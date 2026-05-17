@@ -2,4 +2,4 @@
 
 DemonstarteAdapter demonstarteAdapter = new DemonstarteAdapter();
 
-demonstarteAdapter.Demonstrate();
+demonstarteAdapter.Demonstarte();

@@ -1,7 +1,7 @@
 ﻿namespace GoFPatterns.Adapter.SensorFeature
 {
     //That is legacy code. There is need Adapter
-    public class FarinhateSensor
+    public class FahrenheitSensor
     {
         //Need for demonstartion
         //Should be private and Get from other Service or something

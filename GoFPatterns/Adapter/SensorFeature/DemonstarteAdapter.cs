@@ -1,26 +1,39 @@
 ﻿namespace GoFPatterns.Adapter.SensorFeature
 {
-    //That is a client class
-    public class Sensor
-    {
-        public void PrintTempereture(ITemperatureSensor sensor) =>
-            sensor.GetTemperatureCelsius();
-    }
-
     public class DemonstarteAdapter
     {
-        public void Demonstrate()
+        public void Demonstarte()
         {
-            Sensor sensor = new Sensor();
+            Console.WriteLine("=== Adapter Pattern Demo ===\n");
 
-            var celsiusSensor = new CelsiusSensor();
-            var farinhateSensor = new FarinhateSensor();
-            var farinhateSensorAdapter = new FarinhateSensorAdapter(farinhateSensor);
+            // Modern sensor - works directly
+            ITemperatureSensor celsiusSensor = new CelsiusSensor();
+            Console.WriteLine($"Celsius sensor: {celsiusSensor.GetTemperatureCelsius()}°C");
 
+            // Legacy sensor - needs adapter
+            var fahrenheitSensor = new FahrenheitSensor();
+            Console.WriteLine($"Fahrenheit sensor (incompatible): {fahrenheitSensor.GetCurrentTemperature()}°F");
 
-            Console.WriteLine($"Print temperature by celsious sensor: {celsiusSensor.GetTemperatureCelsius()}");
-            Console.WriteLine($"Print temperature by farinhate sensor: {farinhateSensor.GetCurrentTemperature()}");
-            Console.WriteLine($"Print temperature by celsious with adapter sensor: {farinhateSensorAdapter.GetTemperatureCelsius()}");
+            // Using adapter
+            ITemperatureSensor adapter = new FahrenheitSensorAdapter(fahrenheitSensor);
+            Console.WriteLine($"Fahrenheit sensor via adapter: {adapter.GetTemperatureCelsius()}°C");
+
+            // Both work with the same interface
+            Console.WriteLine("\n=== Using unified interface ===");
+            DisplayTemperature(celsiusSensor);
+            DisplayTemperature(adapter);
+        }
+
+        private void DisplayTemperature(ITemperatureSensor sensor)
+        {
+            var temp = sensor.GetTemperatureCelsius();
+            var status = temp switch
+            {
+                < 15 => "Cold ",
+                >= 15 and < 25 => "Comfortable ",
+                _ => "Hot "
+            };
+            Console.WriteLine($"Temperature: {temp}°C - {status}");
         }
     }
 }
