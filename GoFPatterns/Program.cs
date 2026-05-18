@@ -1,1 +1,5 @@
-﻿Console.WriteLine("Hello, World!");
+﻿using GoFPatterns.Adapter.SensorFeature;
+
+DemonstarteAdapter demonstarteAdapter = new DemonstarteAdapter();
+
+demonstarteAdapter.Demonstarte();
