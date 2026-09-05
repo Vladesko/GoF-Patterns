@@ -1,5 +1,4 @@
-﻿using GoFPatterns.Adapter.SensorFeature;
+﻿using GoFPatterns.AbtractFactory.Payments;
 
-DemonstarteAdapter demonstarteAdapter = new DemonstarteAdapter();
-
-demonstarteAdapter.Demonstarte();
+DemontrateAbstractFactory demontrateAbstractFactory = new DemontrateAbstractFactory();
+demontrateAbstractFactory.Demonstrate();
