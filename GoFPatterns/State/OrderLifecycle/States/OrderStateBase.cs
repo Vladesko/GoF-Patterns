@@ -1,17 +1,17 @@
 ﻿namespace GoFPatterns.State.OrderLifecycle.States
 {
-    // Base state - by default every action is not allowed.
-    // Concrete states override only actions which make sense for them.
+    // Stato base - di default nessuna azione è consentita.
+    // Gli stati concreti ridefiniscono solo le azioni che per loro hanno senso.
     public abstract class OrderStateBase : IOrderState
     {
         public abstract string Name { get; }
 
-        public virtual void Pay(Order order) => Deny(nameof(Pay));
-        public virtual void Ship(Order order) => Deny(nameof(Ship));
-        public virtual void Deliver(Order order) => Deny(nameof(Deliver));
-        public virtual void Cancel(Order order) => Deny(nameof(Cancel));
+        public virtual void Pay(Order order) => Deny("pagare");
+        public virtual void Ship(Order order) => Deny("spedire");
+        public virtual void Deliver(Order order) => Deny("consegnare");
+        public virtual void Cancel(Order order) => Deny("annullare");
 
         private void Deny(string action) =>
-            Console.WriteLine($"    Can't {action.ToLower()}: order is {Name}");
+            Console.WriteLine($"    Impossibile {action.ToLower()}: l'ordine è {Name}");
     }
 }

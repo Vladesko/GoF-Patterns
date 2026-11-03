@@ -6,7 +6,7 @@ namespace GoFPatterns.Prototype.Documents
     {
         public void Demonstrate()
         {
-            Console.WriteLine("=== Prototype: Documents ===\n");
+            Console.WriteLine("=== Prototype: Documenti ===\n");
 
             DemonstrateShallowAndDeepCopy();
             Console.WriteLine();
@@ -17,57 +17,57 @@ namespace GoFPatterns.Prototype.Documents
         {
             var original = new Contract
             {
-                Title = "Service agreement",
-                Company = "Horns & Hooves",
+                Title = "Contratto di servizio",
+                Company = "Corna & Zoccoli",
                 Style = new DocumentStyle { Font = "Times New Roman", FontSize = 14 },
-                Sections = ["Subject", "Price", "Responsibility"]
+                Sections = ["Oggetto", "Prezzo", "Responsabilità"]
             };
 
             var shallow = original.ShallowClone();
             var deep = (Contract)original.Clone();
 
-            // Change nested objects of the copies.
+            // Modifica degli oggetti annidati delle copie.
             shallow.Style.FontSize = 20;
-            shallow.Sections.Add("Added in shallow copy");
+            shallow.Sections.Add("Aggiunta nella copia superficiale");
             deep.Style.Font = "Calibri";
-            deep.Sections.Add("Added in deep copy");
+            deep.Sections.Add("Aggiunta nella copia profonda");
 
-            Console.WriteLine("Shallow copy shares Style and Sections with original:");
-            Console.WriteLine($"  Original: {original}");
-            Console.WriteLine($"  Shallow:  {shallow}");
-            Console.WriteLine("Deep copy is independent:");
-            Console.WriteLine($"  Deep:     {deep}");
+            Console.WriteLine("La copia superficiale condivide Style e Sections con l'originale:");
+            Console.WriteLine($"  Originale:    {original}");
+            Console.WriteLine($"  Superficiale: {shallow}");
+            Console.WriteLine("La copia profonda è indipendente:");
+            Console.WriteLine($"  Profonda:     {deep}");
         }
 
         private static void DemonstrateRegistry()
         {
-            // Templates are configured once ...
+            // I modelli vengono configurati una sola volta ...
             var registry = new DocumentTemplateRegistry();
             registry.Register("nda", new Contract
             {
                 Title = "NDA",
-                Company = "<company>",
-                Sections = ["Confidential information", "Term", "Penalties"]
+                Company = "<azienda>",
+                Sections = ["Informazioni riservate", "Durata", "Penali"]
             });
-            registry.Register("invoice-eu", new Invoice { Title = "EU invoice", TaxRate = 0.2m });
+            registry.Register("invoice-eu", new Invoice { Title = "Fattura UE", TaxRate = 0.2m });
 
-            // ... and then copied many times without repeating the configuration.
+            // ... e poi copiati molte volte senza ripetere la configurazione.
             var ndaForAcme = (Contract)registry.Create("nda");
             ndaForAcme.Company = "Acme";
 
             var ndaForGlobex = (Contract)registry.Create("nda");
             ndaForGlobex.Company = "Globex";
-            ndaForGlobex.Sections.Add("Jurisdiction");
+            ndaForGlobex.Sections.Add("Foro competente");
 
             var invoice = (Invoice)registry.Create("invoice-eu");
-            invoice.Lines.Add(("Laptop", 1000m));
+            invoice.Lines.Add(("Portatile", 1000m));
             invoice.Lines.Add(("Mouse", 25m));
 
-            Console.WriteLine("Documents created from registry:");
+            Console.WriteLine("Documenti creati dal registro:");
             Console.WriteLine($"  {ndaForAcme}");
             Console.WriteLine($"  {ndaForGlobex}");
             Console.WriteLine($"  {invoice}");
-            Console.WriteLine($"  Template is unchanged: {registry.Create("nda")}");
+            Console.WriteLine($"  Il modello è invariato: {registry.Create("nda")}");
         }
     }
 }

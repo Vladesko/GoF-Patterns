@@ -6,8 +6,8 @@ namespace GoFPatterns.AbtractFactory.Payments.Stopes
     {
         public bool ValidatePayment(decimal amount)
         {
-            Console.WriteLine($"Strope: validating payment {amount}.");
-            return amount > 0; // Example validation logic
+            Console.WriteLine($"Strope: convalida del pagamento {amount}.");
+            return amount > 0; // Esempio di logica di convalida
         }
     }
 }

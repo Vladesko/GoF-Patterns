@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Mediator.ChatRoom
 {
-    // Mediator - participants communicate only through it, not directly with each other.
+    // Mediator - i partecipanti comunicano solo tramite esso, non direttamente tra loro.
     public interface IChatMediator
     {
         void Join(ChatUser user);

@@ -1,44 +1,46 @@
-# Prototype (Прототип)
+🌐 [Русский](https://github.com/Vladesko/GoF-Patterns/tree/rus/GoFPatterns/Prototype) | [English](https://github.com/Vladesko/GoF-Patterns/tree/eng/GoFPatterns/Prototype) | [Deutsch](https://github.com/Vladesko/GoF-Patterns/tree/deu/GoFPatterns/Prototype) | **Italiano** | [Español](https://github.com/Vladesko/GoF-Patterns/tree/spa/GoFPatterns/Prototype)
 
-**Тип:** порождающий паттерн.
+# Prototype (Prototipo)
 
-**Prototype** позволяет создавать новые объекты копированием уже существующих (прототипов), не завися от их конкретных классов.
+**Tipo:** pattern creazionale.
 
----
-
-## Какую проблему решает
-
-Нужно получить копию объекта. Наивный способ — создать объект того же класса и переписать в него все поля. Проблемы:
-
-- часть полей может быть **приватной** и недоступной снаружи;
-- клиент должен **знать конкретный класс** объекта, а часто у него есть только интерфейс (`IDocumentPrototype`, `Unit`);
-- объект может быть **дорогим в настройке** (долгая инициализация, загрузка конфигурации), и повторять её на каждую копию накладно.
-
-## Решение
-
-Поручить копирование самому объекту. Все копируемые объекты реализуют общий интерфейс с методом `Clone()`. Объект сам знает свои поля (включая приватные) и сам решает, как их скопировать.
-
-Часто дополнительно заводят **реестр прототипов** — хранилище заранее настроенных объектов, из которого клиент берёт копии по ключу.
-
-### Поверхностная и глубокая копия
-
-- **Shallow copy** (`MemberwiseClone()`) копирует поля «как есть»: значимые типы копируются, а ссылочные поля у копии и оригинала указывают на **одни и те же** объекты.
-- **Deep copy** копирует и вложенные объекты, копия полностью независима.
-
-Для неизменяемых объектов (`string`, `record` с init-свойствами) разница не важна — их можно безопасно разделять.
+**Prototype** permette di creare nuovi oggetti copiando oggetti già esistenti (i prototipi), senza dipendere dalle loro classi concrete.
 
 ---
 
-## Участники
+## Quale problema risolve
 
-| Роль | Класс в примере | Описание |
-|------|-----------------|----------|
-| **Prototype** | `IDocumentPrototype`, `Unit` | Объявляет метод клонирования `Clone()` |
-| **ConcretePrototype** | `Contract`, `Invoice`, `Archer`, `Mage` | Реализует `Clone()`, копируя своё состояние |
-| **Prototype Registry** | `DocumentTemplateRegistry` | Хранит настроенные прототипы и выдаёт их копии по ключу (необязательный участник) |
-| **Client** | `Spawner`, `DemonstratePrototype` | Создаёт новые объекты, вызывая `Clone()` у прототипа |
+Bisogna ottenere una copia di un oggetto. Il modo ingenuo è creare un oggetto della stessa classe e ricopiarvi tutti i campi. I problemi sono:
 
-## Схема
+- alcuni campi possono essere **privati** e inaccessibili dall'esterno;
+- il client deve **conoscere la classe concreta** dell'oggetto, mentre spesso ha a disposizione solo un'interfaccia (`IDocumentPrototype`, `Unit`);
+- l'oggetto può essere **costoso da configurare** (inizializzazione lunga, caricamento della configurazione), e ripetere tutto per ogni copia è dispendioso.
+
+## Soluzione
+
+Affidare la copia all'oggetto stesso. Tutti gli oggetti copiabili implementano un'interfaccia comune con il metodo `Clone()`. L'oggetto conosce i propri campi (anche quelli privati) e decide da solo come copiarli.
+
+Spesso si aggiunge un **registro dei prototipi**: un archivio di oggetti preconfigurati da cui il client prende copie in base a una chiave.
+
+### Copia superficiale e profonda
+
+- La **shallow copy** (`MemberwiseClone()`) copia i campi «così come sono»: i tipi valore vengono copiati, mentre i campi di tipo riferimento della copia e dell'originale puntano agli **stessi** oggetti.
+- La **deep copy** copia anche gli oggetti annidati: la copia è completamente indipendente.
+
+Per gli oggetti immutabili (`string`, `record` con proprietà init) la differenza non conta: possono essere condivisi in sicurezza.
+
+---
+
+## Partecipanti
+
+| Ruolo | Classe nell'esempio | Descrizione |
+|-------|---------------------|-------------|
+| **Prototype** | `IDocumentPrototype`, `Unit` | Dichiara il metodo di clonazione `Clone()` |
+| **ConcretePrototype** | `Contract`, `Invoice`, `Archer`, `Mage` | Implementa `Clone()`, copiando il proprio stato |
+| **Prototype Registry** | `DocumentTemplateRegistry` | Conserva i prototipi configurati e ne restituisce copie in base a una chiave (partecipante facoltativo) |
+| **Client** | `Spawner`, `DemonstratePrototype` | Crea nuovi oggetti chiamando `Clone()` sul prototipo |
+
+## Schema
 
 ```text
  Client ───────────► «interface» IDocumentPrototype
@@ -49,52 +51,52 @@
                      Clone() => new Contract(this)
 
  DocumentTemplateRegistry
-   _templates: key ─► prototype
+   _templates: chiave ─► prototipo
    Create(key) => _templates[key].Clone()
 ```
 
 ---
 
-## Пример 1. Шаблоны документов (`Documents/`)
+## Esempio 1. Modelli di documento (`Documents/`)
 
-**Задача:** в системе документооборота есть шаблоны (NDA, счёт для ЕС). Новый документ создаётся копированием шаблона, после чего заполняются конкретные данные.
+**Problema:** in un sistema di gestione documentale ci sono dei modelli (NDA, fattura UE). Un nuovo documento si crea copiando il modello, dopodiché si compilano i dati specifici.
 
-**Prototype** — `IDocumentPrototype` с методом `Clone()`.
+**Prototype**: `IDocumentPrototype` con il metodo `Clone()`.
 
-**ConcretePrototype** — `Contract` содержит ссылочные поля `DocumentStyle Style` и `List<string> Sections`. Глубокое копирование реализовано через **приватный конструктор копирования** — так класс имеет доступ ко всем своим полям:
+**ConcretePrototype**: `Contract` contiene i campi di tipo riferimento `DocumentStyle Style` e `List<string> Sections`. La copia profonda è implementata tramite un **costruttore di copia privato**: in questo modo la classe ha accesso a tutti i propri campi:
 
 ```csharp
 private Contract(Contract source)
 {
     Title = source.Title;
     Company = source.Company;
-    Style = source.Style.Copy();       // копия вложенного объекта
-    Sections = [.. source.Sections];   // копия списка
+    Style = source.Style.Copy();       // copia dell'oggetto annidato
+    Sections = [.. source.Sections];   // copia della lista
 }
 
 public IDocumentPrototype Clone() => new Contract(this);
 ```
 
-Для сравнения есть `ShallowClone()` через `MemberwiseClone()`. В демо видно: после изменения `shallow.Style.FontSize` и `shallow.Sections` **меняется и оригинал**, потому что они разделяют один объект стиля и один список. Изменения глубокой копии оригинал не затрагивают.
+Per confronto c'è `ShallowClone()`, basato su `MemberwiseClone()`. Nella demo si vede che dopo aver modificato `shallow.Style.FontSize` e `shallow.Sections` **cambia anche l'originale**, perché condividono lo stesso oggetto stile e la stessa lista. Le modifiche alla copia profonda non toccano l'originale.
 
-`Invoice` — второй прототип, у него свой набор полей и своя реализация `Clone()`.
+`Invoice` è il secondo prototipo: ha un proprio insieme di campi e una propria implementazione di `Clone()`.
 
-**Registry** — `DocumentTemplateRegistry` хранит шаблоны по ключу и в `Create(key)` всегда возвращает **копию**, поэтому сам шаблон никогда не портится:
+**Registry**: `DocumentTemplateRegistry` conserva i modelli per chiave e in `Create(key)` restituisce sempre una **copia**, quindi il modello stesso non viene mai rovinato:
 
 ```csharp
 var ndaForAcme = (Contract)registry.Create("nda");
 ndaForAcme.Company = "Acme";
 ```
 
-## Пример 2. Спавнер игровых юнитов (`GameUnits/`)
+## Esempio 2. Generatore di unità di gioco (`GameUnits/`)
 
-**Задача:** в игре нужно порождать много однотипных юнитов («элитный лучник», «огненный маг»), настройки которых загружаются из конфигурации.
+**Problema:** in un gioco bisogna generare molte unità dello stesso tipo («arciere d'élite», «mago del fuoco»), le cui impostazioni vengono caricate dalla configurazione.
 
-**Prototype** — абстрактный класс `Unit` с `abstract Unit Clone()`.
+**Prototype**: la classe astratta `Unit` con `abstract Unit Clone()`.
 
-**ConcretePrototype** — `Archer` и `Mage` (папка `Units/`) копируют свои специфичные поля; `Mage` копирует список заклинаний, чтобы клоны не делили его.
+**ConcretePrototype**: `Archer` e `Mage` (cartella `Units/`) copiano i propri campi specifici; `Mage` copia la lista degli incantesimi, così i cloni non la condividono.
 
-**Client** — `Spawner` получает **любой** `Unit` и порождает новые экземпляры, не зная, лучник это или маг:
+**Client**: `Spawner` riceve **qualsiasi** `Unit` e genera nuove istanze senza sapere se si tratta di un arciere o di un mago:
 
 ```csharp
 public Unit Spawn(Position position)
@@ -106,37 +108,37 @@ public Unit Spawn(Position position)
 }
 ```
 
-`Position` — это `record`. Он неизменяем, поэтому его можно не копировать, а разделять между клонами. Также в демо показан встроенный в C# механизм клонирования записей — выражение `with`: `start with { X = 7 }`.
+`Position` è un `record`. È immutabile, quindi non serve copiarlo: si può condividere tra i cloni. La demo mostra anche il meccanismo di clonazione dei record integrato in C#, l'espressione `with`: `start with { X = 7 }`.
 
 ---
 
-## Когда применять
+## Quando usarlo
 
-- Код не должен зависеть от конкретных классов копируемых объектов.
-- Создание объекта дорогое, а нужно много похожих экземпляров.
-- Есть набор типовых конфигураций, и вместо множества подклассов удобнее хранить настроенные прототипы.
+- Il codice non deve dipendere dalle classi concrete degli oggetti copiati.
+- Creare un oggetto è costoso, ma servono molte istanze simili.
+- C'è un insieme di configurazioni tipiche, e invece di molte sottoclassi è più comodo conservare prototipi già configurati.
 
-## Когда не нужен
+## Quando non serve
 
-- Объекты простые и дешёвые — проще вызвать конструктор.
-- Объекты неизменяемы — их можно разделять без копирования.
+- Gli oggetti sono semplici ed economici: è più facile chiamare il costruttore.
+- Gli oggetti sono immutabili: si possono condividere senza copiarli.
 
-## Плюсы и минусы
+## Pro e contro
 
-**Плюсы**
-- Клонирование без привязки к конкретным классам.
-- Меньше повторяющегося кода инициализации.
-- Альтернатива наследованию для получения «вариаций» объекта.
+**Pro**
+- Clonazione senza legarsi alle classi concrete.
+- Meno codice di inizializzazione ripetuto.
+- Un'alternativa all'ereditarietà per ottenere «varianti» di un oggetto.
 
-**Минусы**
-- Сложно клонировать объекты со сложными графами (циклические ссылки, ресурсы вроде соединений и файлов).
-- Нужно внимательно следить за shallow/deep копированием.
+**Contro**
+- È difficile clonare oggetti con grafi complessi (riferimenti circolari, risorse come connessioni e file).
+- Bisogna fare molta attenzione alla copia shallow/deep.
 
-## Связь с другими паттернами
+## Relazioni con altri pattern
 
-- **Abstract Factory** может хранить набор прототипов и клонировать их вместо создания через `new`.
-- **Memento** — для простых объектов снимок состояния можно делать клонированием.
-- **Composite** и **Decorator** — клонирование помогает копировать сложные структуры из этих паттернов.
-- Реестр прототипов часто делают **Singleton**.
+- **Abstract Factory** può conservare un insieme di prototipi e clonarli invece di crearli con `new`.
+- **Memento**: per oggetti semplici lo snapshot dello stato si può ottenere per clonazione.
+- **Composite** e **Decorator**: la clonazione aiuta a copiare le strutture complesse di questi pattern.
+- Il registro dei prototipi è spesso un **Singleton**.
 
-> В .NET есть интерфейс `ICloneable`, но его использовать не рекомендуют: он возвращает `object` и не говорит, глубокая копия или поверхностная. Лучше свой типизированный интерфейс, как `IDocumentPrototype`.
+> In .NET esiste l'interfaccia `ICloneable`, ma se ne sconsiglia l'uso: restituisce `object` e non dice se la copia è profonda o superficiale. Meglio un'interfaccia tipizzata propria, come `IDocumentPrototype`.

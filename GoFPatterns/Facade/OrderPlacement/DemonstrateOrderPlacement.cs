@@ -6,21 +6,21 @@ namespace GoFPatterns.Facade.OrderPlacement
     {
         public void Demonstrate()
         {
-            Console.WriteLine("=== Facade: Order placement ===\n");
+            Console.WriteLine("=== Facade: Invio dell'ordine ===\n");
 
             var facade = new OrderFacade(new InventoryService(), new PaymentGateway(), new ShippingService(), new NotificationService());
 
             OrderRequest[] orders =
             [
-                new("Laptop", 1, 1200m, "4111111111111111", "Moscow, Lenina 1", "ivan@mail.com"),
-                new("Phone", 1, 700m, "4111111111111111", "Kazan, Baumana 5", "olga@mail.com"),
-                new("Laptop", 1, 1200m, "4111111111110000", "Kazan, Baumana 5", "petr@mail.com")
+                new("Portatile", 1, 1200m, "4111111111111111", "Mosca, via Lenin 1", "ivan@mail.com"),
+                new("Telefono", 1, 700m, "4111111111111111", "Kazan, via Bauman 5", "olga@mail.com"),
+                new("Portatile", 1, 1200m, "4111111111110000", "Kazan, via Bauman 5", "petr@mail.com")
             ];
 
             foreach (var order in orders)
             {
                 var result = facade.PlaceOrder(order);
-                Console.WriteLine($"=> {(result.Success ? "SUCCESS" : "FAILED")}: {result.Message}\n");
+                Console.WriteLine($"=> {(result.Success ? "SUCCESSO" : "FALLITO")}: {result.Message}\n");
             }
         }
     }

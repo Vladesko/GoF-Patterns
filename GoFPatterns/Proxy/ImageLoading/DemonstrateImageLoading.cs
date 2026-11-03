@@ -6,24 +6,24 @@ namespace GoFPatterns.Proxy.ImageLoading
     {
         public void Demonstrate()
         {
-            Console.WriteLine("=== Proxy: Lazy image loading (virtual proxy) ===\n");
+            Console.WriteLine("=== Proxy: caricamento lazy delle immagini (virtual proxy) ===\n");
 
-            string[] files = ["sea.jpg", "mountains.jpg", "forest.jpg", "city.jpg", "desert.jpg"];
+            string[] files = ["mare.jpg", "montagne.jpg", "foresta.jpg", "citta.jpg", "deserto.jpg"];
 
             var stopwatch = Stopwatch.StartNew();
-            Console.WriteLine("Gallery without proxy - all images are loaded at once:");
+            Console.WriteLine("Galleria senza proxy - tutte le immagini vengono caricate subito:");
             var eagerGallery = files.Select(f => (IImage)new HighResolutionImage(f)).ToList();
-            Console.WriteLine($"Gallery opened in {stopwatch.ElapsedMilliseconds} ms\n");
+            Console.WriteLine($"Galleria aperta in {stopwatch.ElapsedMilliseconds} ms\n");
 
             stopwatch.Restart();
-            Console.WriteLine("Gallery with proxy - nothing is loaded:");
+            Console.WriteLine("Galleria con proxy - non viene caricato nulla:");
             var lazyGallery = files.Select(f => (IImage)new LazyImageProxy(f)).ToList();
-            Console.WriteLine($"Gallery opened in {stopwatch.ElapsedMilliseconds} ms\n");
+            Console.WriteLine($"Galleria aperta in {stopwatch.ElapsedMilliseconds} ms\n");
 
-            // User looks only at two images.
-            Console.WriteLine("User opens image #2 twice and image #4:");
+            // L'utente guarda solo due immagini.
+            Console.WriteLine("L'utente apre due volte l'immagine #2 e l'immagine #4:");
             lazyGallery[1].Display();
-            lazyGallery[1].Display(); // already loaded
+            lazyGallery[1].Display(); // già caricata
             lazyGallery[3].Display();
         }
     }

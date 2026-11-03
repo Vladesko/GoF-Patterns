@@ -3,7 +3,7 @@ using GoFPatterns.Strategy.Sorting.Strategies;
 
 namespace GoFPatterns.Strategy.Sorting
 {
-    // Context - sorts data with the given strategy or chooses a strategy by itself.
+    // Context - ordina i dati con la strategy indicata oppure sceglie da solo una strategy.
     public class DataSorter
     {
         public TimeSpan Sort(int[] items, ISortStrategy strategy)
@@ -13,7 +13,7 @@ namespace GoFPatterns.Strategy.Sorting
             return stopwatch.Elapsed;
         }
 
-        // Context can pick strategy depending on data - client doesn't have to know algorithms.
+        // Il context può scegliere la strategy in base ai dati - il client non deve conoscere gli algoritmi.
         public static ISortStrategy ChooseFor(int[] items) =>
             items.Length < 10 ? new BubbleSortStrategy() : new BuiltInSortStrategy();
     }

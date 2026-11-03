@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.ChainOfResponsibility.Middleware
 {
-    // Request (and response) object which is passed through the chain.
+    // Oggetto richiesta (e risposta) che viene passato lungo la catena.
     public class HttpRequestContext
     {
         public required string Path { get; init; }

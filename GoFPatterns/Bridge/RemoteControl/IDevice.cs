@@ -1,7 +1,7 @@
 ﻿namespace GoFPatterns.Bridge.RemoteControl
 {
-    // Implementor - low-level operations which every device can do.
-    // Remotes (abstraction) are built on top of these primitive operations.
+    // Implementor - operazioni di basso livello che ogni dispositivo sa eseguire.
+    // I telecomandi (abstraction) sono costruiti sopra queste operazioni primitive.
     public interface IDevice
     {
         string Name { get; }

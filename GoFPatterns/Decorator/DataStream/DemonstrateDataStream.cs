@@ -6,18 +6,18 @@ namespace GoFPatterns.Decorator.DataStream
     {
         public void Demonstrate()
         {
-            Console.WriteLine("=== Decorator: Data source ===\n");
+            Console.WriteLine("=== Decorator: Sorgente dati ===\n");
 
-            var data = string.Join(", ", Enumerable.Repeat("customer: John Smith, card: 4111-1111-1111-1111", 5));
+            var data = string.Join(", ", Enumerable.Repeat("cliente: Mario Rossi, carta: 4111-1111-1111-1111", 5));
 
-            // Plain storage.
+            // Archivio semplice.
             var plainStorage = new InMemoryDataSource();
             plainStorage.Write(data);
-            Console.WriteLine($"Plain storage ({plainStorage.RawContent.Length} chars):\n  {plainStorage.RawContent[..60]}...\n");
+            Console.WriteLine($"Archivio semplice ({plainStorage.RawContent.Length} caratteri):\n  {plainStorage.RawContent[..60]}...\n");
 
-            // The same storage, but wrapped with decorators at runtime.
-            // Write: logging -> compression -> encryption -> storage
-            // Read:  storage -> encryption -> compression -> logging
+            // Lo stesso archivio, ma avvolto dai decorator a runtime.
+            // Scrittura: logging -> compressione -> cifratura -> archivio
+            // Lettura:   archivio -> cifratura -> compressione -> logging
             var protectedStorage = new InMemoryDataSource();
             IDataSource source = new LoggingDecorator(
                 new CompressionDecorator(
@@ -25,10 +25,10 @@ namespace GoFPatterns.Decorator.DataStream
                 "client");
 
             source.Write(data);
-            Console.WriteLine($"Compressed + encrypted storage ({protectedStorage.RawContent.Length} chars):\n  {protectedStorage.RawContent[..Math.Min(60, protectedStorage.RawContent.Length)]}...");
+            Console.WriteLine($"Archivio compresso + cifrato ({protectedStorage.RawContent.Length} caratteri):\n  {protectedStorage.RawContent[..Math.Min(60, protectedStorage.RawContent.Length)]}...");
 
             var restored = source.Read();
-            Console.WriteLine($"Data is restored correctly: {restored == data}");
+            Console.WriteLine($"I dati sono stati ripristinati correttamente: {restored == data}");
         }
     }
 }

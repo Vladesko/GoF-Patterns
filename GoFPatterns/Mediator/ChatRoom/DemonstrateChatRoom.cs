@@ -17,13 +17,13 @@
             room.Join(olga);
             room.Join(bot);
 
-            anna.Send("Hi everyone!");
-            ivan.SendPrivate("Anna", "Hi, how are you?");
-            olga.Send("Buy cheap SPAM here");
+            anna.Send("Ciao a tutti!");
+            ivan.SendPrivate("Anna", "Ciao, come stai?");
+            olga.Send("Compra SPAM a poco prezzo qui");
             ivan.Send("/time");
 
             room.Leave(olga);
-            anna.SendPrivate("Olga", "Are you here?");
+            anna.SendPrivate("Olga", "Ci sei?");
         }
     }
 }

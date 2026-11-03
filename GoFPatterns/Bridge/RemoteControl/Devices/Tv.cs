@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Bridge.RemoteControl.Devices
 {
-    // Concrete implementor - TV.
+    // Implementor concreto - TV.
     public class Tv : IDevice
     {
         public string Name => "TV";
@@ -11,13 +11,13 @@
         public void Enable()
         {
             IsEnabled = true;
-            Console.WriteLine("  TV: screen turns on");
+            Console.WriteLine("  TV: lo schermo si accende");
         }
 
         public void Disable()
         {
             IsEnabled = false;
-            Console.WriteLine("  TV: screen turns off");
+            Console.WriteLine("  TV: lo schermo si spegne");
         }
 
         public void SetVolume(int volume)
@@ -29,7 +29,7 @@
         public void SetChannel(int channel)
         {
             Channel = Math.Max(1, channel);
-            Console.WriteLine($"  TV: channel {Channel}");
+            Console.WriteLine($"  TV: canale {Channel}");
         }
     }
 }

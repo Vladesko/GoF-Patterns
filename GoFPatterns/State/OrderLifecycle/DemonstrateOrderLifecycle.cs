@@ -4,24 +4,24 @@
     {
         public void Demonstrate()
         {
-            Console.WriteLine("=== State: Order lifecycle ===\n");
+            Console.WriteLine("=== State: Ciclo di vita dell'ordine ===\n");
 
-            Console.WriteLine("Happy path:");
+            Console.WriteLine("Percorso ideale:");
             var order = new Order(1, 150m);
-            order.Ship();     // not paid yet
+            order.Ship();     // non ancora pagato
             order.Pay();
-            order.Pay();      // already paid
+            order.Pay();      // già pagato
             order.Ship();
-            order.Cancel();   // too late
+            order.Cancel();   // troppo tardi
             order.Deliver();
 
-            Console.WriteLine("\nCancel after payment:");
+            Console.WriteLine("\nAnnullamento dopo il pagamento:");
             var cancelled = new Order(2, 80m);
             cancelled.Pay();
             cancelled.Cancel();
             cancelled.Ship();
 
-            Console.WriteLine($"\nFinal states: #{order.Id} {order.State.Name}, #{cancelled.Id} {cancelled.State.Name}");
+            Console.WriteLine($"\nStati finali: #{order.Id} {order.State.Name}, #{cancelled.Id} {cancelled.State.Name}");
         }
     }
 }

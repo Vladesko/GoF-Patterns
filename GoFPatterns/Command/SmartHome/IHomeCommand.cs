@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Command.SmartHome
 {
-    // Command - action which can be bound to any button of the remote.
+    // Command - azione che può essere associata a qualsiasi pulsante del telecomando.
     public interface IHomeCommand
     {
         string Description { get; }

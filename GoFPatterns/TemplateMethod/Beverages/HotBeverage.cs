@@ -1,12 +1,12 @@
 ﻿namespace GoFPatterns.TemplateMethod.Beverages
 {
-    // Abstract class - recipe of any hot beverage.
+    // Classe astratta - la ricetta di qualsiasi bevanda calda.
     public abstract class HotBeverage
     {
         // Template method.
         public void Prepare()
         {
-            Console.WriteLine($"Preparing {GetType().Name}:");
+            Console.WriteLine($"Preparazione di {GetType().Name}:");
             BoilWater();
             Brew();
             PourInCup();
@@ -15,15 +15,15 @@
             Console.WriteLine();
         }
 
-        // Common steps.
-        private void BoilWater() => Console.WriteLine($"  boil water to {WaterTemperature}°C");
-        private static void PourInCup() => Console.WriteLine("  pour into cup");
+        // Passi comuni.
+        private void BoilWater() => Console.WriteLine($"  scaldare l'acqua a {WaterTemperature}°C");
+        private static void PourInCup() => Console.WriteLine("  versare nella tazza");
 
-        // Steps implemented by subclasses.
+        // Passi implementati dalle sottoclassi.
         protected abstract void Brew();
         protected abstract void AddCondiments();
 
-        // Hooks - subclasses may override them, but don't have to.
+        // Hook - le sottoclassi possono ridefinirli, ma non sono obbligate.
         protected virtual int WaterTemperature => 100;
         protected virtual bool CustomerWantsCondiments() => true;
     }

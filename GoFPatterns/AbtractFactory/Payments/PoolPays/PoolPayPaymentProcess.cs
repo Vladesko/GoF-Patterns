@@ -6,7 +6,7 @@ namespace GoFPatterns.AbtractFactory.Payments.PoolPays
     {
         public Guid ProcessPayment(decimal amount)
         {
-            Console.WriteLine($"PoolPay: processing payment {amount}.");
+            Console.WriteLine($"PoolPay: elaborazione del pagamento {amount}.");
             return Guid.NewGuid();
         }
     }

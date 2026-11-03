@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Proxy.BankAccount.Proxies
 {
-    // Caching proxy - remembers result of expensive call and invalidates it when data changes.
+    // Caching proxy - ricorda il risultato di una chiamata costosa e lo invalida quando i dati cambiano.
     public class CachingAccountProxy(IBankAccount account) : IBankAccount
     {
         private decimal? _cachedBalance;
@@ -10,7 +10,7 @@
         public void Withdraw(decimal amount)
         {
             account.Withdraw(amount);
-            _cachedBalance = null; // Balance is changed - cache is not valid anymore.
+            _cachedBalance = null; // Il saldo è cambiato - la cache non è più valida.
         }
     }
 }

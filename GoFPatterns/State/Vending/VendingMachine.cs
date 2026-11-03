@@ -2,10 +2,10 @@
 
 namespace GoFPatterns.State.Vending
 {
-    // Context - vending machine. Data (balance, stock) is stored here, behavior depends on state.
+    // Context - distributore automatico. I dati (credito, scorte) sono qui, il comportamento dipende dallo stato.
     public class VendingMachine
     {
-        // States have no fields, so one instance of each state can be shared (they are flyweights).
+        // Gli stati non hanno campi, quindi una sola istanza di ogni stato può essere condivisa (sono flyweight).
         internal static readonly IVendingState Idle = new IdleState();
         internal static readonly IVendingState HasMoney = new HasMoneyState();
         internal static readonly IVendingState SoldOut = new SoldOutState();
@@ -28,19 +28,19 @@ namespace GoFPatterns.State.Vending
 
         public void InsertCoin(int amount)
         {
-            Console.WriteLine($"  > insert {amount}");
+            Console.WriteLine($"  > inserisci {amount}");
             _state.InsertCoin(this, amount);
         }
 
         public void SelectProduct()
         {
-            Console.WriteLine("  > select product");
+            Console.WriteLine("  > seleziona prodotto");
             _state.SelectProduct(this);
         }
 
         public void Refund()
         {
-            Console.WriteLine("  > refund");
+            Console.WriteLine("  > restituzione");
             _state.Refund(this);
         }
     }

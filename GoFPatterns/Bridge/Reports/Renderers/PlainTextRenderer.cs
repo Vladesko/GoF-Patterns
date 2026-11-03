@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Bridge.Reports.Renderers
 {
-    // Concrete implementor - plain text for console or e-mail.
+    // Implementor concreto - testo semplice per la console o per l'e-mail.
     public class PlainTextRenderer : IReportRenderer
     {
         public string RenderTitle(string title) => $"{title.ToUpper()}{Environment.NewLine}{new string('-', title.Length)}";

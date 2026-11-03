@@ -1,16 +1,18 @@
-# State (Состояние)
+🌐 [Русский](https://github.com/Vladesko/GoF-Patterns/tree/rus/GoFPatterns/State) | [English](https://github.com/Vladesko/GoF-Patterns/tree/eng/GoFPatterns/State) | [Deutsch](https://github.com/Vladesko/GoF-Patterns/tree/deu/GoFPatterns/State) | **Italiano** | [Español](https://github.com/Vladesko/GoF-Patterns/tree/spa/GoFPatterns/State)
 
-**Тип:** поведенческий паттерн.
+# State (Stato)
 
-**State** позволяет объекту **менять поведение при изменении внутреннего состояния**. Со стороны кажется, что объект поменял свой класс.
+**Tipo:** pattern comportamentale.
+
+**State** permette a un oggetto di **cambiare comportamento quando cambia il suo stato interno**. Dall'esterno sembra che l'oggetto abbia cambiato classe.
 
 ---
 
-## Какую проблему решает
+## Quale problema risolve
 
-Заказ в интернет-магазине проходит этапы: *Новый → Оплачен → Отправлен → Доставлен* (или *Отменён*). Одно и то же действие ведёт себя по-разному в зависимости от этапа: отменить новый заказ — просто отменить; оплаченный — вернуть деньги; отправленный — нельзя.
+Un ordine in un negozio online attraversa diverse fasi: *Nuovo → Pagato → Spedito → Consegnato* (oppure *Annullato*). La stessa azione si comporta in modo diverso a seconda della fase: annullare un ordine nuovo significa semplicemente annullarlo; uno pagato richiede il rimborso; uno spedito non si può annullare.
 
-Типичная реализация — поле `Status` и `switch` в каждом методе:
+L'implementazione tipica è un campo `Status` con uno `switch` in ogni metodo:
 
 ```csharp
 public void Cancel()
@@ -26,25 +28,25 @@ public void Cancel()
 }
 ```
 
-Такие `switch` есть в `Pay`, `Ship`, `Deliver`, `Cancel`... Добавили новый статус («Возврат») — надо пройти по всем методам. Правила переходов размазаны по классу, и легко допустить ошибку.
+Questi `switch` si trovano in `Pay`, `Ship`, `Deliver`, `Cancel`... Se si aggiunge un nuovo stato («Reso») bisogna ripassare tutti i metodi. Le regole di transizione sono sparse nella classe ed è facile sbagliare.
 
-## Решение
+## Soluzione
 
-Каждое состояние вынести в **отдельный класс** с общим интерфейсом, где есть все действия. Исходный объект (**контекст**) хранит ссылку на текущий объект-состояние и **делегирует** ему все действия. Переход в другое состояние — это просто замена объекта-состояния.
+Spostare ogni stato in una **classe separata** con un'interfaccia comune che contiene tutte le azioni. L'oggetto originale (il **contesto**) mantiene un riferimento all'oggetto stato corrente e gli **delega** tutte le azioni. Il passaggio a un altro stato è semplicemente la sostituzione dell'oggetto stato.
 
-Вместо одного большого `switch` по всем состояниям получаем несколько маленьких классов, каждый из которых описывает **поведение в одном состоянии** и **куда из него можно перейти**.
+Invece di un grande `switch` su tutti gli stati si ottengono diverse piccole classi, ognuna delle quali descrive il **comportamento in un solo stato** e **verso quali stati si può passare**.
 
 ---
 
-## Участники
+## Partecipanti
 
-| Роль | Класс в примере | Описание |
-|------|-----------------|----------|
-| **Context** | `Order`, `VendingMachine` | Хранит ссылку на текущее состояние и делегирует ему действия. Предоставляет метод для смены состояния |
-| **State** | `IOrderState`, `IVendingState` | Общий интерфейс всех состояний — все действия, доступные контексту |
-| **ConcreteState** | `NewState`, `PaidState`, `ShippedState`, `DeliveredState`, `CancelledState`, `IdleState`, `HasMoneyState`, `SoldOutState` | Реализует поведение в конкретном состоянии и решает, когда переключить контекст |
+| Ruolo | Classe nell'esempio | Descrizione |
+|-------|---------------------|-------------|
+| **Context** | `Order`, `VendingMachine` | Mantiene un riferimento allo stato corrente e gli delega le azioni. Offre un metodo per cambiare stato |
+| **State** | `IOrderState`, `IVendingState` | Interfaccia comune di tutti gli stati: tutte le azioni disponibili per il contesto |
+| **ConcreteState** | `NewState`, `PaidState`, `ShippedState`, `DeliveredState`, `CancelledState`, `IdleState`, `HasMoneyState`, `SoldOutState` | Implementa il comportamento in uno stato specifico e decide quando far cambiare stato al contesto |
 
-## Схема
+## Schema
 
 ```text
  ┌───────────────────────┐        ┌────────────────────────┐
@@ -56,16 +58,16 @@ public void Cancel()
                                 ┌─────────────┼──────────────┬────────────┐
                              NewState     PaidState     ShippedState   ...
 
- Переходы:  New ──Pay──► Paid ──Ship──► Shipped ──Deliver──► Delivered
-             │            │
-             └──Cancel──► Cancelled ◄──Cancel (refund)
+ Transizioni:  New ──Pay──► Paid ──Ship──► Shipped ──Deliver──► Delivered
+                │            │
+                └──Cancel──► Cancelled ◄──Cancel (rimborso)
 ```
 
 ---
 
-## Пример 1. Жизненный цикл заказа (`OrderLifecycle/`)
+## Esempio 1. Ciclo di vita dell'ordine (`OrderLifecycle/`)
 
-**Context** — `Order` не содержит ни одного `switch`. Все публичные действия просто делегируются текущему состоянию:
+**Context**: `Order` non contiene nemmeno uno `switch`. Tutte le azioni pubbliche vengono semplicemente delegate allo stato corrente:
 
 ```csharp
 public void Pay() => State.Pay(this);
@@ -74,41 +76,41 @@ public void Cancel() => State.Cancel(this);
 internal void TransitionTo(IOrderState state) => State = state;
 ```
 
-`TransitionTo` помечен `internal` — менять состояние могут только классы состояний, а не внешний код.
+`TransitionTo` è marcato `internal`: lo stato può essere cambiato solo dalle classi stato, non dal codice esterno.
 
-**State** — `IOrderState` перечисляет все действия над заказом.
+**State**: `IOrderState` elenca tutte le azioni sull'ordine.
 
-**Базовое состояние** — `OrderStateBase` (папка `States/`) по умолчанию **запрещает** все действия. Поэтому конкретные состояния переопределяют только то, что в них разрешено, — не нужно в каждом классе писать «нельзя» для остальных действий.
+**Stato base**: `OrderStateBase` (cartella `States/`) di default **vieta** tutte le azioni. Così gli stati concreti ridefiniscono solo ciò che in essi è consentito, e non serve scrivere «non si può» per le altre azioni in ogni classe.
 
 **ConcreteState**:
-- `NewState` — разрешены оплата (→ `Paid`) и отмена (→ `Cancelled`);
-- `PaidState` — отправка (→ `Shipped`) и отмена **с возвратом денег**:
+- `NewState`: sono consentiti il pagamento (→ `Paid`) e l'annullamento (→ `Cancelled`);
+- `PaidState`: la spedizione (→ `Shipped`) e l'annullamento **con rimborso**:
 
 ```csharp
 public override void Cancel(Order order)
 {
-    Console.WriteLine($"Refund {order.Amount:F2} to customer");
+    Console.WriteLine($"Rimborso di {order.Amount:F2} al cliente");
     order.TransitionTo(new CancelledState());
 }
 ```
 
-- `ShippedState` — только доставка (→ `Delivered`);
-- `DeliveredState`, `CancelledState` — финальные, ничего не переопределяют.
+- `ShippedState`: solo la consegna (→ `Delivered`);
+- `DeliveredState`, `CancelledState`: stati finali, non ridefiniscono nulla.
 
-Видно, что действие «отмена» в двух состояниях ведёт себя по-разному, а в остальных запрещено, — и для этого нет ни одного `if` по статусу.
+Si vede che l'azione «annulla» si comporta in modo diverso in due stati ed è vietata negli altri, senza un solo `if` sullo stato.
 
-**Client** — демо пробует выполнить действия в неправильном порядке (отправить неоплаченный заказ, отменить отправленный) — состояния корректно отказывают.
+**Client**: la demo prova a eseguire le azioni nell'ordine sbagliato (spedire un ordine non pagato, annullarne uno spedito) e gli stati rifiutano correttamente.
 
-## Пример 2. Торговый автомат (`Vending/`)
+## Esempio 2. Distributore automatico (`Vending/`)
 
-**Context** — `VendingMachine` хранит **данные** (остаток товара, цену, баланс) и текущее состояние.
+**Context**: `VendingMachine` conserva i **dati** (scorte, prezzo, credito) e lo stato corrente.
 
-**ConcreteState** (папка `States/`):
-- `IdleState` — ждёт денег; монета → `HasMoney`;
-- `HasMoneyState` — копит деньги, выдаёт товар и сдачу; если товар закончился → `SoldOut`, иначе → `Idle`;
-- `SoldOutState` — сразу возвращает любую монету.
+**ConcreteState** (cartella `States/`):
+- `IdleState`: aspetta il denaro; moneta → `HasMoney`;
+- `HasMoneyState`: accumula il denaro, eroga il prodotto e il resto; se il prodotto è esaurito → `SoldOut`, altrimenti → `Idle`;
+- `SoldOutState`: restituisce subito qualsiasi moneta.
 
-Здесь показан приём из книги GoF: состояния **не имеют собственных полей** — все данные хранятся в контексте и передаются параметром. Поэтому каждое состояние можно создать один раз и **разделять** (это легковесы, см. Flyweight):
+Qui si vede una tecnica del libro della GoF: gli stati **non hanno campi propri**, tutti i dati sono conservati nel contesto e passati come parametro. Per questo ogni stato può essere creato una sola volta e **condiviso** (sono flyweight, vedi Flyweight):
 
 ```csharp
 internal static readonly IVendingState Idle = new IdleState();
@@ -116,36 +118,36 @@ internal static readonly IVendingState HasMoney = new HasMoneyState();
 internal static readonly IVendingState SoldOut = new SoldOutState();
 ```
 
-**Client** — демо имитирует покупателей: попытка купить без денег, недостаток денег, покупка со сдачей, возврат, покупка последнего товара и попытка бросить монету в пустой автомат. После каждого действия выводится текущее состояние.
+**Client**: la demo simula dei clienti: tentativo di acquisto senza denaro, denaro insufficiente, acquisto con resto, restituzione, acquisto dell'ultimo prodotto e tentativo di inserire una moneta nel distributore vuoto. Dopo ogni azione viene stampato lo stato corrente.
 
 ---
 
-## Когда применять
+## Quando usarlo
 
-- Поведение объекта сильно зависит от его состояния, и состояний много.
-- Код полон `switch`/`if` по полю статуса, которые повторяются в разных методах.
-- Правила переходов между состояниями сложные и часто меняются.
-- Примеры: заказы, документооборот (черновик → на согласовании → утверждён), TCP-соединения, медиаплеер, персонажи в играх, конечные автоматы.
+- Il comportamento dell'oggetto dipende fortemente dal suo stato, e gli stati sono molti.
+- Il codice è pieno di `switch`/`if` sul campo di stato, ripetuti in metodi diversi.
+- Le regole di transizione tra gli stati sono complesse e cambiano spesso.
+- Esempi: ordini, gestione documentale (bozza → in approvazione → approvato), connessioni TCP, lettore multimediale, personaggi nei giochi, macchine a stati finiti.
 
-## Когда не нужен
+## Quando non serve
 
-- Состояний мало, и они редко меняются — `switch` по `enum` будет проще и нагляднее.
+- Gli stati sono pochi e cambiano raramente: uno `switch` su un `enum` sarà più semplice e chiaro.
 
-## Плюсы и минусы
+## Pro e contro
 
-**Плюсы**
-- Избавляет от больших условных операторов.
-- Код каждого состояния — в своём классе (SRP).
-- Новые состояния добавляются без изменения существующих (Open/Closed).
-- Переходы явные: видно, из какого состояния куда можно попасть.
+**Pro**
+- Elimina i grandi costrutti condizionali.
+- Il codice di ogni stato è nella propria classe (SRP).
+- Nuovi stati si aggiungono senza modificare quelli esistenti (Open/Closed).
+- Le transizioni sono esplicite: si vede da quale stato si può passare a quale.
 
-**Минусы**
-- Много классов при небольшом числе состояний.
-- Логика переходов распределена по классам состояний — сложнее увидеть весь автомат целиком (помогает диаграмма в документации).
+**Contro**
+- Molte classi anche con pochi stati.
+- La logica delle transizioni è distribuita tra le classi stato: è più difficile vedere l'intera macchina a stati (aiuta un diagramma nella documentazione).
 
-## Связь с другими паттернами
+## Relazioni con altri pattern
 
-- **Strategy** — структура почти идентична (контекст делегирует объекту с интерфейсом). Разница в намерении: стратегию **выбирает клиент**, и стратегии друг о друге не знают; состояния **сами переключают** друг друга и знают о переходах.
-- **Flyweight** — состояния без полей можно разделять между контекстами (пример `Vending`).
-- **Singleton** — объекты-состояния иногда делают одиночками.
-- **Bridge** и **Strategy** тоже основаны на композиции и делегировании, но решают другие задачи.
+- **Strategy**: la struttura è quasi identica (il contesto delega a un oggetto con un'interfaccia). La differenza è nell'intento: la strategia **la sceglie il client**, e le strategie non si conoscono tra loro; gli stati **si scambiano da soli** e conoscono le transizioni.
+- **Flyweight**: gli stati senza campi si possono condividere tra i contesti (esempio `Vending`).
+- **Singleton**: gli oggetti stato a volte sono singleton.
+- Anche **Bridge** e **Strategy** si basano su composizione e delega, ma risolvono problemi diversi.

@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Bridge.RemoteControl.Devices
 {
-    // Concrete implementor - radio. "Channel" here is a frequency station.
+    // Implementor concreto - radio. Il "canale" qui è una stazione radio.
     public class Radio : IDevice
     {
         private static readonly string[] _stations = ["Rock FM", "Jazz FM", "News FM", "Classic FM"];
@@ -13,18 +13,18 @@
         public void Enable()
         {
             IsEnabled = true;
-            Console.WriteLine("  Radio: *static noise* ... on air");
+            Console.WriteLine("  Radio: *fruscio* ... in onda");
         }
 
         public void Disable()
         {
             IsEnabled = false;
-            Console.WriteLine("  Radio: off");
+            Console.WriteLine("  Radio: spenta");
         }
 
         public void SetVolume(int volume)
         {
-            // Radio has a smaller range of volume.
+            // La radio ha un intervallo di volume più ridotto.
             Volume = Math.Clamp(volume, 0, 20);
             Console.WriteLine($"  Radio: volume {Volume}/20");
         }
@@ -32,7 +32,7 @@
         public void SetChannel(int channel)
         {
             Channel = (channel % _stations.Length + _stations.Length) % _stations.Length;
-            Console.WriteLine($"  Radio: station {_stations[Channel]}");
+            Console.WriteLine($"  Radio: stazione {_stations[Channel]}");
         }
     }
 }

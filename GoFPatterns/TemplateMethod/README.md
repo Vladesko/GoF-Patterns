@@ -1,71 +1,73 @@
-# Template Method (Шаблонный метод)
+🌐 [Русский](https://github.com/Vladesko/GoF-Patterns/tree/rus/GoFPatterns/TemplateMethod) | [English](https://github.com/Vladesko/GoF-Patterns/tree/eng/GoFPatterns/TemplateMethod) | [Deutsch](https://github.com/Vladesko/GoF-Patterns/tree/deu/GoFPatterns/TemplateMethod) | **Italiano** | [Español](https://github.com/Vladesko/GoF-Patterns/tree/spa/GoFPatterns/TemplateMethod)
 
-**Тип:** поведенческий паттерн.
+# Template Method (Metodo modello)
 
-**Template Method** определяет **скелет алгоритма** в методе базового класса, перекладывая реализацию отдельных шагов на подклассы. Подклассы могут переопределять шаги, но **не могут менять структуру** алгоритма.
+**Tipo:** pattern comportamentale.
 
----
-
-## Какую проблему решает
-
-Нужно импортировать клиентов из CSV и из JSON. Процесс в обоих случаях одинаковый: подготовить данные → разобрать → проверить → сохранить → (что-то сделать после импорта). Отличается только шаг **разбора**.
-
-Если написать два независимых класса `CsvImporter` и `JsonImporter`:
-- проверка и сохранение **дублируются**;
-- исправили ошибку в валидации в одном классе — забыли во втором;
-- появится XML — придётся копировать всё в третий раз;
-- никто не гарантирует, что все импортёры выполняют шаги в одном порядке.
-
-## Решение
-
-Вынести общий алгоритм в **базовый класс** в виде метода (шаблонного метода), который вызывает шаги по порядку. Шаги бывают трёх видов:
-
-- **абстрактные** — каждый подкласс обязан реализовать (`Parse`);
-- **общие** — реализованы в базовом классе и одинаковы для всех (`Save`);
-- **хуки (hooks)** — `virtual`-методы с реализацией по умолчанию (часто пустой), которые подкласс **может** переопределить, чтобы «вклиниться» в алгоритм (`Preprocess`, `AfterImport`).
-
-Сам шаблонный метод **не виртуальный** — подклассы не могут поменять порядок шагов.
+**Template Method** definisce lo **scheletro di un algoritmo** in un metodo della classe base, delegando alle sottoclassi l'implementazione di singoli passi. Le sottoclassi possono ridefinire i passi, ma **non possono cambiare la struttura** dell'algoritmo.
 
 ---
 
-## Участники
+## Quale problema risolve
 
-| Роль | Класс в примере | Описание |
-|------|-----------------|----------|
-| **AbstractClass** | `CustomerImporter`, `HotBeverage` | Содержит шаблонный метод (`Import`, `Prepare`) и объявляет шаги: абстрактные, общие и хуки |
-| **ConcreteClass** | `CsvCustomerImporter`, `JsonCustomerImporter`, `PartnerCsvCustomerImporter`, `Tea`, `GreenTea`, `Coffee` | Реализует абстрактные шаги и при необходимости переопределяет хуки. Сам алгоритм не трогает |
+Bisogna importare clienti da CSV e da JSON. Il processo è lo stesso in entrambi i casi: preparare i dati → analizzarli → verificarli → salvarli → (fare qualcosa dopo l'importazione). Cambia solo il passo di **analisi** (parsing).
 
-## Схема
+Se si scrivono due classi indipendenti `CsvImporter` e `JsonImporter`:
+- la verifica e il salvataggio sono **duplicati**;
+- si corregge un errore nella convalida in una classe e ci si dimentica dell'altra;
+- quando arriva l'XML bisogna copiare tutto una terza volta;
+- nessuno garantisce che tutti gli importer eseguano i passi nello stesso ordine.
+
+## Soluzione
+
+Spostare l'algoritmo comune nella **classe base** sotto forma di un metodo (il template method) che chiama i passi in ordine. I passi sono di tre tipi:
+
+- **astratti**: ogni sottoclasse deve implementarli (`Parse`);
+- **comuni**: implementati nella classe base e uguali per tutti (`Save`);
+- **hook**: metodi `virtual` con un'implementazione di default (spesso vuota), che la sottoclasse **può** ridefinire per «inserirsi» nell'algoritmo (`Preprocess`, `AfterImport`).
+
+Il template method stesso **non è virtuale**: le sottoclassi non possono cambiare l'ordine dei passi.
+
+---
+
+## Partecipanti
+
+| Ruolo | Classe nell'esempio | Descrizione |
+|-------|---------------------|-------------|
+| **AbstractClass** | `CustomerImporter`, `HotBeverage` | Contiene il template method (`Import`, `Prepare`) e dichiara i passi: astratti, comuni e hook |
+| **ConcreteClass** | `CsvCustomerImporter`, `JsonCustomerImporter`, `PartnerCsvCustomerImporter`, `Tea`, `GreenTea`, `Coffee` | Implementa i passi astratti e, se serve, ridefinisce gli hook. Non tocca l'algoritmo in sé |
+
+## Schema
 
 ```text
  ┌──────────────────────────────────────────┐
  │ «abstract» CustomerImporter              │
- │ + Import(raw)          ← шаблонный метод │
+ │ + Import(raw)          ← template method │
  │     Preprocess()       ← hook (virtual)  │
  │     Parse()            ← abstract        │
  │     Validate()         ← virtual         │
- │     Save()             ← общий (private) │
- │     AfterImport()      ← hook (пустой)   │
+ │     Save()             ← comune (private)│
+ │     AfterImport()      ← hook (vuoto)    │
  └──────────────────────────────────────────┘
           ▲                         ▲
  ┌──────────────────────┐  ┌──────────────────────┐
  │ CsvCustomerImporter  │  │ JsonCustomerImporter │
- │ Preprocess(): skip   │  │ Parse(): JSON        │
- │   header             │  │ AfterImport(): email │
+ │ Preprocess(): salta  │  │ Parse(): JSON        │
+ │   l'intestazione     │  │ AfterImport(): email │
  │ Parse(): CSV         │  └──────────────────────┘
  └──────────────────────┘
           ▲
  ┌────────────────────────────┐
  │ PartnerCsvCustomerImporter │
- │ Validate(): stricter rules │
+ │ Validate(): regole severe  │
  └────────────────────────────┘
 ```
 
 ---
 
-## Пример 1. Импорт клиентов (`DataImport/`)
+## Esempio 1. Importazione dei clienti (`DataImport/`)
 
-**AbstractClass** — `CustomerImporter`. Шаблонный метод `Import`:
+**AbstractClass**: `CustomerImporter`. Il template method `Import`:
 
 ```csharp
 public IReadOnlyList<Customer> Import(string rawData)
@@ -73,27 +75,27 @@ public IReadOnlyList<Customer> Import(string rawData)
     var content = Preprocess(rawData);          // hook
     var records = Parse(content);               // abstract
     var valid = records.Where(Validate).ToList();   // virtual
-    Save(valid);                                // общий шаг
+    Save(valid);                                // passo comune
     AfterImport(valid);                         // hook
     return valid;
 }
 ```
 
-- `Parse` — абстрактный, у каждого формата свой.
-- `Validate` — общая проверка (email содержит `@`, возраст в разумных пределах), но её можно усилить.
-- `Save` — `private`: этот шаг подкласс не может ни переопределить, ни вызвать отдельно.
-- `Preprocess` и `AfterImport` — хуки.
+- `Parse` è astratto: ogni formato ha il proprio.
+- `Validate` è la verifica comune (l'e-mail contiene `@`, l'età è entro limiti ragionevoli), ma può essere resa più severa.
+- `Save` è `private`: la sottoclasse non può né ridefinire né chiamare separatamente questo passo.
+- `Preprocess` e `AfterImport` sono hook.
 
-**ConcreteClass** (папка `Importers/`):
-- `CsvCustomerImporter` — разбирает строки через `;` и переопределяет хук `Preprocess`, чтобы отрезать строку заголовков;
-- `JsonCustomerImporter` — разбирает JSON через `System.Text.Json` и переопределяет хук `AfterImport` (отправка приветственных писем);
-- `PartnerCsvCustomerImporter` — наследуется от **CSV-импортёра** и только ужесточает `Validate` (совершеннолетние с корпоративной почтой), вызывая `base.Validate`. Разбор CSV и весь алгоритм достаются ему бесплатно.
+**ConcreteClass** (cartella `Importers/`):
+- `CsvCustomerImporter`: analizza le righe separate da `;` e ridefinisce l'hook `Preprocess` per eliminare la riga di intestazione;
+- `JsonCustomerImporter`: analizza il JSON con `System.Text.Json` e ridefinisce l'hook `AfterImport` (invio delle e-mail di benvenuto);
+- `PartnerCsvCustomerImporter`: eredita dall'**importer CSV** e si limita a rendere più severo `Validate` (solo maggiorenni con e-mail aziendale), chiamando `base.Validate`. Il parsing CSV e l'intero algoritmo li ottiene gratis.
 
-**Client** — демо работает со всеми импортёрами через базовый класс и вызывает один и тот же `Import`. По выводу видно: шаги одинаковые, отличаются только детали.
+**Client**: la demo lavora con tutti gli importer tramite la classe base e chiama lo stesso `Import`. Dall'output si vede che i passi sono gli stessi e cambiano solo i dettagli.
 
-## Пример 2. Горячие напитки (`Beverages/`) — классический пример с хуками
+## Esempio 2. Bevande calde (`Beverages/`): l'esempio classico con gli hook
 
-**AbstractClass** — `HotBeverage` с шаблонным методом `Prepare()`:
+**AbstractClass**: `HotBeverage` con il template method `Prepare()`:
 
 ```csharp
 public void Prepare()
@@ -106,49 +108,49 @@ public void Prepare()
 }
 ```
 
-- `BoilWater`, `PourInCup` — общие шаги;
-- `Brew`, `AddCondiments` — абстрактные;
-- `WaterTemperature` и `CustomerWantsCondiments()` — **хуки**: по умолчанию 100°C и «да, добавки нужны».
+- `BoilWater`, `PourInCup`: passi comuni;
+- `Brew`, `AddCondiments`: astratti;
+- `WaterTemperature` e `CustomerWantsCondiments()`: **hook**: di default 100°C e «sì, gli extra servono».
 
-**ConcreteClass** (папка `Drinks/`):
-- `Tea` — только обязательные шаги;
-- `GreenTea` — переопределяет хуки: вода 80°C и без добавок;
-- `Coffee` — хук `CustomerWantsCondiments()` зависит от выбора клиента (параметр конструктора).
+**ConcreteClass** (cartella `Drinks/`):
+- `Tea`: solo i passi obbligatori;
+- `GreenTea`: ridefinisce gli hook: acqua a 80°C e nessun extra;
+- `Coffee`: l'hook `CustomerWantsCondiments()` dipende dalla scelta del cliente (parametro del costruttore).
 
-Хуки показывают, как подкласс может **управлять ходом** алгоритма (пропустить шаг), не меняя сам алгоритм.
+Gli hook mostrano come una sottoclasse possa **guidare il flusso** dell'algoritmo (saltare un passo) senza modificare l'algoritmo stesso.
 
 ---
 
-## «Голливудский принцип»
+## Il «principio di Hollywood»
 
-*«Не звоните нам, мы сами вам позвоним».* Базовый класс вызывает методы подклассов, а не наоборот. Подкласс не управляет алгоритмом — он только предоставляет детали, когда его об этом попросят.
+*«Non chiamarci, ti chiameremo noi».* È la classe base a chiamare i metodi delle sottoclassi, non il contrario. La sottoclasse non controlla l'algoritmo: fornisce solo i dettagli quando le vengono richiesti.
 
-## Когда применять
+## Quando usarlo
 
-- Несколько классов делают одно и то же, отличаясь лишь отдельными шагами.
-- Нужно разрешить расширять только определённые части алгоритма, не давая менять его структуру.
-- Нужно убрать дублирование общего кода в похожих классах.
-- Примеры: импорт/экспорт данных, генерация отчётов, обработка запросов (в ASP.NET Core `ControllerBase`, `BackgroundService.ExecuteAsync`), тестовые фреймворки (`SetUp` → тест → `TearDown`).
+- Diverse classi fanno la stessa cosa e differiscono solo per alcuni passi.
+- Bisogna permettere di estendere solo determinate parti dell'algoritmo, senza permettere di cambiarne la struttura.
+- Bisogna eliminare la duplicazione del codice comune in classi simili.
+- Esempi: importazione/esportazione di dati, generazione di report, elaborazione delle richieste (in ASP.NET Core `ControllerBase`, `BackgroundService.ExecuteAsync`), framework di test (`SetUp` → test → `TearDown`).
 
-## Когда не нужен
+## Quando non serve
 
-- Варианты алгоритма нужно менять **во время выполнения** — лучше Strategy.
-- Шагов много, и подклассы переопределяют почти всё — общего алгоритма фактически нет.
+- Le varianti dell'algoritmo devono cambiare **durante l'esecuzione**: meglio Strategy.
+- I passi sono molti e le sottoclassi ridefiniscono quasi tutto: di fatto non c'è un algoritmo comune.
 
-## Плюсы и минусы
+## Pro e contro
 
-**Плюсы**
-- Общий код в одном месте, нет дублирования.
-- Структура алгоритма защищена от изменений.
-- Подклассы переопределяют только то, что действительно отличается.
+**Pro**
+- Il codice comune è in un unico punto, senza duplicazioni.
+- La struttura dell'algoritmo è protetta dalle modifiche.
+- Le sottoclassi ridefiniscono solo ciò che è davvero diverso.
 
-**Минусы**
-- Жёсткая связь через **наследование**: изменения базового класса затрагивают всех наследников.
-- Ограничен структурой скелета — новый шаг в середине требует изменения базового класса.
-- Можно нарушить принцип подстановки Лисков, если подкласс переопределит шаг «неожиданно» (например, подавит обязательный шаг).
-- Чем больше шагов, тем труднее поддерживать.
+**Contro**
+- Accoppiamento rigido tramite **ereditarietà**: le modifiche alla classe base si ripercuotono su tutte le sottoclassi.
+- È limitato dalla struttura dello scheletro: un nuovo passo nel mezzo richiede di modificare la classe base.
+- Si può violare il principio di sostituzione di Liskov se una sottoclasse ridefinisce un passo in modo «inaspettato» (ad esempio sopprimendo un passo obbligatorio).
+- Più passi ci sono, più è difficile la manutenzione.
 
-## Связь с другими паттернами
+## Relazioni con altri pattern
 
-- **Strategy** решает похожую задачу через **композицию** и позволяет менять алгоритм целиком во время выполнения. **Template Method** — через **наследование**, вариант фиксируется на уровне класса.
-- **Factory Method** — частный случай Template Method: шаг алгоритма — это создание объекта. В этом проекте `NotificationFactory.Notify()` из `FactoryMethod/NotifySystem` — шаблонный метод, вызывающий фабричный метод `CreateNotification()`.
+- **Strategy** risolve un problema simile tramite la **composizione** e permette di cambiare l'intero algoritmo a runtime. **Template Method** lo fa tramite l'**ereditarietà**, e la variante è fissata a livello di classe.
+- **Factory Method** è un caso particolare di Template Method: il passo dell'algoritmo è la creazione di un oggetto. In questo progetto `NotificationFactory.Notify()` di `FactoryMethod/NotifySystem` è un template method che chiama il factory method `CreateNotification()`.

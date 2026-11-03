@@ -6,9 +6,9 @@ namespace GoFPatterns.ChainOfResponsibility.SupportTickets
     {
         public void Demonstrate()
         {
-            Console.WriteLine("=== Chain of Responsibility: Support tickets ===\n");
+            Console.WriteLine("=== Chain of Responsibility: ticket di supporto ===\n");
 
-            // Chain: bot -> operator -> engineer -> manager
+            // Catena: bot -> operatore -> ingegnere -> manager
             var chain = new ChatBotHandler();
             chain.SetNext(new OperatorHandler())
                  .SetNext(new EngineerHandler())
@@ -16,22 +16,22 @@ namespace GoFPatterns.ChainOfResponsibility.SupportTickets
 
             SupportTicket[] tickets =
             [
-                new(1, "I forgot my password", TicketSeverity.Low),
-                new(2, "Wrong item in my order", TicketSeverity.Medium),
-                new(3, "Payment page returns error 500", TicketSeverity.High),
-                new(4, "Site is down for all users", TicketSeverity.Critical)
+                new(1, "Ho dimenticato la mia password", TicketSeverity.Low),
+                new(2, "Articolo sbagliato nel mio ordine", TicketSeverity.Medium),
+                new(3, "La pagina di pagamento restituisce l'errore 500", TicketSeverity.High),
+                new(4, "Il sito non è raggiungibile per tutti gli utenti", TicketSeverity.Critical)
             ];
 
             foreach (var ticket in tickets)
             {
                 Console.WriteLine($"Ticket #{ticket.Id} [{ticket.Severity}]: {ticket.Description}");
-                chain.Handle(ticket); // Client sends request only to the first handler.
+                chain.Handle(ticket); // Il client invia la richiesta solo al primo handler.
                 Console.WriteLine();
             }
 
-            // Chain can be configured differently - for example, without bot and manager at night.
-            Console.WriteLine("Night shift chain (only operator):");
-            new OperatorHandler().Handle(new SupportTicket(5, "Database is corrupted", TicketSeverity.Critical));
+            // La catena può essere configurata diversamente - ad esempio, di notte senza bot e manager.
+            Console.WriteLine("Catena del turno di notte (solo operatore):");
+            new OperatorHandler().Handle(new SupportTicket(5, "Il database è danneggiato", TicketSeverity.Critical));
         }
     }
 }

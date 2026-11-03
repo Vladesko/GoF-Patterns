@@ -2,7 +2,7 @@
 
 namespace GoFPatterns.Command.TextEditor
 {
-    // Receiver - contains real business logic. Knows nothing about commands.
+    // Receiver - contiene la vera logica di business. Non sa nulla dei comandi.
     public class Document
     {
         private readonly StringBuilder _text = new();

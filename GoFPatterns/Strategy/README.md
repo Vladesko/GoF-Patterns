@@ -1,14 +1,16 @@
-# Strategy (Стратегия)
+🌐 [Русский](https://github.com/Vladesko/GoF-Patterns/tree/rus/GoFPatterns/Strategy) | [English](https://github.com/Vladesko/GoF-Patterns/tree/eng/GoFPatterns/Strategy) | [Deutsch](https://github.com/Vladesko/GoF-Patterns/tree/deu/GoFPatterns/Strategy) | **Italiano** | [Español](https://github.com/Vladesko/GoF-Patterns/tree/spa/GoFPatterns/Strategy)
 
-**Тип:** поведенческий паттерн.
+# Strategy (Strategia)
 
-**Strategy** определяет **семейство взаимозаменяемых алгоритмов**, выносит каждый в отдельный класс и позволяет подменять их во время выполнения программы. Клиент работает с алгоритмом через общий интерфейс.
+**Tipo:** pattern comportamentale.
+
+**Strategy** definisce una **famiglia di algoritmi intercambiabili**, mette ciascuno in una classe separata e permette di sostituirli durante l'esecuzione del programma. Il client lavora con l'algoritmo tramite un'interfaccia comune.
 
 ---
 
-## Какую проблему решает
+## Quale problema risolve
 
-Интернет-магазин считает стоимость доставки: почтой, курьером, в пункт выдачи. Если всё это в одном классе:
+Un negozio online calcola il costo di consegna: per posta, con corriere, presso un punto di ritiro. Se tutto è in un'unica classe:
 
 ```csharp
 public decimal Calculate(Parcel parcel, string type)
@@ -20,32 +22,32 @@ public decimal Calculate(Parcel parcel, string type)
 }
 ```
 
-- каждый новый способ доставки — правка этого класса и риск сломать остальные;
-- класс разрастается, алгоритмы перемешаны;
-- отдельно протестировать один алгоритм сложно;
-- такие же `if` появляются в расчёте сроков, в отображении и т.д.
+- ogni nuovo metodo di consegna significa modificare questa classe con il rischio di rompere gli altri;
+- la classe cresce e gli algoritmi sono mescolati;
+- è difficile testare un singolo algoritmo separatamente;
+- gli stessi `if` compaiono nel calcolo dei tempi, nella visualizzazione e così via.
 
-## Решение
+## Soluzione
 
-Каждый алгоритм вынести в отдельный класс — **стратегию** — с общим интерфейсом. Класс-**контекст** хранит ссылку на стратегию и делегирует ей работу, не зная, какая именно стратегия ему передана. Клиент выбирает нужную стратегию и передаёт её контексту; её можно заменить в любой момент.
+Spostare ogni algoritmo in una classe separata, una **strategy**, con un'interfaccia comune. La classe **contesto** mantiene un riferimento alla strategy e le delega il lavoro, senza sapere quale strategy le sia stata passata. Il client sceglie la strategy desiderata e la passa al contesto; può essere sostituita in qualsiasi momento.
 
 ---
 
-## Участники
+## Partecipanti
 
-| Роль | Класс в примере | Описание |
-|------|-----------------|----------|
-| **Strategy** | `IDeliveryStrategy`, `ISortStrategy` | Общий интерфейс всех вариантов алгоритма |
-| **ConcreteStrategy** | `PostDeliveryStrategy`, `CourierDeliveryStrategy`, `PickupPointStrategy`, `BubbleSortStrategy`, `QuickSortStrategy`, `BuiltInSortStrategy` | Конкретные реализации алгоритма |
-| **Context** | `DeliveryCalculator`, `DataSorter` | Хранит стратегию (или получает её параметром) и вызывает её через интерфейс |
-| **Client** | демо-классы | Выбирает стратегию и передаёт её контексту |
+| Ruolo | Classe nell'esempio | Descrizione |
+|-------|---------------------|-------------|
+| **Strategy** | `IDeliveryStrategy`, `ISortStrategy` | Interfaccia comune di tutte le varianti dell'algoritmo |
+| **ConcreteStrategy** | `PostDeliveryStrategy`, `CourierDeliveryStrategy`, `PickupPointStrategy`, `BubbleSortStrategy`, `QuickSortStrategy`, `BuiltInSortStrategy` | Implementazioni concrete dell'algoritmo |
+| **Context** | `DeliveryCalculator`, `DataSorter` | Conserva la strategy (o la riceve come parametro) e la chiama tramite l'interfaccia |
+| **Client** | classi demo | Sceglie la strategy e la passa al contesto |
 
-## Схема
+## Schema
 
 ```text
- Client ── выбирает ──► PostDeliveryStrategy
+ Client ── sceglie ──► PostDeliveryStrategy
    │                          │
-   ▼                          ▼  implements
+   ▼                          ▼  implementa
  DeliveryCalculator ◆────► «interface» IDeliveryStrategy
  (Context)                    CalculateCost(parcel)
    SetStrategy(s)             EstimateDays(parcel)
@@ -56,81 +58,81 @@ public decimal Calculate(Parcel parcel, string type)
 
 ---
 
-## Пример 1. Стоимость доставки (`Delivery/`)
+## Esempio 1. Costo di consegna (`Delivery/`)
 
-**Strategy** — `IDeliveryStrategy` с методами `CalculateCost` и `EstimateDays`. Входные данные — `record Parcel` (вес, расстояние, объявленная стоимость).
+**Strategy**: `IDeliveryStrategy` con i metodi `CalculateCost` ed `EstimateDays`. I dati di input sono un `record Parcel` (peso, distanza, valore dichiarato).
 
-**ConcreteStrategy** (папка `Strategies/`) — каждая содержит только свою формулу:
-- `PostDeliveryStrategy` — дёшево и медленно, цена зависит от веса;
-- `CourierDeliveryStrategy` — дороже, зависит от расстояния, 1–2 дня;
-- `PickupPointStrategy` — бесплатно для заказов от 100:
+**ConcreteStrategy** (cartella `Strategies/`): ognuna contiene solo la propria formula:
+- `PostDeliveryStrategy`: economica e lenta, il prezzo dipende dal peso;
+- `CourierDeliveryStrategy`: più cara, dipende dalla distanza, 1–2 giorni;
+- `PickupPointStrategy`: gratuita per gli ordini da 100 in su:
 
 ```csharp
 public decimal CalculateCost(Parcel parcel) =>
     parcel.DeclaredValue >= FreeDeliveryThreshold ? 0m : 2.5m;
 ```
 
-**Context** — `DeliveryCalculator` получает стратегию в конструкторе, может сменить её через `SetStrategy` и формирует предложение, не зная, какая стратегия внутри:
+**Context**: `DeliveryCalculator` riceve la strategy nel costruttore, può cambiarla con `SetStrategy` e prepara il preventivo senza sapere quale strategy ci sia dentro:
 
 ```csharp
 public string GetQuote(Parcel parcel) =>
-    $"{_strategy.Name} cost: {_strategy.CalculateCost(parcel)}, days: {_strategy.EstimateDays(parcel)}";
+    $"{_strategy.Name} costo: {_strategy.CalculateCost(parcel)}, giorni: {_strategy.EstimateDays(parcel)}";
 ```
 
-**Client** — демо прогоняет одну посылку через все стратегии, а потом **автоматически выбирает** самую дешёвую и самую быструю — стратегии можно сравнивать, потому что у них общий интерфейс.
+**Client**: la demo fa passare lo stesso pacco attraverso tutte le strategy, e poi **sceglie automaticamente** la più economica e la più veloce: le strategy si possono confrontare perché hanno un'interfaccia comune.
 
-Чтобы добавить, например, доставку дроном, достаточно написать один новый класс — ни контекст, ни другие стратегии менять не нужно.
+Per aggiungere, ad esempio, la consegna con drone basta scrivere una nuova classe: non bisogna modificare né il contesto né le altre strategy.
 
-## Пример 2. Алгоритмы сортировки (`Sorting/`)
+## Esempio 2. Algoritmi di ordinamento (`Sorting/`)
 
-**Strategy** — `ISortStrategy.Sort(int[] items)`.
+**Strategy**: `ISortStrategy.Sort(int[] items)`.
 
-**ConcreteStrategy** (папка `Strategies/`):
-- `BubbleSortStrategy` — простая, O(n²);
-- `QuickSortStrategy` — быстрая сортировка, O(n log n) в среднем;
-- `BuiltInSortStrategy` — обёртка над `Array.Sort` (интроспективная сортировка .NET).
+**ConcreteStrategy** (cartella `Strategies/`):
+- `BubbleSortStrategy`: semplice, O(n²);
+- `QuickSortStrategy`: quick sort, O(n log n) in media;
+- `BuiltInSortStrategy`: wrapper attorno a `Array.Sort` (l'introsort di .NET).
 
-**Context** — `DataSorter`:
-- `Sort(items, strategy)` — стратегию передают **параметром метода**, а не хранят в поле. Это тоже Strategy: важна возможность подставить алгоритм, а не то, где хранится ссылка;
-- `ChooseFor(items)` — контекст может **сам выбрать** стратегию по данным (для крошечного массива — пузырёк, иначе — встроенная).
+**Context**: `DataSorter`:
+- `Sort(items, strategy)`: la strategy viene passata **come parametro del metodo**, non conservata in un campo. Anche questo è Strategy: conta la possibilità di sostituire l'algoritmo, non dove si trova il riferimento;
+- `ChooseFor(items)`: il contesto può **scegliere da solo** la strategy in base ai dati (per un array minuscolo il bubble sort, altrimenti quella integrata).
 
-**Client** — демо сортирует одни и те же 5000 чисел всеми стратегиями и сравнивает время — наглядно видно, зачем алгоритмы делать взаимозаменяемыми.
+**Client**: la demo ordina gli stessi 5000 numeri con tutte le strategy e ne confronta i tempi: si vede chiaramente perché conviene rendere gli algoritmi intercambiabili.
 
-В конце показано, что в C# простая стратегия может быть просто **делегатом**: `Array.Sort(names, byLength)`, где `byLength` — `Comparison<string>`. Так же устроены `IComparer<T>`, `IEqualityComparer<T>`, лямбды в LINQ (`OrderBy(x => ...)`).
+Alla fine si mostra che in C# una strategy semplice può essere semplicemente un **delegate**: `Array.Sort(names, byLength)`, dove `byLength` è un `Comparison<string>`. Allo stesso modo funzionano `IComparer<T>`, `IEqualityComparer<T>` e le lambda in LINQ (`OrderBy(x => ...)`).
 
 ---
 
-## Когда применять
+## Quando usarlo
 
-- Есть несколько вариантов одного алгоритма, и нужно переключаться между ними.
-- Есть много похожих классов, отличающихся только поведением.
-- Нужно убрать большой условный оператор, выбирающий вариант алгоритма.
-- Нужно изолировать детали алгоритма от кода, который его использует.
-- Примеры: способы оплаты/доставки, расчёт скидок и налогов, сжатие, сортировка, маршрутизация, валидация.
+- Ci sono diverse varianti dello stesso algoritmo e bisogna passare dall'una all'altra.
+- Ci sono molte classi simili che differiscono solo per il comportamento.
+- Bisogna eliminare un grande costrutto condizionale che sceglie la variante dell'algoritmo.
+- Bisogna isolare i dettagli dell'algoritmo dal codice che lo usa.
+- Esempi: metodi di pagamento/consegna, calcolo di sconti e tasse, compressione, ordinamento, routing, convalida.
 
-## Когда не нужен
+## Quando non serve
 
-- Алгоритмов два, и они почти никогда не меняются — `if` проще.
-- Клиенту не нужно знать о вариантах — тогда, возможно, лучше Template Method или просто полиморфизм.
+- Gli algoritmi sono due e non cambiano quasi mai: un `if` è più semplice.
+- Il client non ha bisogno di conoscere le varianti: allora forse è meglio Template Method o il semplice polimorfismo.
 
-## Плюсы и минусы
+## Pro e contro
 
-**Плюсы**
-- Алгоритмы заменяются во время выполнения.
-- Код алгоритмов изолирован от остального кода (SRP).
-- Наследование заменяется композицией.
-- Новые стратегии добавляются без изменения контекста (Open/Closed).
-- Каждую стратегию легко протестировать отдельно.
+**Pro**
+- Gli algoritmi si sostituiscono a runtime.
+- Il codice degli algoritmi è isolato dal resto del codice (SRP).
+- L'ereditarietà è sostituita dalla composizione.
+- Nuove strategy si aggiungono senza modificare il contesto (Open/Closed).
+- Ogni strategy è facile da testare separatamente.
 
-**Минусы**
-- Клиент должен знать о различиях между стратегиями, чтобы выбрать нужную.
-- Лишние классы, если алгоритмов немного (в C# смягчается делегатами).
+**Contro**
+- Il client deve conoscere le differenze tra le strategy per scegliere quella giusta.
+- Classi in più se gli algoritmi sono pochi (in C# il problema si attenua con i delegate).
 
-## Связь с другими паттернами
+## Relazioni con altri pattern
 
-- **State** — почти та же структура, но стратегию **выбирает клиент**, и стратегии независимы; состояния **сами переключаются** между собой.
-- **Template Method** меняет части алгоритма через **наследование** (статически, на уровне классов); **Strategy** меняет алгоритм целиком через **композицию** (динамически, на уровне объектов).
-- **Decorator** меняет «оболочку» объекта, **Strategy** — его «внутренности».
-- **Bridge** тоже основан на делегировании через интерфейс, но там и абстракция образует иерархию.
-- **Command** тоже упаковывает поведение в объект, но команда — это **действие** (которое можно отложить, отменить), а стратегия — **способ** выполнить одну и ту же задачу.
-- **Abstract Factory** из этого проекта (`IPaymentProviderFactory`) использует похожую идею: `PaymentService` работает с любым провайдером через интерфейс.
+- **State**: struttura quasi uguale, ma la strategy la **sceglie il client** e le strategy sono indipendenti; gli stati **si scambiano da soli** tra loro.
+- **Template Method** cambia parti dell'algoritmo tramite l'**ereditarietà** (staticamente, a livello di classi); **Strategy** cambia l'intero algoritmo tramite la **composizione** (dinamicamente, a livello di oggetti).
+- **Decorator** cambia l'«involucro» di un oggetto, **Strategy** le sue «viscere».
+- Anche **Bridge** si basa sulla delega tramite un'interfaccia, ma lì anche l'astrazione forma una gerarchia.
+- Anche **Command** racchiude un comportamento in un oggetto, ma il comando è un'**azione** (che si può rimandare, annullare), mentre la strategy è un **modo** di svolgere lo stesso compito.
+- L'**Abstract Factory** di questo progetto (`IPaymentProviderFactory`) usa un'idea simile: `PaymentService` lavora con qualsiasi provider tramite un'interfaccia.

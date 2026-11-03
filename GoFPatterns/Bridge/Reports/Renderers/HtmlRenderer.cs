@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Bridge.Reports.Renderers
 {
-    // Concrete implementor - HTML for web page.
+    // Implementor concreto - HTML per una pagina web.
     public class HtmlRenderer : IReportRenderer
     {
         public string RenderTitle(string title) => $"<h1>{title}</h1>";

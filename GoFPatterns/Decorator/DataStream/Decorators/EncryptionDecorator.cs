@@ -2,8 +2,8 @@
 
 namespace GoFPatterns.Decorator.DataStream.Decorators
 {
-    // Concrete decorator - encrypts data before writing and decrypts after reading.
-    // Simple XOR is used only for demonstration, it is NOT a real encryption.
+    // Decorator concreto - cifra i dati prima della scrittura e li decifra dopo la lettura.
+    // Il semplice XOR è usato solo a scopo dimostrativo, NON è una vera cifratura.
     public class EncryptionDecorator(IDataSource source, string key) : DataSourceDecorator(source)
     {
         private readonly byte[] _key = Encoding.UTF8.GetBytes(key);

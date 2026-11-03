@@ -1,7 +1,7 @@
 ﻿namespace GoFPatterns.Memento.TextEditorHistory
 {
-    // Narrow interface of memento - this is all the caretaker can see.
-    // Saved state itself is hidden, so nobody except editor can read or change it.
+    // Interfaccia ristretta del memento - è tutto ciò che il caretaker può vedere.
+    // Lo stato salvato è nascosto, quindi nessuno tranne l'editor può leggerlo o modificarlo.
     public interface IEditorMemento
     {
         string Label { get; }

@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Strategy.Sorting
 {
-    // Strategy - sorting algorithm.
+    // Strategy - algoritmo di ordinamento.
     public interface ISortStrategy
     {
         string Name { get; }

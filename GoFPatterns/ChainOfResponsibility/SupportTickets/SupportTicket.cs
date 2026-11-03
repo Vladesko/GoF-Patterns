@@ -1,5 +1,5 @@
 ﻿namespace GoFPatterns.ChainOfResponsibility.SupportTickets
 {
-    // Request which travels along the chain.
+    // Richiesta che viaggia lungo la catena.
     public record SupportTicket(int Id, string Description, TicketSeverity Severity);
 }

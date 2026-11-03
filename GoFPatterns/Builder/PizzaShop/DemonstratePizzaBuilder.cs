@@ -8,23 +8,23 @@ namespace GoFPatterns.Builder.PizzaShop
         {
             Console.WriteLine("=== Builder: Pizza ===\n");
 
-            // The same recipes (director) with different builders give different products.
+            // Le stesse ricette (director) con builder diversi danno prodotti diversi.
             var director = new PizzaDirector(new ItalianPizzaBuilder());
-            Console.WriteLine($"Italian margherita: {director.MakeMargherita()}");
-            Console.WriteLine($"Italian pepperoni:  {director.MakePepperoni()}");
+            Console.WriteLine($"Margherita italiana: {director.MakeMargherita()}");
+            Console.WriteLine($"Pepperoni italiana:  {director.MakePepperoni()}");
 
             director.ChangeBuilder(new AmericanPizzaBuilder());
-            Console.WriteLine($"American margherita: {director.MakeMargherita()}");
-            Console.WriteLine($"American pepperoni:  {director.MakePepperoni()}");
+            Console.WriteLine($"Margherita americana: {director.MakeMargherita()}");
+            Console.WriteLine($"Pepperoni americana:  {director.MakePepperoni()}");
 
-            // Client can use builder without director to make a custom pizza.
+            // Il client può usare il builder senza director per creare una pizza personalizzata.
             IPizzaBuilder builder = new ItalianPizzaBuilder();
-            builder.SetSize("Small");
-            builder.SetDough("rye");
+            builder.SetSize("piccola");
+            builder.SetDough("segale");
             builder.SetSauce("pesto");
-            builder.AddTopping("mushrooms");
-            builder.AddTopping("olives");
-            Console.WriteLine($"\nCustom pizza: {builder.GetResult()}");
+            builder.AddTopping("funghi");
+            builder.AddTopping("olive");
+            Console.WriteLine($"\nPizza personalizzata: {builder.GetResult()}");
         }
     }
 }

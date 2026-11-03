@@ -2,8 +2,8 @@
 
 namespace GoFPatterns.Mediator.RegistrationForm
 {
-    // Concrete mediator - the form. All rules about how components affect each other are here.
-    // Components are reusable: TextBox knows nothing about checkboxes and buttons.
+    // Mediator concreto - il modulo. Qui si trovano tutte le regole su come i componenti si influenzano a vicenda.
+    // I componenti sono riutilizzabili: TextBox non sa nulla di checkbox e pulsanti.
     public class RegistrationDialog : IFormMediator
     {
         public TextBox Email { get; } = new("Email");
@@ -29,13 +29,13 @@ namespace GoFPatterns.Mediator.RegistrationForm
             if (sender == IsCompany && eventName == "toggled")
             {
                 CompanyName.IsVisible = IsCompany.IsChecked;
-                Console.WriteLine($"    [form] CompanyName field is {(CompanyName.IsVisible ? "shown" : "hidden")}");
+                Console.WriteLine($"    [modulo] il campo CompanyName è {(CompanyName.IsVisible ? "visibile" : "nascosto")}");
             }
 
             if (sender == Submit && eventName == "click")
             {
-                var company = IsCompany.IsChecked ? $", company {CompanyName.Text}" : string.Empty;
-                Console.WriteLine($"    [form] Registered {Email.Text}{company}");
+                var company = IsCompany.IsChecked ? $", azienda {CompanyName.Text}" : string.Empty;
+                Console.WriteLine($"    [modulo] Registrato {Email.Text}{company}");
                 return;
             }
 
@@ -52,7 +52,7 @@ namespace GoFPatterns.Mediator.RegistrationForm
             if (Submit.IsEnabled != isValid)
             {
                 Submit.IsEnabled = isValid;
-                Console.WriteLine($"    [form] Submit is {(isValid ? "enabled" : "disabled")}");
+                Console.WriteLine($"    [modulo] Submit è {(isValid ? "abilitato" : "disabilitato")}");
             }
         }
     }

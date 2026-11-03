@@ -1,50 +1,52 @@
-# Proxy (Заместитель)
+🌐 [Русский](https://github.com/Vladesko/GoF-Patterns/tree/rus/GoFPatterns/Proxy) | [English](https://github.com/Vladesko/GoF-Patterns/tree/eng/GoFPatterns/Proxy) | [Deutsch](https://github.com/Vladesko/GoF-Patterns/tree/deu/GoFPatterns/Proxy) | **Italiano** | [Español](https://github.com/Vladesko/GoF-Patterns/tree/spa/GoFPatterns/Proxy)
 
-**Тип:** структурный паттерн.
+# Proxy (Sostituto)
 
-**Proxy** — это объект-заместитель, который реализует **тот же интерфейс**, что и реальный объект, и **контролирует доступ** к нему: перехватывает вызовы и может выполнить что-то до или после передачи вызова оригиналу (или не передавать его вовсе).
+**Tipo:** pattern strutturale.
 
----
-
-## Какую проблему решает
-
-Есть объект, к которому нельзя или нежелательно обращаться напрямую:
-
-- он **тяжёлый** — галерея из 100 фотографий по 20 МБ не должна грузить их все при открытии, если пользователь посмотрит только две;
-- к нему нужен **контроль доступа** — снять деньги со счёта может только владелец;
-- его вызовы **дорогие**, и результат стоит **кешировать** — запрос баланса к ядру банковской системы;
-- нужно **логировать/аудировать** обращения;
-- объект находится **удалённо** (другой сервис, другая машина).
-
-Добавлять всё это в сам класс плохо: он начинает отвечать за безопасность, кеширование и логирование вместо своей бизнес-логики. А часто класс вообще нельзя менять (сторонний код).
-
-## Решение
-
-Создать класс-заместитель с тем же интерфейсом. Заместитель хранит ссылку на реальный объект (или создаёт его сам, когда нужно) и делегирует ему работу, добавляя свою логику. Клиент работает с интерфейсом и **не замечает подмены**.
-
-### Виды заместителей
-
-| Вид | Что делает | Пример в проекте |
-|-----|-----------|------------------|
-| **Virtual proxy** | Откладывает создание тяжёлого объекта до первого обращения | `LazyImageProxy` |
-| **Protection proxy** | Проверяет права доступа | `ProtectionAccountProxy` |
-| **Caching proxy** | Кеширует результаты | `CachingAccountProxy` |
-| **Logging proxy** | Журналирует обращения | `LoggingAccountProxy` |
-| **Remote proxy** | Представляет объект из другого адресного пространства (gRPC/WCF-клиенты, `HttpClient`-обёртки) | — |
-| **Smart reference** | Подсчёт ссылок, освобождение ресурсов, когда объект больше не нужен | — |
+**Proxy** è un oggetto sostituto che implementa **la stessa interfaccia** dell'oggetto reale e ne **controlla l'accesso**: intercetta le chiamate e può fare qualcosa prima o dopo averle passate all'originale (oppure non passarle affatto).
 
 ---
 
-## Участники
+## Quale problema risolve
 
-| Роль | Класс в примере | Описание |
-|------|-----------------|----------|
-| **Subject** | `IImage`, `IBankAccount` | Общий интерфейс реального объекта и заместителя. Благодаря ему заместитель можно подставить вместо оригинала |
-| **RealSubject** | `HighResolutionImage`, `BankAccount` | Реальный объект с полезной бизнес-логикой |
-| **Proxy** | `LazyImageProxy`, `ProtectionAccountProxy`, `CachingAccountProxy`, `LoggingAccountProxy` | Хранит ссылку на RealSubject, контролирует доступ к нему, может управлять его жизненным циклом |
-| **Client** | демо-классы | Работает через Subject и не знает, оригинал перед ним или заместитель |
+C'è un oggetto a cui non si può o non conviene accedere direttamente:
 
-## Схема
+- è **pesante**: una galleria di 100 foto da 20 MB non dovrebbe caricarle tutte all'apertura se l'utente ne guarderà solo due;
+- richiede un **controllo degli accessi**: solo il titolare può prelevare denaro dal conto;
+- le sue chiamate sono **costose** e il risultato merita di essere **messo in cache**: la richiesta del saldo al sistema centrale della banca;
+- bisogna **registrare/verificare** gli accessi (logging, audit);
+- l'oggetto si trova **in remoto** (un altro servizio, un'altra macchina).
+
+Aggiungere tutto questo alla classe stessa è una cattiva idea: inizia a occuparsi di sicurezza, cache e logging invece della propria logica di business. E spesso la classe non si può proprio modificare (codice di terze parti).
+
+## Soluzione
+
+Creare una classe sostituto con la stessa interfaccia. Il proxy mantiene un riferimento all'oggetto reale (o lo crea da solo quando serve) e gli delega il lavoro, aggiungendo la propria logica. Il client lavora con l'interfaccia e **non si accorge della sostituzione**.
+
+### Tipi di proxy
+
+| Tipo | Cosa fa | Esempio nel progetto |
+|------|---------|----------------------|
+| **Virtual proxy** | Rimanda la creazione di un oggetto pesante fino al primo accesso | `LazyImageProxy` |
+| **Protection proxy** | Verifica i diritti di accesso | `ProtectionAccountProxy` |
+| **Caching proxy** | Mette in cache i risultati | `CachingAccountProxy` |
+| **Logging proxy** | Registra gli accessi | `LoggingAccountProxy` |
+| **Remote proxy** | Rappresenta un oggetto di un altro spazio di indirizzamento (client gRPC/WCF, wrapper di `HttpClient`) | — |
+| **Smart reference** | Conteggio dei riferimenti, rilascio delle risorse quando l'oggetto non serve più | — |
+
+---
+
+## Partecipanti
+
+| Ruolo | Classe nell'esempio | Descrizione |
+|-------|---------------------|-------------|
+| **Subject** | `IImage`, `IBankAccount` | Interfaccia comune dell'oggetto reale e del proxy. Grazie a essa il proxy può essere usato al posto dell'originale |
+| **RealSubject** | `HighResolutionImage`, `BankAccount` | L'oggetto reale con la logica di business utile |
+| **Proxy** | `LazyImageProxy`, `ProtectionAccountProxy`, `CachingAccountProxy`, `LoggingAccountProxy` | Mantiene un riferimento al RealSubject, ne controlla l'accesso, può gestirne il ciclo di vita |
+| **Client** | classi demo | Lavora tramite il Subject e non sa se ha davanti l'originale o un proxy |
+
+## Schema
 
 ```text
                ┌──────────────────────┐
@@ -55,22 +57,22 @@
                     │             │
      ┌──────────────────┐   ┌───────────────────────┐
      │ LazyImageProxy   │──►│ HighResolutionImage   │
-     │ - _realImage?    │   │ (тяжёлый, грузится    │
-     │ Display():       │   │  в конструкторе)      │
-     │  create if null, │   └───────────────────────┘
-     │  then delegate   │
+     │ - _realImage?    │   │ (pesante, caricato    │
+     │ Display():       │   │  nel costruttore)     │
+     │  crea se null,   │   └───────────────────────┘
+     │  poi delega      │
      └──────────────────┘
 ```
 
 ---
 
-## Пример 1. Ленивая загрузка изображений (`ImageLoading/`) — virtual proxy
+## Esempio 1. Caricamento lazy delle immagini (`ImageLoading/`): virtual proxy
 
-**Subject** — `IImage` (`FileName`, `Display()`).
+**Subject**: `IImage` (`FileName`, `Display()`).
 
-**RealSubject** — `HighResolutionImage` загружает картинку с диска прямо в конструкторе (имитация через `Thread.Sleep`). Создать такой объект — уже дорого.
+**RealSubject**: `HighResolutionImage` carica l'immagine dal disco direttamente nel costruttore (simulato con `Thread.Sleep`). Già creare un oggetto del genere è costoso.
 
-**Proxy** — `LazyImageProxy` хранит только имя файла и создаёт реальный объект при **первом** вызове `Display()`:
+**Proxy**: `LazyImageProxy` conserva solo il nome del file e crea l'oggetto reale alla **prima** chiamata di `Display()`:
 
 ```csharp
 public void Display()
@@ -80,40 +82,40 @@ public void Display()
 }
 ```
 
-**Client** — демо открывает галерею из 5 картинок двумя способами:
-- без заместителя — все 5 файлов грузятся сразу (~1 с);
-- с заместителем — галерея открывается мгновенно, а загружаются только те 2 картинки, которые пользователь открыл. Повторный показ уже не грузит файл.
+**Client**: la demo apre una galleria di 5 immagini in due modi:
+- senza proxy: tutti e 5 i file vengono caricati subito (~1 s);
+- con il proxy: la galleria si apre istantaneamente e vengono caricate solo le 2 immagini aperte dall'utente. La visualizzazione successiva non ricarica il file.
 
-В .NET похожую роль играет `Lazy<T>`, а в Entity Framework — **lazy-loading proxies** для навигационных свойств.
+In .NET un ruolo simile è svolto da `Lazy<T>`, e in Entity Framework dai **lazy-loading proxy** per le proprietà di navigazione.
 
-## Пример 2. Банковский счёт (`BankAccount/`) — protection, caching, logging
+## Esempio 2. Conto bancario (`BankAccount/`): protection, caching, logging
 
-**Subject** — `IBankAccount` (`GetBalance()`, `Withdraw()`).
+**Subject**: `IBankAccount` (`GetBalance()`, `Withdraw()`).
 
-**RealSubject** — `BankAccount` содержит **только** бизнес-логику. Запрос баланса медленный (имитация обращения к ядру банка), счётчик `BalanceRequests` показывает, сколько раз реально обращались к банку.
+**RealSubject**: `BankAccount` contiene **solo** la logica di business. La richiesta del saldo è lenta (simula l'accesso al sistema centrale della banca), e il contatore `BalanceRequests` mostra quante volte si è effettivamente acceduto alla banca.
 
-**Proxies** (папка `Proxies/`):
+**Proxies** (cartella `Proxies/`):
 
-`ProtectionAccountProxy` — снимать деньги может только `UserRole.Owner`:
+`ProtectionAccountProxy`: solo `UserRole.Owner` può prelevare denaro:
 
 ```csharp
 public void Withdraw(decimal amount)
 {
     if (role != UserRole.Owner)
-        throw new UnauthorizedAccessException($"{role} can't withdraw money.");
+        throw new UnauthorizedAccessException($"{role} non può prelevare denaro.");
     account.Withdraw(amount);
 }
 ```
 
-`CachingAccountProxy` — запоминает баланс и **сбрасывает кеш** после списания:
+`CachingAccountProxy`: memorizza il saldo e **invalida la cache** dopo un prelievo:
 
 ```csharp
 public decimal GetBalance() => _cachedBalance ??= account.GetBalance();
 ```
 
-`LoggingAccountProxy` — пишет аудит всех операций, включая неудачные.
+`LoggingAccountProxy`: scrive l'audit di tutte le operazioni, comprese quelle non riuscite.
 
-**Client** — так как все заместители реализуют `IBankAccount`, их можно вкладывать друг в друга:
+**Client**: poiché tutti i proxy implementano `IBankAccount`, si possono annidare l'uno nell'altro:
 
 ```csharp
 IBankAccount ownerAccess = new LoggingAccountProxy(
@@ -121,37 +123,37 @@ IBankAccount ownerAccess = new LoggingAccountProxy(
         new CachingAccountProxy(realAccount), UserRole.Owner));
 ```
 
-Демо показывает: три запроса баланса дают **одно** реальное обращение к банку; после списания кеш сбрасывается и баланс актуален; гость получает отказ, и это попадает в аудит.
+La demo mostra che: tre richieste del saldo producono **un solo** accesso reale alla banca; dopo il prelievo la cache viene invalidata e il saldo è aggiornato; l'ospite riceve un rifiuto, che finisce nell'audit.
 
 ---
 
-## Когда применять
+## Quando usarlo
 
-- Ленивая инициализация тяжёлого объекта (virtual proxy).
-- Контроль доступа (protection proxy).
-- Кеширование результатов (caching proxy).
-- Логирование, метрики, аудит обращений.
-- Работа с удалённым объектом как с локальным (remote proxy).
+- Inizializzazione lazy di un oggetto pesante (virtual proxy).
+- Controllo degli accessi (protection proxy).
+- Cache dei risultati (caching proxy).
+- Logging, metriche, audit degli accessi.
+- Lavorare con un oggetto remoto come se fosse locale (remote proxy).
 
-## Когда не нужен
+## Quando non serve
 
-- Объект лёгкий и не требует контроля — лишний уровень косвенности.
-- Нужно не контролировать, а именно **добавить** новое поведение, которое клиент сам выбирает и комбинирует, — это ближе к Decorator.
+- L'oggetto è leggero e non richiede controlli: sarebbe un livello di indirezione superfluo.
+- Non serve controllare, ma proprio **aggiungere** un nuovo comportamento che il client sceglie e combina da solo: questo è più vicino a Decorator.
 
-## Плюсы и минусы
+## Pro e contro
 
-**Плюсы**
-- Контроль над объектом незаметно для клиента.
-- Можно управлять жизненным циклом реального объекта (создать позже, освободить раньше).
-- Работает, даже если реальный объект ещё не создан или недоступен.
-- Open/Closed: новые заместители добавляются без изменения сервиса и клиента.
+**Pro**
+- Controllo sull'oggetto in modo trasparente per il client.
+- Si può gestire il ciclo di vita dell'oggetto reale (crearlo dopo, rilasciarlo prima).
+- Funziona anche se l'oggetto reale non è ancora stato creato o non è disponibile.
+- Open/Closed: nuovi proxy si aggiungono senza modificare il servizio e il client.
 
-**Минусы**
-- Дополнительный уровень косвенности, возможны задержки ответа.
-- Увеличивается число классов.
+**Contro**
+- Un livello di indirezione in più, con possibili ritardi nella risposta.
+- Aumenta il numero di classi.
 
-## Связь с другими паттернами
+## Relazioni con altri pattern
 
-- **Adapter** предоставляет **другой** интерфейс; **Proxy** — **тот же**; **Decorator** — тот же, но расширенный.
-- **Decorator** и **Proxy** устроены почти одинаково (обёртка + делегирование), разница в намерении: декоратор **добавляет** поведение и его состав определяет клиент; заместитель **контролирует доступ** и обычно сам управляет жизненным циклом объекта (как `LazyImageProxy`, который сам создаёт `HighResolutionImage`).
-- **Facade** тоже прячет объект за собой, но у фасада свой упрощённый интерфейс, а у заместителя — интерфейс оригинала.
+- **Adapter** offre un'interfaccia **diversa**; **Proxy** la **stessa**; **Decorator** la stessa, ma estesa.
+- **Decorator** e **Proxy** sono strutturati quasi allo stesso modo (wrapper + delega), la differenza sta nell'intento: il decorator **aggiunge** comportamento e la sua composizione è decisa dal client; il proxy **controlla l'accesso** e di solito gestisce da solo il ciclo di vita dell'oggetto (come `LazyImageProxy`, che crea da solo `HighResolutionImage`).
+- Anche **Facade** nasconde un oggetto dietro di sé, ma la facade ha una propria interfaccia semplificata, mentre il proxy ha l'interfaccia dell'originale.

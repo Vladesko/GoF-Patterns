@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Flyweight.TextFormatting
 {
-    // Client - document which stores thousands of characters but only a few styles.
+    // Client - documento che memorizza migliaia di caratteri ma solo pochi stili.
     public class TextDocument
     {
         private readonly List<FormattedCharacter> _characters = [];
@@ -9,7 +9,7 @@
         public int CharactersCount => _characters.Count;
         public int StylesCount => _styles.Count;
 
-        public void Append(string text, string font, int size, bool bold = false, string color = "black")
+        public void Append(string text, string font, int size, bool bold = false, string color = "nero")
         {
             var style = _styles.Get(font, size, bold, color);
             foreach (var symbol in text)
@@ -23,7 +23,7 @@
 
         public string Render()
         {
-            // Group neighbour characters with the same style object into fragments.
+            // Raggruppa i caratteri vicini con lo stesso oggetto stile in frammenti.
             var fragments = new List<string>();
             CharacterStyle? current = null;
             var buffer = new System.Text.StringBuilder();
@@ -44,6 +44,6 @@
         }
 
         private static string Format(string text, CharacterStyle style) =>
-            $"  [{style.Font} {style.Size}{(style.Bold ? " bold" : "")} {style.Color}] \"{text}\"";
+            $"  [{style.Font} {style.Size}{(style.Bold ? " grassetto" : "")} {style.Color}] \"{text}\"";
     }
 }

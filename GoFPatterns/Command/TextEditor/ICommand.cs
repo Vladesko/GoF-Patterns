@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Command.TextEditor
 {
-    // Command - turns a request into an object. Undo makes it possible to revert the operation.
+    // Command - trasforma una richiesta in un oggetto. Undo permette di annullare l'operazione.
     public interface ICommand
     {
         string Name { get; }

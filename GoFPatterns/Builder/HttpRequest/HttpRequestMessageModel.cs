@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Builder.HttpRequest
 {
-    // Product - immutable request. It can be created only through the builder.
+    // Product - richiesta immutabile. Può essere creata solo tramite il builder.
     public class HttpRequestMessageModel
     {
         public string Method { get; }
@@ -32,7 +32,7 @@
                 ? string.Empty
                 : "?" + string.Join("&", QueryParameters.Select(p => $"{p.Key}={p.Value}"));
             var headers = string.Join(Environment.NewLine, Headers.Select(h => $"  {h.Key}: {h.Value}"));
-            var body = Body is null ? string.Empty : $"{Environment.NewLine}  Body: {Body}";
+            var body = Body is null ? string.Empty : $"{Environment.NewLine}  Corpo: {Body}";
             return $"{Method} {Url}{query} (timeout {Timeout.TotalSeconds}s){Environment.NewLine}{headers}{body}";
         }
     }

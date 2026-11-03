@@ -2,8 +2,8 @@
 {
     internal class PersonalTrainingMembership : IMembership
     {
-        public string Name => "Personal Training Membership";
-        public string Description => "Access to personal training sessions";
+        public string Name => "Abbonamento con personal trainer";
+        public string Description => "Accesso alle sessioni di allenamento personalizzato";
         public decimal Price => 100m;
     }
 }

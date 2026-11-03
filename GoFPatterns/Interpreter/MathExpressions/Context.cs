@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Interpreter.MathExpressions
 {
-    // Context - global information for interpretation: values of variables.
+    // Context - informazioni globali per l'interpretazione: i valori delle variabili.
     public class Context
     {
         private readonly Dictionary<string, double> _variables = [];
@@ -10,6 +10,6 @@
         public double Get(string name) =>
             _variables.TryGetValue(name, out var value)
                 ? value
-                : throw new KeyNotFoundException($"Variable '{name}' is not defined.");
+                : throw new KeyNotFoundException($"La variabile '{name}' non è definita.");
     }
 }

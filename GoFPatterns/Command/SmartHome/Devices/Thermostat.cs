@@ -3,6 +3,6 @@
     // Receiver.
     public class Thermostat
     {
-        public void SetTemperature(int degrees) => Console.WriteLine($"    Thermostat: {degrees}°C");
+        public void SetTemperature(int degrees) => Console.WriteLine($"    Termostato: {degrees}°C");
     }
 }

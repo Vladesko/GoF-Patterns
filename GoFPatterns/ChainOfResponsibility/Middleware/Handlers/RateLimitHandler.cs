@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.ChainOfResponsibility.Middleware.Handlers
 {
-    // Concrete handler - stops the chain if client sends too many requests.
+    // Handler concreto - interrompe la catena se il client invia troppe richieste.
     public class RateLimitHandler(int maxRequests) : IRequestHandler
     {
         private readonly Dictionary<string, int> _requests = [];
@@ -11,8 +11,8 @@
             if (_requests[context.ClientIp] > maxRequests)
             {
                 context.StatusCode = 429;
-                context.Response = "Too many requests";
-                return; // chain is interrupted
+                context.Response = "Troppe richieste";
+                return; // la catena viene interrotta
             }
             next();
         }

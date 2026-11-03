@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Prototype.Documents
 {
-    // Reference type inside of the document. It shows the difference between shallow and deep copy.
+    // Tipo riferimento all'interno del documento. Mostra la differenza tra copia superficiale e profonda.
     public class DocumentStyle
     {
         public string Font { get; set; } = "Arial";

@@ -1,8 +1,8 @@
 ﻿namespace GoFPatterns.State.OrderLifecycle.States
 {
-    // Concrete state - final state.
+    // Stato concreto - stato finale.
     public class CancelledState : OrderStateBase
     {
-        public override string Name => "Cancelled";
+        public override string Name => "Annullato";
     }
 }

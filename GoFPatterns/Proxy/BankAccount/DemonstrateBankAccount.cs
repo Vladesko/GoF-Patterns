@@ -6,28 +6,28 @@ namespace GoFPatterns.Proxy.BankAccount
     {
         public void Demonstrate()
         {
-            Console.WriteLine("=== Proxy: Bank account (protection, caching, logging) ===\n");
+            Console.WriteLine("=== Proxy: Conto bancario (protezione, cache, logging) ===\n");
 
             var realAccount = new BankAccount(1_000m);
 
-            // Proxies can be combined, because all of them implement IBankAccount.
+            // I proxy possono essere combinati, perché implementano tutti IBankAccount.
             IBankAccount ownerAccess = new LoggingAccountProxy(
                 new ProtectionAccountProxy(
                     new CachingAccountProxy(realAccount), UserRole.Owner));
 
             var requestsBefore = BankAccount.BalanceRequests;
-            Console.WriteLine("Owner checks balance 3 times:");
+            Console.WriteLine("Il titolare controlla il saldo 3 volte:");
             for (var i = 0; i < 3; i++)
             {
                 ownerAccess.GetBalance();
             }
-            Console.WriteLine($"  Real requests to bank: {BankAccount.BalanceRequests - requestsBefore}\n");
+            Console.WriteLine($"  Richieste reali alla banca: {BankAccount.BalanceRequests - requestsBefore}\n");
 
-            Console.WriteLine("Owner withdraws money:");
+            Console.WriteLine("Il titolare preleva denaro:");
             ownerAccess.Withdraw(300m);
             ownerAccess.GetBalance();
 
-            Console.WriteLine("\nGuest tries to withdraw money:");
+            Console.WriteLine("\nUn ospite prova a prelevare denaro:");
             IBankAccount guestAccess = new LoggingAccountProxy(new ProtectionAccountProxy(realAccount, UserRole.Guest));
             try
             {
@@ -35,7 +35,7 @@ namespace GoFPatterns.Proxy.BankAccount
             }
             catch (UnauthorizedAccessException)
             {
-                Console.WriteLine("  Access denied, money is safe.");
+                Console.WriteLine("  Accesso negato, il denaro è al sicuro.");
             }
             guestAccess.GetBalance();
         }

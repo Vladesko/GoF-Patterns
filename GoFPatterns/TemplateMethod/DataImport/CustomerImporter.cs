@@ -1,49 +1,49 @@
 ﻿namespace GoFPatterns.TemplateMethod.DataImport
 {
-    // Abstract class - defines the skeleton of import algorithm in the template method Import().
-    // Steps which differ between formats are abstract, optional steps are virtual hooks.
+    // Classe astratta - definisce lo scheletro dell'algoritmo di importazione nel template method Import().
+    // I passi che variano tra i formati sono astratti, i passi opzionali sono hook virtuali.
     public abstract class CustomerImporter
     {
-        // Template method. It is not virtual, so subclasses can't change the order of steps.
+        // Template method. Non è virtuale, quindi le sottoclassi non possono cambiare l'ordine dei passi.
         public IReadOnlyList<Customer> Import(string rawData)
         {
-            Console.WriteLine($"  [{GetType().Name}] import started");
+            Console.WriteLine($"  [{GetType().Name}] importazione avviata");
 
             var content = Preprocess(rawData);
             var records = Parse(content);
             var valid = records.Where(Validate).ToList();
-            Console.WriteLine($"  parsed: {records.Count}, valid: {valid.Count}");
+            Console.WriteLine($"  letti: {records.Count}, validi: {valid.Count}");
 
             Save(valid);
             AfterImport(valid);
             return valid;
         }
 
-        // Hook - optional step with default implementation.
+        // Hook - passo opzionale con implementazione di default.
         protected virtual string Preprocess(string rawData) => rawData.Trim();
 
-        // Abstract step - each format must implement it.
+        // Passo astratto - ogni formato deve implementarlo.
         protected abstract List<Customer> Parse(string content);
 
-        // Common step - the same for all formats, but can be overridden.
+        // Passo comune - uguale per tutti i formati, ma può essere ridefinito.
         protected virtual bool Validate(Customer customer)
         {
             var isValid = customer.Email.Contains('@') && customer.Age is > 0 and < 120;
             if (!isValid)
-                Console.WriteLine($"  skipped invalid record: {customer}");
+                Console.WriteLine($"  scartato record non valido: {customer}");
             return isValid;
         }
 
-        // Common step - not overridable.
+        // Passo comune - non ridefinibile.
         private static void Save(List<Customer> customers)
         {
             foreach (var customer in customers)
             {
-                Console.WriteLine($"  saved {customer.Name} <{customer.Email}>, {customer.Age}");
+                Console.WriteLine($"  salvato {customer.Name} <{customer.Email}>, {customer.Age}");
             }
         }
 
-        // Hook - empty by default.
+        // Hook - vuoto di default.
         protected virtual void AfterImport(List<Customer> customers) { }
     }
 }

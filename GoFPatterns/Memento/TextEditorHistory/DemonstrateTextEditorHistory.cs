@@ -4,23 +4,23 @@
     {
         public void Demonstrate()
         {
-            Console.WriteLine("=== Memento: Text editor history ===\n");
+            Console.WriteLine("=== Memento: Cronologia dell'editor di testo ===\n");
 
             var editor = new TextEditor();
             var history = new EditorHistory(editor);
 
-            history.Backup("empty");
-            editor.Type("Hello");
+            history.Backup("vuoto");
+            editor.Type("Ciao");
             Console.WriteLine($"  {editor}");
 
-            history.Backup("hello");
-            editor.Type(" world");
+            history.Backup("ciao");
+            editor.Type(" mondo");
             editor.SetFont("Times New Roman");
             Console.WriteLine($"  {editor}");
 
-            history.Backup("hello world");
+            history.Backup("ciao mondo");
             editor.MoveCursor(0);
-            editor.Type("Oops! ");
+            editor.Type("Ops! ");
             Console.WriteLine($"  {editor}");
 
             history.ShowHistory();

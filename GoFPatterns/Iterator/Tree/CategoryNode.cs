@@ -1,7 +1,7 @@
 ﻿namespace GoFPatterns.Iterator.Tree
 {
-    // Aggregate - tree of catalog categories. Internal structure (list of children) is hidden,
-    // clients traverse the tree only through iterators.
+    // Aggregate - albero delle categorie del catalogo. La struttura interna (lista dei figli) è nascosta,
+    // i client attraversano l'albero solo tramite gli iterator.
     public class CategoryNode(string name)
     {
         private readonly List<CategoryNode> _children = [];
@@ -14,8 +14,8 @@
             return this;
         }
 
-        // Iterator 1: depth-first traversal. Returns node with its depth.
-        // Explicit stack is used instead of recursion, so deep trees don't cause StackOverflow.
+        // Iterator 1: attraversamento in profondità. Restituisce il nodo con la sua profondità.
+        // Si usa uno stack esplicito invece della ricorsione, così gli alberi profondi non causano StackOverflow.
         public IEnumerable<(CategoryNode Node, int Depth)> DepthFirst()
         {
             var stack = new Stack<(CategoryNode, int)>();
@@ -25,7 +25,7 @@
                 var (node, depth) = stack.Pop();
                 yield return (node, depth);
 
-                // Push children in reverse order, so the first child is processed first.
+                // Inserisce i figli in ordine inverso, così il primo figlio viene elaborato per primo.
                 for (var i = node._children.Count - 1; i >= 0; i--)
                 {
                     stack.Push((node._children[i], depth + 1));
@@ -33,7 +33,7 @@
             }
         }
 
-        // Iterator 2: breadth-first traversal (level by level).
+        // Iterator 2: attraversamento in ampiezza (livello per livello).
         public IEnumerable<(CategoryNode Node, int Depth)> BreadthFirst()
         {
             var queue = new Queue<(CategoryNode, int)>();

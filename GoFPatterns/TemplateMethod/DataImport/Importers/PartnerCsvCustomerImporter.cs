@@ -1,7 +1,7 @@
 ﻿namespace GoFPatterns.TemplateMethod.DataImport.Importers
 {
-    // Concrete class built on top of another concrete class - partner sends CSV,
-    // but has stricter validation rules: only adults with corporate e-mails.
+    // Classe concreta costruita sopra un'altra classe concreta - il partner invia un CSV,
+    // ma ha regole di convalida più severe: solo maggiorenni con e-mail aziendali.
     public class PartnerCsvCustomerImporter : CsvCustomerImporter
     {
         protected override bool Validate(Customer customer)
@@ -11,7 +11,7 @@
 
             var isPartner = customer.Age >= 18 && customer.Email.EndsWith("@partner.com");
             if (!isPartner)
-                Console.WriteLine($"  skipped by partner rules: {customer.Name}");
+                Console.WriteLine($"  scartato dalle regole del partner: {customer.Name}");
             return isPartner;
         }
     }

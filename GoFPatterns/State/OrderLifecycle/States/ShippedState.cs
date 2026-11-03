@@ -1,13 +1,13 @@
 ﻿namespace GoFPatterns.State.OrderLifecycle.States
 {
-    // Concrete state - order is on the way. It can't be cancelled anymore.
+    // Stato concreto - l'ordine è in viaggio. Non può più essere annullato.
     public class ShippedState : OrderStateBase
     {
-        public override string Name => "Shipped";
+        public override string Name => "Spedito";
 
         public override void Deliver(Order order)
         {
-            Console.WriteLine("    Customer received the package");
+            Console.WriteLine("    Il cliente ha ricevuto il pacco");
             order.TransitionTo(new DeliveredState());
         }
     }

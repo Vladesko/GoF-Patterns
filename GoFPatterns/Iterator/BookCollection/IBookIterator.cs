@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Iterator.BookCollection
 {
-    // Iterator - classic GoF interface for traversing a collection.
+    // Iterator - interfaccia GoF classica per attraversare una collezione.
     public interface IBookIterator
     {
         bool HasNext();

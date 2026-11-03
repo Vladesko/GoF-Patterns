@@ -1,13 +1,13 @@
 ﻿namespace GoFPatterns.Facade.OrderPlacement.Subsystems
 {
-    // Subsystem - payments.
+    // Sottosistema - pagamenti.
     public class PaymentGateway
     {
         public bool Charge(string cardNumber, decimal amount)
         {
-            // Emulation: cards ending with "0000" are declined.
+            // Emulazione: le carte che terminano con "0000" vengono rifiutate.
             var success = !cardNumber.EndsWith("0000");
-            Console.WriteLine($"  Payment: charge {amount:F2} from card *{cardNumber[^4..]} - {(success ? "ok" : "declined")}");
+            Console.WriteLine($"  Pagamento: addebito di {amount:F2} sulla carta *{cardNumber[^4..]} - {(success ? "ok" : "rifiutato")}");
             return success;
         }
     }

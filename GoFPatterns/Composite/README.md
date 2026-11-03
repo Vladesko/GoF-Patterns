@@ -1,46 +1,48 @@
-# Composite (Компоновщик)
+🌐 [Русский](https://github.com/Vladesko/GoF-Patterns/tree/rus/GoFPatterns/Composite) | [English](https://github.com/Vladesko/GoF-Patterns/tree/eng/GoFPatterns/Composite) | [Deutsch](https://github.com/Vladesko/GoF-Patterns/tree/deu/GoFPatterns/Composite) | **Italiano** | [Español](https://github.com/Vladesko/GoF-Patterns/tree/spa/GoFPatterns/Composite)
 
-**Тип:** структурный паттерн.
+# Composite (Composto)
 
-**Composite** позволяет сгруппировать объекты в **древовидную структуру** и работать с ней так, как будто это один объект. Клиент одинаково обращается и к отдельному элементу, и к целой группе.
+**Tipo:** pattern strutturale.
 
----
-
-## Какую проблему решает
-
-Есть иерархия «часть — целое»: файлы и папки, сотрудники и отделы, товары и коробки с товарами, элементы меню и подменю.
-
-Нужно посчитать, например, размер папки. Без паттерна клиент вынужден:
-- проверять тип каждого элемента (`if (item is File) ... else if (item is Folder) ...`);
-- сам писать обход дерева с учётом вложенности;
-- переписывать этот код каждый раз, когда появляется новый тип элемента (например, ярлык или архив).
-
-## Решение
-
-Ввести **общий интерфейс** для простых и составных элементов. У этого интерфейса есть метод, который имеет смысл для обоих (`GetSize()`):
-
-- **лист** (файл) просто возвращает свой размер;
-- **контейнер** (папка) вызывает `GetSize()` у всех детей и суммирует результат.
-
-Так как дети тоже реализуют общий интерфейс, рекурсия получается сама собой, а клиент вызывает один метод у корня и не задумывается, что внутри.
+**Composite** permette di raggruppare oggetti in una **struttura ad albero** e di lavorarci come se fosse un unico oggetto. Il client accede allo stesso modo sia a un singolo elemento sia a un intero gruppo.
 
 ---
 
-## Участники
+## Quale problema risolve
 
-| Роль | Класс в примере | Описание |
-|------|-----------------|----------|
-| **Component** | `FileSystemItem`, `IOrgUnit` | Общий интерфейс для простых и составных элементов |
-| **Leaf** | `FileItem`, `Employee` | Простой элемент без детей. Выполняет реальную работу |
-| **Composite** | `FolderItem`, `Department` | Контейнер. Хранит детей (типа Component), делегирует им работу и объединяет результат |
-| **Client** | демо-классы | Работает со всеми элементами через Component |
+C'è una gerarchia «parte-tutto»: file e cartelle, dipendenti e reparti, prodotti e scatole di prodotti, voci di menu e sottomenu.
 
-## Схема
+Bisogna calcolare, ad esempio, la dimensione di una cartella. Senza il pattern il client è costretto a:
+- verificare il tipo di ogni elemento (`if (item is File) ... else if (item is Folder) ...`);
+- scrivere da solo l'attraversamento dell'albero tenendo conto dell'annidamento;
+- riscrivere questo codice ogni volta che compare un nuovo tipo di elemento (ad esempio un collegamento o un archivio).
+
+## Soluzione
+
+Introdurre un'**interfaccia comune** per gli elementi semplici e composti. Questa interfaccia ha un metodo che ha senso per entrambi (`GetSize()`):
+
+- la **foglia** (file) restituisce semplicemente la propria dimensione;
+- il **contenitore** (cartella) chiama `GetSize()` su tutti i figli e somma il risultato.
+
+Poiché anche i figli implementano l'interfaccia comune, la ricorsione viene da sé, e il client chiama un solo metodo sulla radice senza preoccuparsi di cosa ci sia dentro.
+
+---
+
+## Partecipanti
+
+| Ruolo | Classe nell'esempio | Descrizione |
+|-------|---------------------|-------------|
+| **Component** | `FileSystemItem`, `IOrgUnit` | Interfaccia comune per gli elementi semplici e composti |
+| **Leaf** | `FileItem`, `Employee` | Elemento semplice senza figli. Esegue il lavoro reale |
+| **Composite** | `FolderItem`, `Department` | Contenitore. Conserva i figli (di tipo Component), delega loro il lavoro e combina il risultato |
+| **Client** | classi demo | Lavora con tutti gli elementi tramite Component |
+
+## Schema
 
 ```text
            ┌──────────────────────────┐
  Client ──►│ «abstract» FileSystemItem │◄──────────────┐
-           │ + GetSize()              │                │ children
+           │ + GetSize()              │                │ figli
            │ + Print()                │                │ 0..*
            └──────────────────────────┘                │
                  ▲                ▲                    │
@@ -48,17 +50,17 @@
           ┌──────────┐     ┌──────────────────────┐    │
           │ FileItem │     │ FolderItem           │◆───┘
           │ (Leaf)   │     │ + Add(), Remove()    │
-          └──────────┘     │ GetSize() = Σ children│
+          └──────────┘     │ GetSize() = Σ figli  │
                            └──────────────────────┘
 ```
 
 ---
 
-## Пример 1. Файловая система (`FileSystem/`)
+## Esempio 1. File system (`FileSystem/`)
 
-**Component** — абстрактный `FileSystemItem` с операциями `GetSize()`, `Print()` и `Find()`.
+**Component**: la classe astratta `FileSystemItem` con le operazioni `GetSize()`, `Print()` e `Find()`.
 
-**Leaf** — `FileItem` (папка `Items/`) знает свой размер и при поиске проверяет только себя:
+**Leaf**: `FileItem` (cartella `Items/`) conosce la propria dimensione e nella ricerca verifica solo se stesso:
 
 ```csharp
 public override long GetSize() => size;
@@ -67,7 +69,7 @@ public override IEnumerable<FileSystemItem> Find(Func<FileSystemItem, bool> pred
     predicate(this) ? [this] : [];
 ```
 
-**Composite** — `FolderItem` хранит список детей и **делегирует** им все операции:
+**Composite**: `FolderItem` conserva la lista dei figli e **delega** loro tutte le operazioni:
 
 ```csharp
 public override long GetSize() => _children.Sum(c => c.GetSize());
@@ -80,60 +82,60 @@ public override void Print(string indent = "")
 }
 ```
 
-Метод `Add` возвращает `this`, поэтому дерево удобно собирать «лесенкой» прямо в демо.
+Il metodo `Add` restituisce `this`, quindi l'albero si assembla comodamente «a scaletta» direttamente nella demo.
 
-**Client** — демо вызывает `GetSize()` и у одиночного файла, и у всего проекта — код вызова одинаковый. `Find(i => i.Name.EndsWith(".cs"))` рекурсивно находит все C#-файлы на любой глубине.
+**Client**: la demo chiama `GetSize()` sia su un singolo file sia sull'intero progetto, e il codice di chiamata è identico. `Find(i => i.Name.EndsWith(".cs"))` trova ricorsivamente tutti i file C# a qualsiasi profondità.
 
-### Где хранить `Add`/`Remove`
+### Dove mettere `Add`/`Remove`
 
-Здесь методы управления детьми есть **только у `FolderItem`** — это «безопасный» вариант: у файла нельзя вызвать `Add`. В книге GoF описан и «прозрачный» вариант, где `Add`/`Remove` объявлены в Component: тогда клиент вообще не различает элементы, но лист вынужден бросать исключение на `Add`.
+Qui i metodi di gestione dei figli esistono **solo in `FolderItem`**: è la variante «sicura», perché su un file non si può chiamare `Add`. Il libro della GoF descrive anche la variante «trasparente», in cui `Add`/`Remove` sono dichiarati in Component: in quel caso il client non distingue affatto gli elementi, ma la foglia è costretta a lanciare un'eccezione su `Add`.
 
-## Пример 2. Структура компании (`OrgStructure/`)
+## Esempio 2. Struttura aziendale (`OrgStructure/`)
 
-**Задача:** посчитать численность и фонд оплаты труда для любого подразделения — от одного сотрудника до всей компании.
+**Problema:** calcolare l'organico e il monte stipendi per qualsiasi unità, da un singolo dipendente all'intera azienda.
 
-**Component** — интерфейс `IOrgUnit` (`GetSalaryBudget()`, `GetHeadcount()`, `Display()`).
+**Component**: l'interfaccia `IOrgUnit` (`GetSalaryBudget()`, `GetHeadcount()`, `Display()`).
 
-**Leaf** — `Employee`: численность 1, бюджет — его зарплата.
+**Leaf**: `Employee`: organico 1, il budget è il suo stipendio.
 
-**Composite** — `Department`: суммирует значения всех вложенных сотрудников и отделов. Отдел `Development` содержит и сотрудника (CTO), и два подотдела — смешивать листья и контейнеры на одном уровне можно.
+**Composite**: `Department`: somma i valori di tutti i dipendenti e i reparti annidati. Il reparto `Sviluppo` contiene sia un dipendente (CTO) sia due sotto-reparti: foglie e contenitori si possono mescolare allo stesso livello.
 
 ```csharp
 public decimal GetSalaryBudget() => _units.Sum(u => u.GetSalaryBudget());
 public int GetHeadcount() => _units.Sum(u => u.GetHeadcount());
 ```
 
-**Client** — в демо массив `IOrgUnit[] units = [company, development, backend, new Employee(...)]` обрабатывается одним циклом, хотя там и вся компания, и один стажёр.
+**Client**: nella demo l'array `IOrgUnit[] units = [company, development, backend, new Employee(...)]` viene elaborato con un unico ciclo, anche se contiene sia l'intera azienda sia un singolo stagista.
 
 ---
 
-## Когда применять
+## Quando usarlo
 
-- Нужно представить иерархию «часть — целое» в виде дерева.
-- Клиент должен единообразно работать и с простыми, и с составными объектами.
-- Примеры из жизни: файловая система, UI-компоненты (контейнеры и элементы), меню, XML/HTML DOM, выражения в калькуляторе, заказ из товаров и наборов.
+- Bisogna rappresentare una gerarchia «parte-tutto» sotto forma di albero.
+- Il client deve lavorare in modo uniforme sia con oggetti semplici sia con oggetti composti.
+- Esempi dalla realtà: file system, componenti UI (contenitori ed elementi), menu, DOM XML/HTML, espressioni in una calcolatrice, un ordine composto da prodotti e confezioni.
 
-## Когда не нужен
+## Quando non serve
 
-- Структура плоская, вложенности нет.
-- У листьев и контейнеров слишком разное поведение, и общий интерфейс получается искусственным.
+- La struttura è piatta, senza annidamento.
+- Foglie e contenitori hanno comportamenti troppo diversi, e l'interfaccia comune risulta artificiosa.
 
-## Плюсы и минусы
+## Pro e contro
 
-**Плюсы**
-- Упрощает клиента: не нужно проверять типы элементов.
-- Легко добавлять новые виды элементов (Open/Closed).
-- Сложные операции над деревом пишутся рекурсивно и коротко.
+**Pro**
+- Semplifica il client: non serve verificare il tipo degli elementi.
+- È facile aggiungere nuovi tipi di elementi (Open/Closed).
+- Le operazioni complesse sull'albero si scrivono in modo ricorsivo e conciso.
 
-**Минусы**
-- Общий интерфейс может стать слишком общим: в нём оказываются методы, которые не имеют смысла для некоторых элементов.
-- Сложно ограничить, какие элементы можно класть в контейнер (например, «в папку только файлы определённого типа») — потребуются проверки во время выполнения.
+**Contro**
+- L'interfaccia comune può diventare troppo generica: finisce per contenere metodi che non hanno senso per alcuni elementi.
+- È difficile limitare quali elementi possono essere inseriti in un contenitore (ad esempio «nella cartella solo file di un certo tipo»): servono controlli a runtime.
 
-## Связь с другими паттернами
+## Relazioni con altri pattern
 
-- **Builder** удобно использовать для пошаговой сборки сложных деревьев Composite.
-- **Iterator** — для обхода дерева Composite (см. пример `Iterator/Tree`).
-- **Visitor** — для выполнения операций над всеми узлами дерева без изменения их классов.
-- **Chain of Responsibility** часто работает поверх Composite: запрос передаётся от листа вверх к родителям.
-- **Flyweight** — листья дерева можно сделать легковесами, чтобы экономить память.
-- **Decorator** похож структурно (рекурсивная композиция), но у декоратора один вложенный объект и цель — добавить поведение, а у компоновщика много детей и цель — объединить результат.
+- **Builder** è comodo per assemblare passo dopo passo alberi Composite complessi.
+- **Iterator**: per attraversare un albero Composite (vedi l'esempio `Iterator/Tree`).
+- **Visitor**: per eseguire operazioni su tutti i nodi dell'albero senza modificarne le classi.
+- **Chain of Responsibility** spesso lavora sopra un Composite: la richiesta passa dalla foglia verso l'alto, ai genitori.
+- **Flyweight**: le foglie dell'albero possono essere flyweight per risparmiare memoria.
+- **Decorator** è simile nella struttura (composizione ricorsiva), ma il decorator ha un solo oggetto annidato e lo scopo è aggiungere comportamento, mentre il composite ha molti figli e lo scopo è combinare il risultato.

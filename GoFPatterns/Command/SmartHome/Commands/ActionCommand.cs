@@ -1,7 +1,7 @@
 ﻿namespace GoFPatterns.Command.SmartHome.Commands
 {
-    // Concrete command based on delegate. In C# a simple command can be just a lambda,
-    // so we don't need a separate class for each action of each device.
+    // Command concreto basato su un delegate. In C# un comando semplice può essere solo una lambda,
+    // quindi non serve una classe separata per ogni azione di ogni dispositivo.
     public class ActionCommand(string description, Action action) : IHomeCommand
     {
         public string Description { get; } = description;

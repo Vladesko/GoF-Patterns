@@ -9,12 +9,12 @@
             NaiveLogger.Reset();
             var before = NaiveLogger.CreatedInstances;
             Parallel.For(0, 10, _ => GC.KeepAlive(NaiveLogger.Instance));
-            Console.WriteLine($"Naive singleton - instances created by 10 threads: {NaiveLogger.CreatedInstances - before} (should be 1!)");
+            Console.WriteLine($"Singleton ingenuo - istanze create da 10 thread: {NaiveLogger.CreatedInstances - before} (dovrebbe essere 1!)");
 
-            Parallel.For(0, 10, i => FileLogger.Instance.Log($"message from task {i}"));
-            Console.WriteLine($"Thread-safe singleton - instances created: {FileLogger.CreatedInstances}");
+            Parallel.For(0, 10, i => FileLogger.Instance.Log($"messaggio dal task {i}"));
+            Console.WriteLine($"Singleton thread-safe - istanze create: {FileLogger.CreatedInstances}");
 
-            Console.WriteLine("\nAll messages are in the same logger:");
+            Console.WriteLine("\nTutti i messaggi sono nello stesso logger:");
             foreach (var line in FileLogger.Instance.GetLines().TakeLast(10))
             {
                 Console.WriteLine($"  {line}");

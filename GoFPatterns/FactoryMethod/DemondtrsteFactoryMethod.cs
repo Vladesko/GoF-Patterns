@@ -7,27 +7,27 @@ namespace GoFPatterns.FactoryMethod
     {
         public static void DemonstrateFitnes()
         {
-            //You can make choise between different membership types by using the appropriate factory.
+            //Puoi scegliere tra diversi tipi di abbonamento usando la factory appropriata.
             var gymPoolFactory = new GymPoolMembershipFactory();
             var gymPoolMembership = gymPoolFactory.CreateMembership();
 
-            Console.WriteLine($"Gym Pool Membership: {gymPoolMembership.Name}, {gymPoolMembership.Description}, Price: {gymPoolMembership.Price}");
+            Console.WriteLine($"Abbonamento palestra + piscina: {gymPoolMembership.Name}, {gymPoolMembership.Description}, Prezzo: {gymPoolMembership.Price}");
             var personalTrainingFactory = new PersonalTrainingMembershipFactory();
 
             var personalTrainingMembership = personalTrainingFactory.CreateMembership();
-            Console.WriteLine($"Personal Training Membership: {personalTrainingMembership.Name}, {personalTrainingMembership.Description}, Price: {personalTrainingMembership.Price}");
+            Console.WriteLine($"Abbonamento con personal trainer: {personalTrainingMembership.Name}, {personalTrainingMembership.Description}, Prezzo: {personalTrainingMembership.Price}");
         }
 
         public static void DemonstrateNotify()
         {
             var umailFactory = new UmailNotificator();
-            umailFactory.Notify("This is an email notification.");
+            umailFactory.Notify("Questa è una notifica email.");
 
             var smsFactory = new SmsNotificator();
-            smsFactory.Notify("This is an SMS notification.");
+            smsFactory.Notify("Questa è una notifica SMS.");
 
             var pushFactory = new PushNotificator();
-            pushFactory.Notify("This is a push notification.");
+            pushFactory.Notify("Questa è una notifica push.");
         }
     }
 }

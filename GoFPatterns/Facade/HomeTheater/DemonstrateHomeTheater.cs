@@ -10,13 +10,13 @@ namespace GoFPatterns.Facade.HomeTheater
 
             var theater = new HomeTheaterFacade(new Projector(), new SoundSystem(), new MediaPlayer(), new Lights());
 
-            // Client calls one method instead of ten.
+            // Il client chiama un solo metodo invece di dieci.
             theater.WatchMovie("Inception");
             Console.WriteLine();
             theater.EndMovie();
 
-            // Subsystems are still available directly, if client needs something special.
-            Console.WriteLine("\nDirect access to subsystem is still possible:");
+            // I sottosistemi restano accessibili direttamente, se il client ha bisogno di qualcosa di particolare.
+            Console.WriteLine("\nL'accesso diretto al sottosistema è ancora possibile:");
             new Lights().Dim(50);
         }
     }
