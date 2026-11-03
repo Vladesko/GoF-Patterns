@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.ChainOfResponsibility.Middleware.Handlers
 {
-    // Concrete handler - checks token and enriches context with user name.
+    // Konkreter Handler – prüft das Token und ergänzt den Kontext um den Benutzernamen.
     public class AuthenticationHandler : IRequestHandler
     {
         private readonly Dictionary<string, string> _tokens = new() { ["token-anna"] = "Anna", ["token-ivan"] = "Ivan" };
@@ -10,7 +10,7 @@
             if (context.Token is null || !_tokens.TryGetValue(context.Token, out var user))
             {
                 context.StatusCode = 401;
-                context.Response = "Unauthorized";
+                context.Response = "Nicht autorisiert";
                 return;
             }
             context.UserName = user;

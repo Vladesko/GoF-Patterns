@@ -1,7 +1,7 @@
 ﻿namespace GoFPatterns.Flyweight.Forest
 {
-    // Flyweight factory - returns existing flyweight or creates a new one.
-    // Client never creates TreeType directly, so duplicates are impossible.
+    // Flyweight-Fabrik – liefert ein vorhandenes Flyweight oder erzeugt ein neues.
+    // Der Client erzeugt TreeType nie direkt, daher sind Duplikate ausgeschlossen.
     public class TreeTypeFactory
     {
         private readonly Dictionary<string, TreeType> _types = [];
@@ -15,7 +15,7 @@
             {
                 type = new TreeType(name, color, texturePath);
                 _types[key] = type;
-                Console.WriteLine($"  [Factory] created new tree type: {name}, {color}");
+                Console.WriteLine($"  [Factory] neuer Baumtyp erstellt: {name}, {color}");
             }
             return type;
         }

@@ -1,19 +1,19 @@
 ﻿namespace GoFPatterns.Builder.PizzaShop
 {
-    // Product - complex object which is assembled step by step.
+    // Produkt – komplexes Objekt, das Schritt für Schritt zusammengesetzt wird.
     public class Pizza
     {
-        public string Size { get; set; } = "Medium";
-        public string Dough { get; set; } = "Classic";
-        public string Sauce { get; set; } = "None";
+        public string Size { get; set; } = "mittel";
+        public string Dough { get; set; } = "klassischer Teig";
+        public string Sauce { get; set; } = "keine";
         public List<string> Toppings { get; } = [];
         public bool ExtraCheese { get; set; }
 
         public override string ToString()
         {
-            var toppings = Toppings.Count == 0 ? "no toppings" : string.Join(", ", Toppings);
-            var cheese = ExtraCheese ? " + extra cheese" : string.Empty;
-            return $"{Size} pizza on {Dough} dough, sauce: {Sauce}, toppings: {toppings}{cheese}";
+            var toppings = Toppings.Count == 0 ? "kein Belag" : string.Join(", ", Toppings);
+            var cheese = ExtraCheese ? " + extra Käse" : string.Empty;
+            return $"Pizza (Größe: {Size}), {Dough}, Soße: {Sauce}, Belag: {toppings}{cheese}";
         }
     }
 }

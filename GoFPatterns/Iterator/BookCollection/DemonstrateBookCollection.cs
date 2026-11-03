@@ -4,22 +4,22 @@
     {
         public void Demonstrate()
         {
-            Console.WriteLine("=== Iterator: Book collection ===\n");
+            Console.WriteLine("=== Iterator: Büchersammlung ===\n");
 
             var library = new Library();
-            library.Add(new Book("War and Peace", "Leo Tolstoy", 1869));
-            library.Add(new Book("Crime and Punishment", "Fyodor Dostoevsky", 1866));
-            library.Add(new Book("Anna Karenina", "Leo Tolstoy", 1878));
-            library.Add(new Book("The Idiot", "Fyodor Dostoevsky", 1869));
-            library.Add(new Book("Dead Souls", "Nikolai Gogol", 1842));
+            library.Add(new Book("Krieg und Frieden", "Lew Tolstoi", 1869));
+            library.Add(new Book("Schuld und Sühne", "Fjodor Dostojewski", 1866));
+            library.Add(new Book("Anna Karenina", "Lew Tolstoi", 1878));
+            library.Add(new Book("Der Idiot", "Fjodor Dostojewski", 1869));
+            library.Add(new Book("Die toten Seelen", "Nikolai Gogol", 1842));
 
-            // Client uses the same loop for any iterator.
-            Print("Forward:", library.CreateIterator());
-            Print("Reverse:", library.CreateReverseIterator());
-            Print("Only Tolstoy:", library.CreateAuthorIterator("Leo Tolstoy"));
+            // Der Client verwendet für jeden Iterator dieselbe Schleife.
+            Print("Vorwärts:", library.CreateIterator());
+            Print("Rückwärts:", library.CreateReverseIterator());
+            Print("Nur Tolstoi:", library.CreateAuthorIterator("Lew Tolstoi"));
 
-            // .NET way: IEnumerable<T> + foreach + LINQ.
-            Console.WriteLine("foreach + LINQ (books before 1869, by year):");
+            // Der .NET-Weg: IEnumerable<T> + foreach + LINQ.
+            Console.WriteLine("foreach + LINQ (Bücher vor 1869, nach Jahr):");
             foreach (var book in library.Where(b => b.Year < 1869).OrderBy(b => b.Year))
             {
                 Console.WriteLine($"  {book.Year} {book.Title}");

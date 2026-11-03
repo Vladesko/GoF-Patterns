@@ -3,7 +3,7 @@ using System.Text;
 
 namespace GoFPatterns.Decorator.DataStream.Decorators
 {
-    // Concrete decorator - compresses data before writing and decompresses after reading.
+    // Konkreter Dekorierer – komprimiert Daten vor dem Schreiben und entpackt sie nach dem Lesen.
     public class CompressionDecorator(IDataSource source) : DataSourceDecorator(source)
     {
         public override void Write(string data) => base.Write(Compress(data));

@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Proxy.ImageLoading
 {
-    // Subject - common interface for real object and its proxy.
+    // Subjekt – gemeinsame Schnittstelle für das echte Objekt und seinen Proxy.
     public interface IImage
     {
         string FileName { get; }

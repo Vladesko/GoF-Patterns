@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Interpreter.ProductSearch.Expressions
 {
-    // Nonterminal expression - both sub-expressions must match.
+    // Nichtterminaler Ausdruck – beide Teilausdrücke müssen zutreffen.
     public class AndExpression(IQueryExpression left, IQueryExpression right) : IQueryExpression
     {
         public bool Matches(Product product) => left.Matches(product) && right.Matches(product);

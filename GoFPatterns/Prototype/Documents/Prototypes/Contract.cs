@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Prototype.Documents.Prototypes
 {
-    // Concrete prototype - contract with sections and style.
+    // Konkreter Prototyp – Vertrag mit Abschnitten und Stil.
     public class Contract : IDocumentPrototype
     {
         public string Title { get; set; } = string.Empty;
@@ -10,8 +10,8 @@
 
         public Contract() { }
 
-        // Copy constructor - copies private and public state of the prototype.
-        // Reference fields are copied too, so clone is fully independent (deep copy).
+        // Kopierkonstruktor – kopiert den privaten und öffentlichen Zustand des Prototyps.
+        // Auch Referenzfelder werden kopiert, daher ist der Klon völlig unabhängig (tiefe Kopie).
         private Contract(Contract source)
         {
             Title = source.Title;
@@ -22,10 +22,10 @@
 
         public IDocumentPrototype Clone() => new Contract(this);
 
-        // Shallow copy - only fields are copied, references point to the same objects.
+        // Flache Kopie – nur die Felder werden kopiert, Referenzen zeigen auf dieselben Objekte.
         public Contract ShallowClone() => (Contract)MemberwiseClone();
 
         public override string ToString() =>
-            $"Contract '{Title}' for {Company}, style: {Style}, sections: [{string.Join(", ", Sections)}]";
+            $"Vertrag '{Title}' für {Company}, Stil: {Style}, Abschnitte: [{string.Join(", ", Sections)}]";
     }
 }

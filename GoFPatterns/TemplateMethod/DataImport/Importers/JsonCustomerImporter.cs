@@ -2,7 +2,7 @@
 
 namespace GoFPatterns.TemplateMethod.DataImport.Importers
 {
-    // Concrete class - parses JSON and adds its own reaction after import.
+    // Konkrete Klasse – liest JSON ein und ergänzt eine eigene Reaktion nach dem Import.
     public class JsonCustomerImporter : CustomerImporter
     {
         private static readonly JsonSerializerOptions _options = new() { PropertyNameCaseInsensitive = true };
@@ -10,8 +10,8 @@ namespace GoFPatterns.TemplateMethod.DataImport.Importers
         protected override List<Customer> Parse(string content) =>
             JsonSerializer.Deserialize<List<Customer>>(content, _options) ?? [];
 
-        // Hook override.
+        // Überschriebener Hook.
         protected override void AfterImport(List<Customer> customers) =>
-            Console.WriteLine($"  sending welcome e-mails to {customers.Count} customers");
+            Console.WriteLine($"  Begrüßungs-E-Mails an {customers.Count} Kunden werden versendet");
     }
 }

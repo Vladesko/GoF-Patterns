@@ -6,7 +6,7 @@ namespace GoFPatterns.AbtractFactory.Payments.Stopes
     {
         public Guid ProcessPayment(decimal amount)
         {
-            Console.WriteLine($"Strope: processing payment {amount}.");
+            Console.WriteLine($"Strope: Zahlung über {amount} wird verarbeitet.");
             return Guid.NewGuid();
         }
     }

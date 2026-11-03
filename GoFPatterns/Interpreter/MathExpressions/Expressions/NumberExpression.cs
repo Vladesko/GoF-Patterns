@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Interpreter.MathExpressions.Expressions
 {
-    // Terminal expression - a number. Leaf of the syntax tree.
+    // Terminaler Ausdruck – eine Zahl. Ein Blatt des Syntaxbaums.
     public class NumberExpression(double value) : IExpression
     {
         public double Interpret(Context context) => value;

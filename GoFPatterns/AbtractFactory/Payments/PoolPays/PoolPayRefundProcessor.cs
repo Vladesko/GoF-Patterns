@@ -6,7 +6,7 @@ namespace GoFPatterns.AbtractFactory.Payments.PoolPays
     {
         public void ProcessRefund(Guid transactionId)
         {
-            Console.WriteLine($"PoolPay: processing refund for transaction {transactionId}.");
+            Console.WriteLine($"PoolPay: Erstattung für Transaktion {transactionId} wird verarbeitet.");
         }
     }
 }

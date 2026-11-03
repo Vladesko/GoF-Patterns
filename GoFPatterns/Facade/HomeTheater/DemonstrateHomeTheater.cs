@@ -6,17 +6,17 @@ namespace GoFPatterns.Facade.HomeTheater
     {
         public void Demonstrate()
         {
-            Console.WriteLine("=== Facade: Home theater ===\n");
+            Console.WriteLine("=== Facade: Heimkino ===\n");
 
             var theater = new HomeTheaterFacade(new Projector(), new SoundSystem(), new MediaPlayer(), new Lights());
 
-            // Client calls one method instead of ten.
+            // Der Client ruft eine Methode statt zehn auf.
             theater.WatchMovie("Inception");
             Console.WriteLine();
             theater.EndMovie();
 
-            // Subsystems are still available directly, if client needs something special.
-            Console.WriteLine("\nDirect access to subsystem is still possible:");
+            // Die Subsysteme bleiben direkt zugänglich, falls der Client etwas Besonderes braucht.
+            Console.WriteLine("\nDirekter Zugriff auf ein Subsystem ist weiterhin möglich:");
             new Lights().Dim(50);
         }
     }

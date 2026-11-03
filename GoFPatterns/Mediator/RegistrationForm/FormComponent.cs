@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Mediator.RegistrationForm
 {
-    // Base colleague - every UI component knows only about mediator.
+    // Basis-Kollege – jede UI-Komponente kennt nur den Vermittler.
     public abstract class FormComponent(string name)
     {
         public string Name { get; } = name;

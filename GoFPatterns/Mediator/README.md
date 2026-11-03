@@ -1,14 +1,16 @@
-# Mediator (Посредник)
+🌐 [Русский](https://github.com/Vladesko/GoF-Patterns/tree/rus/GoFPatterns/Mediator) | [English](https://github.com/Vladesko/GoF-Patterns/tree/eng/GoFPatterns/Mediator) | **Deutsch** | [Italiano](https://github.com/Vladesko/GoF-Patterns/tree/ita/GoFPatterns/Mediator) | [Español](https://github.com/Vladesko/GoF-Patterns/tree/spa/GoFPatterns/Mediator)
 
-**Тип:** поведенческий паттерн.
+# Mediator (Vermittler)
 
-**Mediator** уменьшает связанность множества объектов, заставляя их общаться **не напрямую, а через объект-посредник**. Объекты знают только о посреднике, а вся логика взаимодействия сосредоточена в нём.
+**Typ:** Verhaltensmuster.
+
+**Mediator** verringert die Kopplung vieler Objekte, indem er sie zwingt, **nicht direkt, sondern über ein Vermittlerobjekt** zu kommunizieren. Die Objekte kennen nur den Vermittler, und die gesamte Interaktionslogik ist in ihm gebündelt.
 
 ---
 
-## Какую проблему решает
+## Welches Problem wird gelöst
 
-**Форма регистрации.** Галочка «Я — компания» показывает поле «Название компании». Кнопка «Зарегистрироваться» активна только если email корректный, пароль длинный, условия приняты, а для компании заполнено название. Если компоненты общаются напрямую:
+**Registrierungsformular.** Das Kontrollkästchen „Ich bin ein Unternehmen“ blendet das Feld „Firmenname“ ein. Die Schaltfläche „Registrieren“ ist nur aktiv, wenn die E-Mail korrekt, das Passwort lang genug, die Bedingungen akzeptiert und bei einem Unternehmen der Name ausgefüllt ist. Kommunizieren die Komponenten direkt miteinander:
 
 ```text
  CheckBox(IsCompany) ──► TextBox(CompanyName)
@@ -17,31 +19,31 @@
      Button(Submit) ◄── TextBox(Email) ◄── TextBox(Password) ◄── CheckBox(Terms)
 ```
 
-…каждый компонент знает о куче других, связи образуют «паутину». Переиспользовать `TextBox` в другой форме нельзя — он тянет за собой знание о кнопке и галочках. Любое новое правило требует правок в нескольких классах.
+…kennt jede Komponente eine Menge anderer, und die Verbindungen bilden ein „Spinnennetz“. `TextBox` lässt sich in einem anderen Formular nicht wiederverwenden – sie schleppt das Wissen über die Schaltfläche und die Kontrollkästchen mit. Jede neue Regel erfordert Änderungen in mehreren Klassen.
 
-**Чат.** Если каждый пользователь хранит ссылки на всех остальных, при входе/выходе нужно обновлять всех, а фильтрация спама и личные сообщения размазываются по пользователям.
+**Chat.** Hält jeder Benutzer Referenzen auf alle anderen, müssen beim Betreten/Verlassen alle aktualisiert werden, und Spamfilter und private Nachrichten verteilen sich auf die Benutzer.
 
-## Решение
+## Lösung
 
-Вынести всю логику взаимодействия в отдельный объект — **посредника**. Компоненты:
-- хранят ссылку **только** на посредника;
-- сообщают ему о событиях («меня изменили», «отправь сообщение»);
-- не знают, кто и как на это отреагирует.
+Die gesamte Interaktionslogik wird in ein eigenes Objekt ausgelagert – den **Vermittler**. Die Komponenten:
+- halten eine Referenz **nur** auf den Vermittler;
+- melden ihm Ereignisse („ich wurde geändert“, „sende eine Nachricht“);
+- wissen nicht, wer wie darauf reagiert.
 
-Посредник знает всех участников и решает, кого и как уведомить. Связи «многие ко многим» превращаются в «один ко многим».
+Der Vermittler kennt alle Beteiligten und entscheidet, wen er wie benachrichtigt. Aus „viele-zu-viele“-Beziehungen werden „eins-zu-viele“-Beziehungen.
 
 ---
 
-## Участники
+## Beteiligte
 
-| Роль | Класс в примере | Описание |
+| Rolle | Klasse im Beispiel | Beschreibung |
 |------|-----------------|----------|
-| **Mediator** | `IChatMediator`, `IFormMediator` | Интерфейс общения компонентов с посредником |
-| **ConcreteMediator** | `ChatRoomMediator`, `RegistrationDialog` | Знает всех участников и содержит логику их взаимодействия |
-| **Colleague** | `ChatUser`, `FormComponent` | Базовый класс участника, хранит ссылку на посредника |
-| **ConcreteColleague** | `ChatUser`, `ChatBot`, `TextBox`, `CheckBox`, `Button` | Конкретные участники. Сообщают посреднику о событиях, ничего не зная друг о друге |
+| **Mediator** | `IChatMediator`, `IFormMediator` | Schnittstelle für die Kommunikation der Komponenten mit dem Vermittler |
+| **ConcreteMediator** | `ChatRoomMediator`, `RegistrationDialog` | Kennt alle Beteiligten und enthält die Logik ihrer Interaktion |
+| **Colleague** | `ChatUser`, `FormComponent` | Basisklasse eines Beteiligten, hält eine Referenz auf den Vermittler |
+| **ConcreteColleague** | `ChatUser`, `ChatBot`, `TextBox`, `CheckBox`, `Button` | Konkrete Beteiligte. Melden dem Vermittler Ereignisse, ohne voneinander zu wissen |
 
-## Схема
+## Schema
 
 ```text
         TextBox(Email)   TextBox(Password)   CheckBox(Terms)
@@ -59,40 +61,40 @@
 
 ---
 
-## Пример 1. Чат-комната (`ChatRoom/`)
+## Beispiel 1. Chatraum (`ChatRoom/`)
 
-**Mediator** — `IChatMediator`: `Join`, `Leave`, `SendMessage`, `SendPrivate`.
+**Mediator** – `IChatMediator`: `Join`, `Leave`, `SendMessage`, `SendPrivate`.
 
-**ConcreteMediator** — `ChatRoomMediator` хранит словарь участников и содержит **все правила** общения:
-- рассылка сообщения всем, кроме отправителя;
-- блокировка сообщений с запрещёнными словами;
-- личные сообщения по имени и ответ, если адресата нет в комнате;
-- уведомления о входе/выходе.
+**ConcreteMediator** – `ChatRoomMediator` hält ein Dictionary der Teilnehmer und enthält **alle Regeln** der Kommunikation:
+- Versand einer Nachricht an alle außer dem Absender;
+- Blockieren von Nachrichten mit verbotenen Wörtern;
+- private Nachrichten per Namen und eine Antwort, wenn der Empfänger nicht im Raum ist;
+- Benachrichtigungen über Betreten/Verlassen.
 
 ```csharp
 public void SendMessage(ChatUser sender, string message)
 {
     if (_bannedWords.Any(w => message.Contains(w, StringComparison.OrdinalIgnoreCase)))
-        return;   // правило модерации — только здесь
+        return;   // die Moderationsregel steht nur hier
 
     foreach (var user in _users.Values.Where(u => u != sender))
         user.Receive(sender.Name, message);
 }
 ```
 
-**Colleague** — `ChatUser` знает только своего посредника:
+**Colleague** – `ChatUser` kennt nur seinen Vermittler:
 
 ```csharp
 public void Send(string message) => chat.SendMessage(this, message);
 ```
 
-**ConcreteColleague** — `ChatBot` — тоже участник, но со своей реакцией: на команду `/time` отвечает личным сообщением. Пользователи о боте ничего не знают — он просто ещё один участник комнаты.
+**ConcreteColleague** – `ChatBot` ist ebenfalls ein Teilnehmer, aber mit eigener Reaktion: Auf den Befehl `/time` antwortet er mit einer privaten Nachricht. Die Benutzer wissen nichts vom Bot – er ist einfach ein weiterer Teilnehmer im Raum.
 
-## Пример 2. Форма регистрации (`RegistrationForm/`) — классический пример GoF
+## Beispiel 2. Registrierungsformular (`RegistrationForm/`) – das klassische GoF-Beispiel
 
-**Colleague** — абстрактный `FormComponent` (имя, `IsEnabled`, `IsVisible`, ссылка на посредника).
+**Colleague** – die abstrakte Klasse `FormComponent` (Name, `IsEnabled`, `IsVisible`, Referenz auf den Vermittler).
 
-**ConcreteColleague** (папка `Components/`) — `TextBox`, `CheckBox`, `Button`. Каждый при действии пользователя только сообщает посреднику о событии:
+**ConcreteColleague** (Ordner `Components/`) – `TextBox`, `CheckBox`, `Button`. Bei einer Benutzeraktion meldet jede Komponente dem Vermittler nur das Ereignis:
 
 ```csharp
 public void Type(string text)
@@ -102,12 +104,12 @@ public void Type(string text)
 }
 ```
 
-Эти компоненты **универсальны** — их можно использовать в любой форме, они не знают ни о каких других полях.
+Diese Komponenten sind **universell** – sie lassen sich in jedem Formular verwenden und wissen von keinen anderen Feldern.
 
-**ConcreteMediator** — `RegistrationDialog` создаёт компоненты, назначает себя их посредником и в `Notify` реализует правила формы:
-- галочка `IsCompany` показывает/скрывает поле `CompanyName`;
-- после любого изменения пересчитывается доступность кнопки `Submit`;
-- нажатие `Submit` выполняет регистрацию.
+**ConcreteMediator** – `RegistrationDialog` erzeugt die Komponenten, setzt sich selbst als ihren Vermittler und implementiert in `Notify` die Regeln des Formulars:
+- das Kontrollkästchen `IsCompany` blendet das Feld `CompanyName` ein bzw. aus;
+- nach jeder Änderung wird die Verfügbarkeit der Schaltfläche `Submit` neu berechnet;
+- ein Klick auf `Submit` führt die Registrierung durch.
 
 ```csharp
 var isValid = Email.Text.Contains('@')
@@ -116,35 +118,35 @@ var isValid = Email.Text.Contains('@')
               && (!IsCompany.IsChecked || CompanyName.Text.Length > 0);
 ```
 
-**Client** — демо имитирует действия пользователя. Видно, как кнопка становится активной, потом снова неактивной (отметили «компания», но не ввели название), и снова активной.
+**Client** – die Demo simuliert die Aktionen eines Benutzers. Man sieht, wie die Schaltfläche aktiv wird, dann wieder inaktiv (es wurde „Unternehmen“ angehakt, aber kein Name eingegeben) und schließlich wieder aktiv.
 
 ---
 
-## Когда применять
+## Wann einsetzen
 
-- Множество объектов связаны сложным образом, и связи трудно понимать и менять.
-- Хочется переиспользовать компоненты, но они слишком зависят от других.
-- Логика взаимодействия должна быть в одном месте и настраиваться без изменения компонентов.
-- Примеры: диалоги и формы в UI, чаты, диспетчерская (самолёты общаются через башню), координация микросервисов (оркестратор).
+- Viele Objekte sind auf komplexe Weise verbunden, und die Verbindungen sind schwer zu verstehen und zu ändern.
+- Komponenten sollen wiederverwendet werden, hängen aber zu stark von anderen ab.
+- Die Interaktionslogik soll an einer Stelle liegen und ohne Änderung der Komponenten anpassbar sein.
+- Beispiele: Dialoge und Formulare in UIs, Chats, Flugsicherung (Flugzeuge kommunizieren über den Tower), Koordination von Microservices (Orchestrator).
 
-## Когда не нужен
+## Wann nicht nötig
 
-- Объектов мало, а связи простые — посредник станет лишним уровнем.
+- Es gibt wenige Objekte und einfache Verbindungen – dann wird der Vermittler zur überflüssigen Ebene.
 
-## Плюсы и минусы
+## Vor- und Nachteile
 
-**Плюсы**
-- Устраняет прямые зависимости между компонентами.
-- Логика взаимодействия в одном месте (SRP).
-- Компоненты легко переиспользовать.
-- Новые правила добавляются в посредника, без изменения компонентов.
+**Vorteile**
+- Beseitigt direkte Abhängigkeiten zwischen den Komponenten.
+- Die Interaktionslogik liegt an einer Stelle (SRP).
+- Komponenten lassen sich leicht wiederverwenden.
+- Neue Regeln kommen in den Vermittler, ohne die Komponenten zu ändern.
 
-**Минусы**
-- Посредник может превратиться в **«божественный объект»**, который знает и делает всё.
+**Nachteile**
+- Der Vermittler kann zu einem **„Gottobjekt“** werden, das alles weiß und alles tut.
 
-## Связь с другими паттернами
+## Beziehung zu anderen Mustern
 
-- **Facade** тоже упрощает работу с группой объектов, но подсистема о фасаде **не знает**, а связь односторонняя. Участники Mediator **знают** о посреднике и общаются через него.
-- **Observer** — посредник часто реализуют через события/подписки: компоненты публикуют события, посредник подписан на них. Разница в цели: Observer — динамическая подписка «один ко многим», Mediator — централизованная логика взаимодействия.
-- **Chain of Responsibility**, **Command**, **Mediator**, **Observer** — разные способы связать отправителей и получателей запросов.
-- Библиотека **MediatR** в .NET называется в честь паттерна: обработчики не знают друг о друге, а запросы отправляются через `IMediator`.
+- **Facade** vereinfacht ebenfalls die Arbeit mit einer Gruppe von Objekten, aber das Subsystem **weiß nichts** von der Fassade, und die Verbindung ist einseitig. Die Beteiligten bei Mediator **kennen** den Vermittler und kommunizieren über ihn.
+- **Observer** – ein Vermittler wird oft über Ereignisse/Abonnements umgesetzt: Die Komponenten veröffentlichen Ereignisse, der Vermittler hat sie abonniert. Der Unterschied liegt im Ziel: Observer ist ein dynamisches „eins-zu-viele“-Abonnement, Mediator eine zentralisierte Interaktionslogik.
+- **Chain of Responsibility**, **Command**, **Mediator**, **Observer** – verschiedene Wege, Absender und Empfänger von Anfragen zu verbinden.
+- Die Bibliothek **MediatR** in .NET ist nach dem Muster benannt: Die Handler wissen nichts voneinander, und Anfragen werden über `IMediator` verschickt.

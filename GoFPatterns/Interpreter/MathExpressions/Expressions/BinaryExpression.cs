@@ -1,7 +1,7 @@
 ﻿namespace GoFPatterns.Interpreter.MathExpressions.Expressions
 {
-    // Nonterminal expression - contains other expressions and combines their results.
-    // One class for all binary operators, the operation is passed as a symbol.
+    // Nichtterminaler Ausdruck – enthält andere Ausdrücke und verknüpft ihre Ergebnisse.
+    // Eine Klasse für alle binären Operatoren, die Operation wird als Zeichen übergeben.
     public class BinaryExpression(IExpression left, char operation, IExpression right) : IExpression
     {
         public double Interpret(Context context)
@@ -14,7 +14,7 @@
                 '-' => l - r,
                 '*' => l * r,
                 '/' => r == 0 ? throw new DivideByZeroException() : l / r,
-                _ => throw new NotSupportedException($"Operation '{operation}' is not supported.")
+                _ => throw new NotSupportedException($"Operation '{operation}' wird nicht unterstützt.")
             };
         }
 

@@ -1,70 +1,72 @@
-# Command (Команда)
+🌐 [Русский](https://github.com/Vladesko/GoF-Patterns/tree/rus/GoFPatterns/Command) | [English](https://github.com/Vladesko/GoF-Patterns/tree/eng/GoFPatterns/Command) | **Deutsch** | [Italiano](https://github.com/Vladesko/GoF-Patterns/tree/ita/GoFPatterns/Command) | [Español](https://github.com/Vladesko/GoF-Patterns/tree/spa/GoFPatterns/Command)
 
-**Тип:** поведенческий паттерн.
+# Command (Befehl)
 
-**Command** превращает запрос (действие) в **самостоятельный объект**, который содержит всю информацию о запросе. Такой объект можно передавать как параметр, складывать в очередь, логировать, выполнять позже и **отменять**.
+**Typ:** Verhaltensmuster.
 
----
-
-## Какую проблему решает
-
-**Текстовый редактор.** Есть операции «вставить», «удалить», «заменить», которые вызываются из меню, горячих клавиш и панели инструментов. Нужно уметь их **отменять и повторять** (Undo/Redo). Если кнопка напрямую вызывает `document.Delete(...)`, то:
-- код вызова дублируется во всех местах (меню, кнопка, хоткей);
-- непонятно, как отменить действие: удалённый текст уже потерян;
-- нет единого места, где хранится история.
-
-**Умный дом.** Пульт с кнопками, на которые пользователь сам назначает действия: «включить свет», «уйти из дома» (выключить всё + поставить сигнализацию). Пульт не должен знать про все устройства, а сценарии должны собираться из простых действий.
-
-## Решение
-
-Каждое действие оформить как объект с общим интерфейсом (`Execute()`, при необходимости `Undo()`). Команда хранит:
-- ссылку на **получателя** — объект, который реально выполняет работу;
-- все **параметры** вызова;
-- данные для **отмены** (например, удалённый текст).
-
-**Отправитель** (кнопка, пульт, история) работает только с интерфейсом команды и не знает ни получателя, ни деталей операции.
+**Command** macht aus einer Anfrage (Aktion) ein **eigenständiges Objekt**, das alle Informationen über die Anfrage enthält. Ein solches Objekt kann als Parameter übergeben, in eine Warteschlange gestellt, protokolliert, später ausgeführt und **rückgängig gemacht** werden.
 
 ---
 
-## Участники
+## Welches Problem wird gelöst
 
-| Роль | Класс в примере | Описание |
+**Texteditor.** Es gibt die Operationen „Einfügen“, „Löschen“, „Ersetzen“, die aus dem Menü, über Tastenkürzel und aus der Werkzeugleiste aufgerufen werden. Sie sollen **rückgängig gemacht und wiederholt** werden können (Undo/Redo). Ruft eine Schaltfläche direkt `document.Delete(...)` auf, dann:
+- wird der Aufrufcode an allen Stellen dupliziert (Menü, Schaltfläche, Tastenkürzel);
+- ist unklar, wie die Aktion rückgängig gemacht werden soll: Der gelöschte Text ist bereits verloren;
+- gibt es keinen zentralen Ort, an dem der Verlauf gespeichert wird.
+
+**Smart Home.** Eine Fernbedienung mit Tasten, denen der Benutzer selbst Aktionen zuweist: „Licht an“, „Haus verlassen“ (alles aus + Alarmanlage scharf). Die Fernbedienung soll nicht alle Geräte kennen, und Szenarien sollen sich aus einfachen Aktionen zusammensetzen lassen.
+
+## Lösung
+
+Jede Aktion wird als Objekt mit gemeinsamer Schnittstelle modelliert (`Execute()`, bei Bedarf `Undo()`). Der Befehl speichert:
+- eine Referenz auf den **Empfänger** – das Objekt, das die Arbeit tatsächlich erledigt;
+- alle **Parameter** des Aufrufs;
+- Daten zum **Rückgängigmachen** (z. B. den gelöschten Text).
+
+Der **Aufrufer** (Schaltfläche, Fernbedienung, Verlauf) arbeitet nur mit der Befehlsschnittstelle und kennt weder den Empfänger noch die Details der Operation.
+
+---
+
+## Beteiligte
+
+| Rolle | Klasse im Beispiel | Beschreibung |
 |------|-----------------|----------|
-| **Command** | `ICommand`, `IHomeCommand` | Интерфейс команды: `Execute()`, иногда `Undo()` |
-| **ConcreteCommand** | `InsertTextCommand`, `DeleteTextCommand`, `ReplaceTextCommand`, `ActionCommand`, `MacroCommand` | Хранит получателя и параметры, реализует `Execute` через вызов методов получателя |
-| **Receiver** | `Document`, `Light`, `Thermostat`, `SecuritySystem` | Содержит бизнес-логику. Ничего не знает о командах |
-| **Invoker** | `CommandHistory`, `RemoteControl` | Запускает команды, может хранить их историю или очередь |
-| **Client** | демо-классы | Создаёт команды, связывает их с получателями и передаёт отправителю |
+| **Command** | `ICommand`, `IHomeCommand` | Befehlsschnittstelle: `Execute()`, manchmal `Undo()` |
+| **ConcreteCommand** | `InsertTextCommand`, `DeleteTextCommand`, `ReplaceTextCommand`, `ActionCommand`, `MacroCommand` | Hält Empfänger und Parameter, implementiert `Execute` durch Aufruf der Methoden des Empfängers |
+| **Receiver** | `Document`, `Light`, `Thermostat`, `SecuritySystem` | Enthält die Geschäftslogik. Weiß nichts über Befehle |
+| **Invoker** | `CommandHistory`, `RemoteControl` | Startet Befehle, kann ihren Verlauf oder eine Warteschlange speichern |
+| **Client** | Demo-Klassen | Erzeugt Befehle, verbindet sie mit Empfängern und übergibt sie dem Aufrufer |
 
-## Схема
+## Schema
 
 ```text
- Client ── creates ──► InsertTextCommand(document, pos, text)
+ Client ── erzeugt ──► InsertTextCommand(document, pos, text)
                                │
                                ▼
  CommandHistory (Invoker)   «interface» ICommand          Document (Receiver)
-   _undo: Stack<ICommand> ─► Execute()  ──── calls ────►   Insert(pos, text)
-   _redo: Stack<ICommand>    Undo()     ──── calls ────►   Delete(pos, len)
+   _undo: Stack<ICommand> ─► Execute()  ──── ruft ────►   Insert(pos, text)
+   _redo: Stack<ICommand>    Undo()     ──── ruft ────►   Delete(pos, len)
 ```
 
 ---
 
-## Пример 1. Текстовый редактор с Undo/Redo (`TextEditor/`)
+## Beispiel 1. Texteditor mit Undo/Redo (`TextEditor/`)
 
-**Receiver** — `Document`: обёртка над `StringBuilder` с методами `Insert`, `Delete`, `GetText`. О командах и истории ничего не знает.
+**Receiver** – `Document`: ein Wrapper um `StringBuilder` mit den Methoden `Insert`, `Delete`, `GetText`. Weiß nichts über Befehle und Verlauf.
 
-**Command** — `ICommand` с `Execute()`, `Undo()` и `Name` (для вывода).
+**Command** – `ICommand` mit `Execute()`, `Undo()` und `Name` (für die Ausgabe).
 
-**ConcreteCommand** (папка `Commands/`):
+**ConcreteCommand** (Ordner `Commands/`):
 
-`InsertTextCommand` — отмена вставки = удаление вставленного:
+`InsertTextCommand` – Einfügen rückgängig machen = das Eingefügte löschen:
 
 ```csharp
 public void Execute() => document.Insert(position, text);
 public void Undo() => document.Delete(position, text.Length);
 ```
 
-`DeleteTextCommand` — перед удалением **запоминает** удаляемый текст, иначе отменить было бы невозможно:
+`DeleteTextCommand` – **merkt sich** vor dem Löschen den zu löschenden Text, sonst wäre das Rückgängigmachen unmöglich:
 
 ```csharp
 public void Execute()
@@ -75,16 +77,16 @@ public void Execute()
 public void Undo() => document.Insert(position, _deletedText);
 ```
 
-`ReplaceTextCommand` — **составная** команда из удаления и вставки; отменяет их в обратном порядке.
+`ReplaceTextCommand` – ein **zusammengesetzter** Befehl aus Löschen und Einfügen; macht beide in umgekehrter Reihenfolge rückgängig.
 
-**Invoker** — `CommandHistory` хранит два стека:
+**Invoker** – `CommandHistory` hält zwei Stacks:
 
 ```csharp
 public void Execute(ICommand command)
 {
     command.Execute();
     _undo.Push(command);
-    _redo.Clear();          // новое действие делает «будущее» недействительным
+    _redo.Clear();          // eine neue Aktion macht die „Zukunft“ ungültig
 }
 
 public void Undo()
@@ -95,55 +97,55 @@ public void Undo()
 }
 ```
 
-**Client** — демо выполняет серию правок, затем Undo/Redo. В конце показано, что после нового действия Redo уже невозможен — так работают все редакторы.
+**Client** – die Demo führt eine Reihe von Bearbeitungen aus, danach Undo/Redo. Am Ende wird gezeigt, dass nach einer neuen Aktion kein Redo mehr möglich ist – so funktionieren alle Editoren.
 
-## Пример 2. Пульт умного дома (`SmartHome/`)
+## Beispiel 2. Smart-Home-Fernbedienung (`SmartHome/`)
 
-**Receiver** — устройства в папке `Devices/`: `Light`, `Thermostat`, `SecuritySystem`.
+**Receiver** – die Geräte im Ordner `Devices/`: `Light`, `Thermostat`, `SecuritySystem`.
 
-**Command** — `IHomeCommand` (`Description`, `Execute()`), без отмены.
+**Command** – `IHomeCommand` (`Description`, `Execute()`), ohne Rückgängigmachen.
 
-**ConcreteCommand** (папка `Commands/`):
-- `ActionCommand` — команда на основе **делегата**. В C# простую команду не обязательно оформлять отдельным классом на каждое действие — достаточно лямбды или ссылки на метод: `new ActionCommand("Arm security", security.Arm)`. По сути `Action` — это и есть «команда без отмены».
-- `MacroCommand` — **макрокоманда**: хранит список команд и выполняет их по очереди. Так как она тоже `IHomeCommand`, в неё можно вкладывать другие макросы — сценарий «Уйти из дома» содержит макрос «Выключить весь свет» (это одновременно и Composite).
+**ConcreteCommand** (Ordner `Commands/`):
+- `ActionCommand` – ein Befehl auf Basis eines **Delegaten**. In C# muss ein einfacher Befehl nicht für jede Aktion als eigene Klasse modelliert werden – ein Lambda oder eine Methodenreferenz genügt: `new ActionCommand("Alarmanlage scharf schalten", security.Arm)`. Im Grunde ist `Action` genau ein „Befehl ohne Undo“.
+- `MacroCommand` – ein **Makrobefehl**: hält eine Liste von Befehlen und führt sie nacheinander aus. Da er selbst ein `IHomeCommand` ist, kann man andere Makros hineinschachteln – das Szenario „Haus verlassen“ enthält das Makro „Alle Lichter aus“ (das ist zugleich ein Composite).
 
-**Invoker** — `RemoteControl`:
-- кнопки (`Dictionary<int, IHomeCommand>`) настраиваются во время выполнения через `SetCommand`;
-- команды можно **поставить в очередь** (`Schedule`) и выполнить позже (`RunScheduled`) — это возможно именно потому, что действие стало объектом.
+**Invoker** – `RemoteControl`:
+- die Tasten (`Dictionary<int, IHomeCommand>`) werden zur Laufzeit über `SetCommand` belegt;
+- Befehle können **in eine Warteschlange gestellt** (`Schedule`) und später ausgeführt werden (`RunScheduled`) – das ist gerade deshalb möglich, weil die Aktion zu einem Objekt geworden ist.
 
-**Client** — демо создаёт устройства, собирает сценарии и назначает их на кнопки. Пульт ни разу не обращается к устройствам напрямую.
+**Client** – die Demo erzeugt die Geräte, baut die Szenarien auf und legt sie auf die Tasten. Die Fernbedienung greift kein einziges Mal direkt auf die Geräte zu.
 
 ---
 
-## Когда применять
+## Wann einsetzen
 
-- Нужно параметризовать объекты действиями (кнопки, пункты меню, горячие клавиши).
-- Нужна отмена/повтор операций.
-- Нужно ставить операции в очередь, выполнять по расписанию или удалённо (очереди сообщений, фоновые задачи).
-- Нужно логировать операции, чтобы можно было «проиграть» их снова после сбоя.
-- Нужны транзакции/сценарии из нескольких действий (макрокоманды).
+- Objekte sollen mit Aktionen parametrisiert werden (Schaltflächen, Menüpunkte, Tastenkürzel).
+- Operationen sollen rückgängig gemacht/wiederholt werden können.
+- Operationen sollen in Warteschlangen gestellt, zeitgesteuert oder entfernt ausgeführt werden (Message Queues, Hintergrundjobs).
+- Operationen sollen protokolliert werden, um sie nach einem Absturz erneut „abspielen“ zu können.
+- Transaktionen/Szenarien aus mehreren Aktionen werden gebraucht (Makrobefehle).
 
-## Когда не нужен
+## Wann nicht nötig
 
-- Действие одно, вызывается из одного места и не требует отмены/очереди — простой вызов метода понятнее.
+- Es gibt nur eine Aktion, die von einer Stelle aus aufgerufen wird und weder Undo noch Warteschlange braucht – ein einfacher Methodenaufruf ist verständlicher.
 
-## Плюсы и минусы
+## Vor- und Nachteile
 
-**Плюсы**
-- Отправитель отделён от получателя.
-- Отмена, повтор, отложенный запуск, очереди, логирование.
-- Простые команды собираются в сложные (макросы).
-- Новые команды добавляются без изменения существующего кода (Open/Closed).
+**Vorteile**
+- Der Aufrufer ist vom Empfänger getrennt.
+- Rückgängigmachen, Wiederholen, verzögerte Ausführung, Warteschlangen, Protokollierung.
+- Einfache Befehle lassen sich zu komplexen zusammensetzen (Makros).
+- Neue Befehle kommen ohne Änderung des vorhandenen Codes hinzu (Open/Closed).
 
-**Минусы**
-- Много мелких классов (частично решается делегатами, как в `ActionCommand`).
-- Отмена бывает сложной: команда должна сохранить достаточно данных для восстановления состояния.
+**Nachteile**
+- Viele kleine Klassen (teilweise lösbar mit Delegaten, wie bei `ActionCommand`).
+- Das Rückgängigmachen kann kompliziert sein: Der Befehl muss genug Daten speichern, um den Zustand wiederherzustellen.
 
-## Связь с другими паттернами
+## Beziehung zu anderen Mustern
 
-- **Memento** — для сложной отмены команда может сохранять снимок состояния получателя перед выполнением.
-- **Chain of Responsibility** — запрос в цепочке часто оформляют как команду.
-- **Composite** — `MacroCommand` является компоновщиком команд.
-- **Strategy** тоже упаковывает поведение в объект, но стратегии — это **разные способы** сделать одно и то же, а команды — **разные действия**, которые можно хранить, откладывать и отменять.
-- **Prototype** — команды, которые надо положить в историю, иногда копируют.
-- В .NET командами являются `ICommand` в WPF/MAUI (MVVM) и запросы `IRequest` в MediatR (CQRS).
+- **Memento** – für komplexes Rückgängigmachen kann ein Befehl vor der Ausführung einen Schnappschuss des Empfängerzustands speichern.
+- **Chain of Responsibility** – die Anfrage in der Kette wird oft als Befehl modelliert.
+- **Composite** – `MacroCommand` ist ein Kompositum aus Befehlen.
+- **Strategy** verpackt ebenfalls Verhalten in ein Objekt, aber Strategien sind **verschiedene Wege**, dasselbe zu tun, während Befehle **verschiedene Aktionen** sind, die man speichern, aufschieben und rückgängig machen kann.
+- **Prototype** – Befehle, die in den Verlauf gelegt werden, werden manchmal kopiert.
+- In .NET sind `ICommand` in WPF/MAUI (MVVM) und die Anfragen `IRequest` in MediatR (CQRS) Befehle.

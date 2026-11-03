@@ -1,12 +1,12 @@
 ﻿namespace GoFPatterns.Singleton.Configuration.Services
 {
-    // Client - another service, which gets the same instance of configuration.
+    // Client – ein weiterer Dienst, der dieselbe Konfigurationsinstanz erhält.
     public class PriceService
     {
         public void ShowPrice(decimal amount)
         {
             var config = AppConfiguration.Instance;
-            Console.WriteLine($"  [PriceService] config {config.InstanceId.ToString()[..8]}: price {amount} {config.Get("Currency")}");
+            Console.WriteLine($"  [PriceService] Konfiguration {config.InstanceId.ToString()[..8]}: Preis {amount} {config.Get("Currency")}");
         }
     }
 }

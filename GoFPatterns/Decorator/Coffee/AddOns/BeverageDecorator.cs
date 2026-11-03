@@ -1,7 +1,7 @@
 ﻿namespace GoFPatterns.Decorator.Coffee.AddOns
 {
-    // Base decorator - implements the same interface as component and holds wrapped object.
-    // By default it just delegates all calls to the wrapped object.
+    // Basis-Dekorierer – implementiert dieselbe Schnittstelle wie die Komponente und hält das umhüllte Objekt.
+    // Standardmäßig delegiert er einfach alle Aufrufe an das umhüllte Objekt.
     public abstract class BeverageDecorator(IBeverage beverage) : IBeverage
     {
         protected IBeverage Beverage { get; } = beverage ?? throw new ArgumentNullException(nameof(beverage));

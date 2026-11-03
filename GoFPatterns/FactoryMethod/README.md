@@ -1,49 +1,51 @@
-# Factory Method (Фабричный метод)
+🌐 [Русский](https://github.com/Vladesko/GoF-Patterns/tree/rus/GoFPatterns/FactoryMethod) | [English](https://github.com/Vladesko/GoF-Patterns/tree/eng/GoFPatterns/FactoryMethod) | **Deutsch** | [Italiano](https://github.com/Vladesko/GoF-Patterns/tree/ita/GoFPatterns/FactoryMethod) | [Español](https://github.com/Vladesko/GoF-Patterns/tree/spa/GoFPatterns/FactoryMethod)
 
-**Тип:** порождающий паттерн.
+# Factory Method (Fabrikmethode)
 
-**Factory Method** определяет метод для создания объекта в базовом классе, но позволяет **подклассам решать, какой именно класс создавать**. Код, использующий объект, зависит только от его интерфейса, а не от конкретного класса.
+**Typ:** Erzeugungsmuster.
+
+**Factory Method** definiert in der Basisklasse eine Methode zur Erzeugung eines Objekts, überlässt es aber **den Unterklassen zu entscheiden, welche Klasse genau erzeugt wird**. Der Code, der das Objekt verwendet, hängt nur von dessen Schnittstelle ab, nicht von der konkreten Klasse.
 
 ---
 
-## Какую проблему решает
+## Welches Problem wird gelöst
 
-Сервис уведомлений сначала умел отправлять только SMS, и код выглядел так:
+Ein Benachrichtigungsdienst konnte anfangs nur SMS versenden, und der Code sah so aus:
 
 ```csharp
 var sms = new SmsNotification();
 sms.Notify(message);
 ```
 
-Потом понадобились email и push. Если продолжать в том же духе, в коде появляются `switch`/`if` с `new` для каждого типа — во всех местах, где отправляются уведомления. Код жёстко привязан к конкретным классам, и добавление нового канала требует правок по всему проекту.
+Dann wurden E-Mail und Push benötigt. Macht man so weiter, tauchen im Code `switch`/`if` mit `new` für jeden Typ auf – an allen Stellen, an denen Benachrichtigungen versendet werden. Der Code ist fest an konkrete Klassen gebunden, und ein neuer Kanal erfordert Änderungen im gesamten Projekt.
 
-То же с абонементами в фитнес-клубе: «зал», «зал + бассейн», «персональные тренировки». Если клиентский код сам вызывает `new GymMembership()`, он зависит от всех видов абонементов.
+Dasselbe gilt für Mitgliedschaften in einem Fitnessclub: „Fitnessstudio“, „Fitnessstudio + Schwimmbad“, „Personal Training“. Ruft der Client-Code selbst `new GymMembership()` auf, hängt er von allen Mitgliedschaftsarten ab.
 
-## Решение
+## Lösung
 
-Заменить прямой вызов `new` вызовом специального **фабричного метода**. Метод объявлен в базовом классе (создателе) и возвращает **интерфейс продукта**, а подклассы-создатели переопределяют его и возвращают конкретные продукты.
+Der direkte Aufruf von `new` wird durch den Aufruf einer speziellen **Fabrikmethode** ersetzt. Die Methode ist in der Basisklasse (dem Erzeuger) deklariert und gibt die **Produktschnittstelle** zurück; die erzeugenden Unterklassen überschreiben sie und liefern konkrete Produkte.
 
-Важно: у создателя обычно есть и **своя логика**, которая работает с продуктом через интерфейс и не знает, какой именно продукт создан (в примере с уведомлениями — метод `Notify`).
+Wichtig: Der Erzeuger hat meist auch **eigene Logik**, die über die Schnittstelle mit dem Produkt arbeitet und nicht weiß, welches Produkt genau erzeugt wurde (im Benachrichtigungsbeispiel die Methode `Notify`).
 
 ---
 
-## Участники
+## Beteiligte
 
-| Роль | Класс в примере | Описание |
+| Rolle | Klasse im Beispiel | Beschreibung |
 |------|-----------------|----------|
-| **Product** | `INotificationService`, `IMembership` | Общий интерфейс создаваемых объектов |
-| **ConcreteProduct** | `SmsNotification`, `UmailNotification`, `PushNotification`, `GymMembership`, `GymPoolMembership`, `PersonalTrainingMembership` | Конкретные реализации продукта |
-| **Creator** | `NotificationFactory`, `MembershipFactory` | Объявляет фабричный метод; может содержать логику, работающую с продуктом |
-| **ConcreteCreator** | `SmsNotificator`, `UmailNotificator`, `PushNotificator`, `GymMembershipFactory`, `GymPoolMembershipFactory`, `PersonalTrainingMembershipFactory` | Переопределяет фабричный метод и возвращает конкретный продукт |
-| **Client** | `DemondtrsteFactoryMethod` | Работает с создателями и продуктами |
+| **Product** | `INotificationService`, `IMembership` | Gemeinsame Schnittstelle der erzeugten Objekte |
+| **ConcreteProduct** | `SmsNotification`, `UmailNotification`, `PushNotification`, `GymMembership`, `GymPoolMembership`, `PersonalTrainingMembership` | Konkrete Implementierungen des Produkts |
+| **Creator** | `NotificationFactory`, `MembershipFactory` | Deklariert die Fabrikmethode; kann Logik enthalten, die mit dem Produkt arbeitet |
+| **ConcreteCreator** | `SmsNotificator`, `UmailNotificator`, `PushNotificator`, `GymMembershipFactory`, `GymPoolMembershipFactory`, `PersonalTrainingMembershipFactory` | Überschreibt die Fabrikmethode und liefert ein konkretes Produkt |
+| **Client** | `DemondtrsteFactoryMethod` | Arbeitet mit Erzeugern und Produkten |
 
-## Схема
+## Schema
 
 ```text
  ┌───────────────────────────────────────────┐          ┌─────────────────────────────┐
  │ «abstract» NotificationFactory (Creator)  │          │ «interface»                 │
  │ # CreateNotification(): INotificationService ──────►│ INotificationService        │
- │ + Notify(message):                        │ creates  │ Notify(message)             │
+ │ + Notify(message):                        │ erzeugt  │ Notify(message)             │
  │     var s = CreateNotification();         │          └─────────────────────────────┘
  │     s.Notify(message);                    │                ▲        ▲        ▲
  └───────────────────────────────────────────┘                │        │        │
@@ -55,20 +57,20 @@ sms.Notify(message);
 
 ---
 
-## Пример 1. Система уведомлений (`NotifySystem/`) — создатель с собственной логикой
+## Beispiel 1. Benachrichtigungssystem (`NotifySystem/`) – Erzeuger mit eigener Logik
 
-**Product** — `INotificationService` с методом `Notify(string message)`.
+**Product** – `INotificationService` mit der Methode `Notify(string message)`.
 
-**ConcreteProduct** (папка `NotifiationServices/`) — `SmsNotification`, `UmailNotification`, `PushNotification`: каждый «отправляет» сообщение своим каналом.
+**ConcreteProduct** (Ordner `NotifiationServices/`) – `SmsNotification`, `UmailNotification`, `PushNotification`: Jede „versendet“ die Nachricht über ihren eigenen Kanal.
 
-**Creator** — абстрактный `NotificationFactory` (папка `Factories/`):
+**Creator** – die abstrakte Klasse `NotificationFactory` (Ordner `Factories/`):
 
 ```csharp
 public abstract class NotificationFactory
 {
-    protected abstract INotificationService CreateNotification();   // фабричный метод
+    protected abstract INotificationService CreateNotification();   // Fabrikmethode
 
-    public void Notify(string message)                               // логика создателя
+    public void Notify(string message)                               // Logik des Erzeugers
     {
         var notificationService = CreateNotification();
         notificationService.Notify(message);
@@ -76,9 +78,9 @@ public abstract class NotificationFactory
 }
 ```
 
-Это классическая форма паттерна: метод `Notify` реализован **один раз** в базовом классе и работает с продуктом только через интерфейс. Фабричный метод `protected` — клиент не создаёт продукт сам, а просто вызывает `Notify`.
+Das ist die klassische Form des Musters: Die Methode `Notify` ist **einmal** in der Basisklasse implementiert und arbeitet mit dem Produkt nur über die Schnittstelle. Die Fabrikmethode ist `protected` – der Client erzeugt das Produkt nicht selbst, sondern ruft einfach `Notify` auf.
 
-**ConcreteCreator** — `SmsNotificator`, `UmailNotificator`, `PushNotificator` переопределяют только фабричный метод:
+**ConcreteCreator** – `SmsNotificator`, `UmailNotificator`, `PushNotificator` überschreiben nur die Fabrikmethode:
 
 ```csharp
 internal class SmsNotificator : NotificationFactory
@@ -87,18 +89,18 @@ internal class SmsNotificator : NotificationFactory
 }
 ```
 
-**Client** — `DemondtrsteFactoryMethod.DemonstrateNotify()` создаёт нужный создатель и вызывает `Notify`. Чтобы добавить, например, Telegram, нужно два класса — `TelegramNotification` и `TelegramNotificator`; существующий код не меняется.
+**Client** – `DemondtrsteFactoryMethod.DemonstrateNotify()` erzeugt den passenden Erzeuger und ruft `Notify` auf. Um zum Beispiel Telegram hinzuzufügen, braucht man zwei Klassen – `TelegramNotification` und `TelegramNotificator`; der vorhandene Code bleibt unverändert.
 
-## Пример 2. Абонементы фитнес-клуба (`Fitnes/`) — фабрики продуктов
+## Beispiel 2. Mitgliedschaften im Fitnessclub (`Fitnes/`) – Produktfabriken
 
-**Product** — `IMembership` (название, описание, цена).
+**Product** – `IMembership` (Name, Beschreibung, Preis).
 
-**ConcreteProduct** (папка `Memberships/`):
-- `GymMembership` — зал, 50;
-- `GymPoolMembership` — зал + бассейн, 75;
-- `PersonalTrainingMembership` — персональные тренировки, 100.
+**ConcreteProduct** (Ordner `Memberships/`):
+- `GymMembership` – Fitnessstudio, 50;
+- `GymPoolMembership` – Fitnessstudio + Schwimmbad, 75;
+- `PersonalTrainingMembership` – Personal Training, 100.
 
-**Creator** — абстрактный `MembershipFactory` с публичным фабричным методом:
+**Creator** – die abstrakte Klasse `MembershipFactory` mit einer öffentlichen Fabrikmethode:
 
 ```csharp
 internal abstract class MembershipFactory
@@ -107,40 +109,40 @@ internal abstract class MembershipFactory
 }
 ```
 
-**ConcreteCreator** (папка `Factories/`) — `GymMembershipFactory`, `GymPoolMembershipFactory`, `PersonalTrainingMembershipFactory` — каждая возвращает свой абонемент.
+**ConcreteCreator** (Ordner `Factories/`) – `GymMembershipFactory`, `GymPoolMembershipFactory`, `PersonalTrainingMembershipFactory` – jede liefert ihre eigene Mitgliedschaft.
 
-**Client** — `DemondtrsteFactoryMethod.DemonstrateFitnes()` выбирает нужную фабрику и получает абонемент через `CreateMembership()`, дальше работает с ним как с `IMembership`.
+**Client** – `DemondtrsteFactoryMethod.DemonstrateFitnes()` wählt die passende Fabrik, erhält die Mitgliedschaft über `CreateMembership()` und arbeitet danach mit ihr als `IMembership`.
 
-Здесь у создателя нет собственной логики — это упрощённая форма паттерна, которую часто используют на практике: фабрику (например, выбранную по настройкам или по выбору пользователя) передают в код, который создаёт объекты, не зная их классов.
+Hier hat der Erzeuger keine eigene Logik – das ist eine vereinfachte Form des Musters, die in der Praxis häufig verwendet wird: Eine Fabrik (z. B. anhand der Einstellungen oder der Benutzerauswahl gewählt) wird an Code übergeben, der Objekte erzeugt, ohne ihre Klassen zu kennen.
 
 ---
 
-## Когда применять
+## Wann einsetzen
 
-- Заранее неизвестно, объекты каких классов понадобится создавать.
-- Нужно дать возможность расширять создаваемые объекты через наследование (фреймворки, библиотеки).
-- Базовый класс содержит общий алгоритм, а конкретный продукт для него определяют подклассы.
-- Нужно централизовать создание объектов, чтобы при необходимости переиспользовать их (кеш, пул).
+- Es ist vorab nicht bekannt, Objekte welcher Klassen erzeugt werden müssen.
+- Die erzeugten Objekte sollen über Vererbung erweiterbar sein (Frameworks, Bibliotheken).
+- Die Basisklasse enthält einen allgemeinen Algorithmus, und das konkrete Produkt dafür bestimmen die Unterklassen.
+- Die Objekterzeugung soll zentralisiert werden, um Objekte bei Bedarf wiederzuverwenden (Cache, Pool).
 
-## Когда не нужен
+## Wann nicht nötig
 
-- Продукт один и не изменится — простой `new` понятнее.
-- Нужно создавать **семейства** согласованных объектов — это Abstract Factory.
+- Es gibt nur ein Produkt, und es wird sich nicht ändern – ein einfaches `new` ist verständlicher.
+- Es sollen **Familien** zueinander passender Objekte erzeugt werden – das ist Abstract Factory.
 
-## Плюсы и минусы
+## Vor- und Nachteile
 
-**Плюсы**
-- Избавляет код от привязки к конкретным классам продуктов.
-- Код создания продуктов в одном месте (SRP).
-- Новые продукты добавляются без изменения существующего кода (Open/Closed).
+**Vorteile**
+- Befreit den Code von der Bindung an konkrete Produktklassen.
+- Der Erzeugungscode der Produkte liegt an einer Stelle (SRP).
+- Neue Produkte kommen ohne Änderung am vorhandenen Code hinzu (Open/Closed).
 
-**Минусы**
-- На каждый продукт — свой подкласс-создатель, иерархии растут параллельно.
+**Nachteile**
+- Für jedes Produkt eine eigene Erzeuger-Unterklasse, die Hierarchien wachsen parallel.
 
-## Связь с другими паттернами
+## Beziehung zu anderen Mustern
 
-- **Abstract Factory** часто реализуется набором фабричных методов, но создаёт **семейство** продуктов и передаётся как объект.
-- **Template Method** — фабричный метод часто является шагом шаблонного метода: `NotificationFactory.Notify()` — шаблонный метод, который вызывает фабричный `CreateNotification()`.
-- **Prototype** не требует подклассов-создателей, но требует инициализации прототипов. Factory Method — наоборот.
-- **Iterator** — `GetEnumerator()` в коллекциях .NET — это фабричный метод, возвращающий итератор.
-- Factory Method часто эволюционирует в **Builder** или **Abstract Factory**, когда создание усложняется.
+- **Abstract Factory** wird oft durch eine Reihe von Fabrikmethoden umgesetzt, erzeugt aber eine **Familie** von Produkten und wird als Objekt übergeben.
+- **Template Method** – eine Fabrikmethode ist oft ein Schritt einer Schablonenmethode: `NotificationFactory.Notify()` ist eine Schablonenmethode, die die Fabrikmethode `CreateNotification()` aufruft.
+- **Prototype** braucht keine Erzeuger-Unterklassen, erfordert aber die Initialisierung der Prototypen. Bei Factory Method ist es umgekehrt.
+- **Iterator** – `GetEnumerator()` in .NET-Collections ist eine Fabrikmethode, die einen Iterator liefert.
+- Factory Method entwickelt sich oft zu **Builder** oder **Abstract Factory**, wenn die Erzeugung komplizierter wird.

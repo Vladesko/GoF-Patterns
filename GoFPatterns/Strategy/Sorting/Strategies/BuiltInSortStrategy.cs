@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Strategy.Sorting.Strategies
 {
-    // Concrete strategy - adapter to the built-in .NET algorithm (introsort).
+    // Konkrete Strategie – Adapter zum eingebauten .NET-Algorithmus (Introsort).
     public class BuiltInSortStrategy : ISortStrategy
     {
         public string Name => "Array.Sort";

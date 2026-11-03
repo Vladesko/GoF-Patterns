@@ -1,7 +1,7 @@
 ﻿namespace GoFPatterns.ChainOfResponsibility.Middleware
 {
-    // Builds the chain from the list of handlers. Handlers don't know about each other,
-    // they only get "next" delegate.
+    // Baut die Kette aus der Liste der Handler. Die Handler wissen nichts voneinander,
+    // sie erhalten nur den Delegaten "next".
     public class RequestPipeline
     {
         private readonly List<IRequestHandler> _handlers = [];

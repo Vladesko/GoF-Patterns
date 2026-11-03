@@ -7,16 +7,16 @@ namespace GoFPatterns.Bridge.RemoteControl
     {
         public void Demonstrate()
         {
-            Console.WriteLine("=== Bridge: Remote control ===\n");
+            Console.WriteLine("=== Bridge: Fernbedienung ===\n");
 
-            // 2 remotes x 2 devices = 4 combinations, but only 2 + 2 classes.
-            Console.WriteLine("Basic remote + TV:");
+            // 2 Fernbedienungen x 2 Geräte = 4 Kombinationen, aber nur 2 + 2 Klassen.
+            Console.WriteLine("Einfache Fernbedienung + Fernseher:");
             var basicTvRemote = new Remote(new Tv());
             basicTvRemote.TogglePower();
             basicTvRemote.VolumeUp();
             basicTvRemote.ChannelUp();
 
-            Console.WriteLine("\nAdvanced remote + Radio:");
+            Console.WriteLine("\nErweiterte Fernbedienung + Radio:");
             var advancedRadioRemote = new AdvancedRemote(new Radio());
             advancedRadioRemote.TogglePower();
             advancedRadioRemote.VolumeUp();
@@ -24,7 +24,7 @@ namespace GoFPatterns.Bridge.RemoteControl
             advancedRadioRemote.Unmute();
             advancedRadioRemote.SetFavoriteChannel(2);
 
-            Console.WriteLine("\nAdvanced remote + TV:");
+            Console.WriteLine("\nErweiterte Fernbedienung + Fernseher:");
             var advancedTvRemote = new AdvancedRemote(new Tv());
             advancedTvRemote.TogglePower();
             advancedTvRemote.SetFavoriteChannel(42);

@@ -4,14 +4,14 @@
     {
         public void Demonstrate()
         {
-            Console.WriteLine("=== State: Vending machine ===\n");
+            Console.WriteLine("=== State: Verkaufsautomat ===\n");
 
             var machine = new VendingMachine(stock: 2, price: 50);
 
             void Act(Action action)
             {
                 action();
-                Console.WriteLine($"    [state: {machine.StateName}]");
+                Console.WriteLine($"    [Zustand: {machine.StateName}]");
             }
 
             Act(machine.SelectProduct);

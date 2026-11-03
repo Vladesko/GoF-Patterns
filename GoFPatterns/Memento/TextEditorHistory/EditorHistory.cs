@@ -1,7 +1,7 @@
 ﻿namespace GoFPatterns.Memento.TextEditorHistory
 {
-    // Caretaker - decides WHEN to save and restore the state, and stores snapshots.
-    // It never looks inside snapshots.
+    // Verwalter (Caretaker) – entscheidet, WANN der Zustand gespeichert und wiederhergestellt wird, und bewahrt die Schnappschüsse auf.
+    // In die Schnappschüsse selbst schaut er nie hinein.
     public class EditorHistory(TextEditor editor)
     {
         private readonly Stack<IEditorMemento> _history = new();
@@ -9,18 +9,18 @@
         public void Backup(string label)
         {
             _history.Push(editor.Save(label));
-            Console.WriteLine($"  [history] saved \"{label}\"");
+            Console.WriteLine($"  [history] \"{label}\" gespeichert");
         }
 
         public void Undo()
         {
             if (!_history.TryPop(out var memento))
             {
-                Console.WriteLine("  [history] nothing to restore");
+                Console.WriteLine("  [history] nichts zum Wiederherstellen");
                 return;
             }
             editor.Restore(memento);
-            Console.WriteLine($"  [history] restored \"{memento.Label}\" from {memento.CreatedAt:HH:mm:ss}");
+            Console.WriteLine($"  [history] \"{memento.Label}\" vom Stand {memento.CreatedAt:HH:mm:ss} wiederhergestellt");
         }
 
         public void ShowHistory()

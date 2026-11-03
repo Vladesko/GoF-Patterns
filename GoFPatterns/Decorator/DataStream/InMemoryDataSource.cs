@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Decorator.DataStream
 {
-    // Concrete component - stores data "as is". Emulation of a file or a database record.
+    // Konkrete Komponente – speichert Daten "wie sie sind". Emulation einer Datei oder eines Datenbankeintrags.
     public class InMemoryDataSource : IDataSource
     {
         private string _storage = string.Empty;

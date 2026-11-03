@@ -6,7 +6,7 @@ namespace GoFPatterns.TemplateMethod.DataImport
     {
         public void Demonstrate()
         {
-            Console.WriteLine("=== Template Method: Data import ===\n");
+            Console.WriteLine("=== Template Method: Datenimport ===\n");
 
             const string csv = """
                 Name;Email;Age
@@ -23,7 +23,7 @@ namespace GoFPatterns.TemplateMethod.DataImport
                 ]
                 """;
 
-            // Client works with base class, algorithm is the same for all importers.
+            // Der Client arbeitet mit der Basisklasse, der Algorithmus ist für alle Importer gleich.
             (CustomerImporter Importer, string Data)[] imports =
             [
                 (new CsvCustomerImporter(), csv),

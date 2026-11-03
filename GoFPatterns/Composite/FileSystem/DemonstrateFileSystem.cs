@@ -6,9 +6,9 @@ namespace GoFPatterns.Composite.FileSystem
     {
         public void Demonstrate()
         {
-            Console.WriteLine("=== Composite: File system ===\n");
+            Console.WriteLine("=== Composite: Dateisystem ===\n");
 
-            var root = new FolderItem("Project")
+            var root = new FolderItem("Projekt")
                 .Add(new FileItem("README.md", 1_200))
                 .Add(new FolderItem("src")
                     .Add(new FileItem("Program.cs", 3_400))
@@ -20,12 +20,12 @@ namespace GoFPatterns.Composite.FileSystem
 
             root.Print();
 
-            // Client calls the same method for a file and for a whole tree.
+            // Der Client ruft dieselbe Methode für eine Datei und für einen ganzen Baum auf.
             FileSystemItem singleFile = new FileItem("notes.txt", 300);
-            Console.WriteLine($"\nSize of single file: {singleFile.GetSize()} B");
-            Console.WriteLine($"Size of whole project: {root.GetSize()} B");
+            Console.WriteLine($"\nGröße einer einzelnen Datei: {singleFile.GetSize()} B");
+            Console.WriteLine($"Größe des gesamten Projekts: {root.GetSize()} B");
 
-            Console.WriteLine("\nC# files in project:");
+            Console.WriteLine("\nC#-Dateien im Projekt:");
             foreach (var item in root.Find(i => i.Name.EndsWith(".cs")))
             {
                 Console.WriteLine($"  {item.Name}");

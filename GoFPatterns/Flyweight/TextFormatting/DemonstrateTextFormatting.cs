@@ -4,24 +4,24 @@
     {
         public void Demonstrate()
         {
-            Console.WriteLine("=== Flyweight: Text formatting ===\n");
+            Console.WriteLine("=== Flyweight: Textformatierung ===\n");
 
             var document = new TextDocument();
-            document.Append("Design Patterns", "Arial", 18, bold: true);
-            document.Append(" are typical solutions to common problems. ", "Arial", 12);
-            document.Append("Flyweight", "Arial", 12, bold: true, color: "blue");
-            document.Append(" saves memory by sharing state. ", "Arial", 12);
-            document.Append("Note:", "Arial", 12, bold: true, color: "blue");
-            document.Append(" styles are reused.", "Arial", 12);
+            document.Append("Entwurfsmuster", "Arial", 18, bold: true);
+            document.Append(" sind typische Lösungen für häufige Probleme. ", "Arial", 12);
+            document.Append("Flyweight", "Arial", 12, bold: true, color: "blau");
+            document.Append(" spart Speicher durch gemeinsam genutzten Zustand. ", "Arial", 12);
+            document.Append("Hinweis:", "Arial", 12, bold: true, color: "blau");
+            document.Append(" Stile werden wiederverwendet.", "Arial", 12);
 
             Console.WriteLine(document.Render());
-            Console.WriteLine($"\nCharacters: {document.CharactersCount}, style objects in pool: {document.StylesCount}");
-            Console.WriteLine($"Distinct style objects referenced by characters: {document.CountDistinctStyleObjects()}");
+            Console.WriteLine($"\nZeichen: {document.CharactersCount}, Stilobjekte im Pool: {document.StylesCount}");
+            Console.WriteLine($"Verschiedene Stilobjekte, auf die Zeichen verweisen: {document.CountDistinctStyleObjects()}");
 
-            // .NET uses the same idea for strings - string interning.
+            // .NET nutzt dieselbe Idee für Zeichenketten – String-Interning.
             var first = string.Intern(new string(['f', 'l', 'y']));
             var second = string.Intern(new string(['f', 'l', 'y']));
-            Console.WriteLine($"\nInterned strings are the same object: {ReferenceEquals(first, second)}");
+            Console.WriteLine($"\nInternierte Strings sind dasselbe Objekt: {ReferenceEquals(first, second)}");
         }
     }
 }

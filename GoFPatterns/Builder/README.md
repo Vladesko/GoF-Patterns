@@ -1,39 +1,41 @@
-# Builder (Строитель)
+🌐 [Русский](https://github.com/Vladesko/GoF-Patterns/tree/rus/GoFPatterns/Builder) | [English](https://github.com/Vladesko/GoF-Patterns/tree/eng/GoFPatterns/Builder) | **Deutsch** | [Italiano](https://github.com/Vladesko/GoF-Patterns/tree/ita/GoFPatterns/Builder) | [Español](https://github.com/Vladesko/GoF-Patterns/tree/spa/GoFPatterns/Builder)
 
-**Тип:** порождающий паттерн.
+# Builder (Erbauer)
 
-**Builder** позволяет создавать сложные объекты пошагово. Один и тот же процесс построения может давать разные представления объекта, а клиент не обязан знать, как именно объект собирается.
+**Typ:** Erzeugungsmuster.
 
----
-
-## Какую проблему решает
-
-Представим объект, у которого много параметров, часть из них необязательна, а часть зависит друг от друга (пицца: размер, тесто, соус, начинки, сыр; HTTP-запрос: метод, URL, заголовки, тело, таймаут).
-
-Без паттерна обычно получается одно из двух:
-
-- **«Телескопический» конструктор** — `new Pizza("Large", "thin", "tomato", null, null, true, ...)`. Непонятно, какой аргумент за что отвечает, а на каждую комбинацию нужна своя перегрузка.
-- **Объект с публичными сеттерами** — объект можно получить «наполовину собранным» и в некорректном состоянии, проверки размазываются по всему коду.
-
-## Решение
-
-Вынести процесс конструирования из самого объекта в отдельный класс — **строитель**. Строитель предоставляет набор шагов (`SetSize`, `AddTopping`, `WithHeader`...), клиент вызывает только нужные, а в конце получает готовый результат (`GetResult()` / `Build()`), который можно проверить перед выдачей.
-
-Если одни и те же последовательности шагов используются часто, их выносят в **директора** — класс, который знает «рецепты» и управляет строителем.
+**Builder** ermöglicht es, komplexe Objekte Schritt für Schritt zu erzeugen. Derselbe Bauprozess kann unterschiedliche Repräsentationen eines Objekts liefern, und der Client muss nicht wissen, wie genau das Objekt zusammengesetzt wird.
 
 ---
 
-## Участники
+## Welches Problem wird gelöst
 
-| Роль | Класс в примере | Описание |
+Stellen wir uns ein Objekt mit vielen Parametern vor, von denen einige optional sind und andere voneinander abhängen (Pizza: Größe, Teig, Soße, Belag, Käse; HTTP-Anfrage: Methode, URL, Header, Body, Timeout).
+
+Ohne das Muster entsteht meist eine von zwei Varianten:
+
+- **„Teleskop“-Konstruktor** – `new Pizza("Large", "thin", "tomato", null, null, true, ...)`. Es ist unklar, welches Argument wofür steht, und für jede Kombination braucht man eine eigene Überladung.
+- **Objekt mit öffentlichen Settern** – man kann ein „halb zusammengebautes“ Objekt in ungültigem Zustand erhalten, und die Prüfungen verteilen sich über den gesamten Code.
+
+## Lösung
+
+Der Bauprozess wird aus dem Objekt selbst in eine eigene Klasse ausgelagert – den **Builder**. Der Builder bietet eine Reihe von Schritten (`SetSize`, `AddTopping`, `WithHeader`...), der Client ruft nur die benötigten auf und erhält am Ende das fertige Ergebnis (`GetResult()` / `Build()`), das vor der Herausgabe geprüft werden kann.
+
+Werden dieselben Schrittfolgen häufig verwendet, lagert man sie in einen **Director** aus – eine Klasse, die die „Rezepte“ kennt und den Builder steuert.
+
+---
+
+## Beteiligte
+
+| Rolle | Klasse im Beispiel | Beschreibung |
 |------|-----------------|----------|
-| **Builder** | `IPizzaBuilder` | Интерфейс, объявляющий шаги построения, общие для всех строителей |
-| **ConcreteBuilder** | `ItalianPizzaBuilder`, `AmericanPizzaBuilder`, `HttpRequestBuilder` | Реализует шаги по-своему и хранит собираемый объект; выдаёт результат |
-| **Product** | `Pizza`, `HttpRequestMessageModel` | Сложный объект, который собирается. Продукты разных строителей не обязаны иметь общий интерфейс |
-| **Director** | `PizzaDirector` | Знает порядок шагов для типовых конфигураций. Работает со строителем только через интерфейс. Необязательный участник |
-| **Client** | `DemonstratePizzaBuilder`, `DemonstrateHttpRequestBuilder` | Создаёт строителя, передаёт его директору или вызывает шаги сам |
+| **Builder** | `IPizzaBuilder` | Schnittstelle, die die Bauschritte deklariert, die allen Buildern gemeinsam sind |
+| **ConcreteBuilder** | `ItalianPizzaBuilder`, `AmericanPizzaBuilder`, `HttpRequestBuilder` | Implementiert die Schritte auf eigene Weise, hält das entstehende Objekt und liefert das Ergebnis |
+| **Product** | `Pizza`, `HttpRequestMessageModel` | Das komplexe Objekt, das zusammengebaut wird. Produkte verschiedener Builder müssen keine gemeinsame Schnittstelle haben |
+| **Director** | `PizzaDirector` | Kennt die Reihenfolge der Schritte für typische Konfigurationen. Arbeitet mit dem Builder nur über die Schnittstelle. Optionaler Beteiligter |
+| **Client** | `DemonstratePizzaBuilder`, `DemonstrateHttpRequestBuilder` | Erzeugt den Builder, übergibt ihn dem Director oder ruft die Schritte selbst auf |
 
-## Схема
+## Schema
 
 ```text
  Client ──► Director ──────────► «interface» IPizzaBuilder
@@ -43,18 +45,18 @@
                                           │                 │
                               ItalianPizzaBuilder   AmericanPizzaBuilder
                                           │                 │
-                                          └──── creates ────┴──► Pizza
+                                          └──── erzeugt ────┴──► Pizza
 ```
 
 ---
 
-## Пример 1. Пиццерия (`PizzaShop/`) — классический Builder с директором
+## Beispiel 1. Pizzeria (`PizzaShop/`) – klassischer Builder mit Director
 
-**Задача:** пиццерия готовит одни и те же рецепты (маргарита, пепперони) в разных стилях. Итальянская пицца — тонкое тесто, пармезан; американская — толстое тесто, BBQ-соус, двойная начинка, чеддер.
+**Aufgabe:** Eine Pizzeria backt dieselben Rezepte (Margherita, Pepperoni) in verschiedenen Stilen. Italienische Pizza – dünner Teig, Parmesan; amerikanische – dicker Teig, BBQ-Soße, doppelter Belag, Cheddar.
 
-**Product** — `Pizza`: обычный класс со свойствами и списком начинок.
+**Product** – `Pizza`: eine gewöhnliche Klasse mit Eigenschaften und einer Liste von Belägen.
 
-**Builder** — `IPizzaBuilder` объявляет шаги:
+**Builder** – `IPizzaBuilder` deklariert die Schritte:
 
 ```csharp
 public interface IPizzaBuilder
@@ -69,44 +71,44 @@ public interface IPizzaBuilder
 }
 ```
 
-**ConcreteBuilder** — каждый строитель по-своему интерпретирует шаги. Например, `AmericanPizzaBuilder` делает тесто толстым и удваивает начинки:
+**ConcreteBuilder** – jeder Builder interpretiert die Schritte auf seine Weise. `AmericanPizzaBuilder` macht den Teig zum Beispiel dick und verdoppelt den Belag:
 
 ```csharp
-public void SetDough(string dough) => _pizza.Dough = $"thick {dough}";
-public void AddTopping(string topping) => _pizza.Toppings.Add($"double {topping}");
+public void SetDough(string dough) => _pizza.Dough = $"dicker {dough}";
+public void AddTopping(string topping) => _pizza.Toppings.Add($"doppelt {topping}");
 ```
 
-`GetResult()` возвращает собранную пиццу и сразу вызывает `Reset()`, чтобы строитель был готов к следующему заказу.
+`GetResult()` gibt die fertige Pizza zurück und ruft sofort `Reset()` auf, damit der Builder für die nächste Bestellung bereit ist.
 
-**Director** — `PizzaDirector` хранит «рецепты». Он не знает, какой строитель ему передан, и вызывает только методы интерфейса:
+**Director** – `PizzaDirector` speichert die „Rezepte“. Er weiß nicht, welcher Builder ihm übergeben wurde, und ruft nur Methoden der Schnittstelle auf:
 
 ```csharp
 public Pizza MakeMargherita()
 {
     _builder.Reset();
-    _builder.SetSize("Medium");
-    _builder.SetDough("wheat");
-    _builder.SetSauce("tomato");
-    _builder.AddTopping("mozzarella");
-    _builder.AddTopping("basil");
+    _builder.SetSize("mittel");
+    _builder.SetDough("Weizenteig");
+    _builder.SetSauce("Tomate");
+    _builder.AddTopping("Mozzarella");
+    _builder.AddTopping("Basilikum");
     return _builder.GetResult();
 }
 ```
 
-**Client** — `DemonstratePizzaBuilder` показывает три вещи:
-1. один и тот же рецепт с `ItalianPizzaBuilder` и `AmericanPizzaBuilder` даёт разные пиццы;
-2. строителя можно сменить у директора через `ChangeBuilder`;
-3. строителем можно пользоваться и без директора — собрать «свою» пиццу вручную.
+**Client** – `DemonstratePizzaBuilder` zeigt drei Dinge:
+1. Dasselbe Rezept liefert mit `ItalianPizzaBuilder` und `AmericanPizzaBuilder` unterschiedliche Pizzen;
+2. der Builder des Directors lässt sich über `ChangeBuilder` austauschen;
+3. der Builder kann auch ohne Director genutzt werden – um eine „eigene“ Pizza von Hand zusammenzustellen.
 
-## Пример 2. HTTP-запрос (`HttpRequest/`) — fluent Builder
+## Beispiel 2. HTTP-Anfrage (`HttpRequest/`) – Fluent Builder
 
-**Задача:** собрать HTTP-запрос, у которого почти все параметры необязательны, а сам запрос после создания должен быть неизменяемым.
+**Aufgabe:** Eine HTTP-Anfrage zusammenstellen, bei der fast alle Parameter optional sind und die Anfrage nach der Erzeugung unveränderlich sein soll.
 
-Это самый распространённый в C# вариант паттерна (ср. `StringBuilder`, `UriBuilder`, `WebApplication.CreateBuilder`, `HostBuilder`). Директора здесь нет, а интерфейс строителя не нужен — строитель один.
+Das ist die in C# am weitesten verbreitete Variante des Musters (vgl. `StringBuilder`, `UriBuilder`, `WebApplication.CreateBuilder`, `HostBuilder`). Einen Director gibt es hier nicht, und eine Builder-Schnittstelle ist unnötig – es gibt nur einen Builder.
 
-**Product** — `HttpRequestMessageModel`: все свойства только для чтения, конструктор `internal`, то есть получить объект «снаружи» можно только через строитель.
+**Product** – `HttpRequestMessageModel`: alle Eigenschaften sind schreibgeschützt, der Konstruktor ist `internal`, das Objekt kann „von außen“ also nur über den Builder erzeugt werden.
 
-**ConcreteBuilder** — `HttpRequestBuilder`. Каждый шаг возвращает `this`, поэтому вызовы выстраиваются в цепочку:
+**ConcreteBuilder** – `HttpRequestBuilder`. Jeder Schritt gibt `this` zurück, daher lassen sich die Aufrufe verketten:
 
 ```csharp
 var request = new HttpRequestBuilder()
@@ -117,39 +119,39 @@ var request = new HttpRequestBuilder()
     .Build();
 ```
 
-Шаги могут быть «составными»: `WithJsonBody` не только задаёт тело, но и выставляет заголовок `Content-Type`, `WithBearerToken` формирует заголовок `Authorization`.
+Schritte können „zusammengesetzt“ sein: `WithJsonBody` setzt nicht nur den Body, sondern auch den Header `Content-Type`, `WithBearerToken` bildet den Header `Authorization`.
 
-`Build()` — единственное место, где проверяется корректность (есть URL, у GET нет тела). Поэтому некорректный объект просто невозможно получить — демо показывает исключение при попытке собрать запрос без URL.
+`Build()` ist die einzige Stelle, an der die Korrektheit geprüft wird (URL vorhanden, GET ohne Body). Ein ungültiges Objekt lässt sich daher gar nicht erst erzeugen – die Demo zeigt die Ausnahme beim Versuch, eine Anfrage ohne URL zu bauen.
 
 ---
 
-## Когда применять
+## Wann einsetzen
 
-- У объекта много необязательных параметров, и конструктор превращается в «телескоп».
-- Нужно создавать разные представления одного объекта одними и теми же шагами.
-- Объект должен быть неизменяемым, но собираться постепенно.
-- Нужно собирать составные структуры (деревья Composite, документы, запросы) шаг за шагом.
+- Das Objekt hat viele optionale Parameter, und der Konstruktor wird zum „Teleskop“.
+- Unterschiedliche Repräsentationen eines Objekts sollen mit denselben Schritten erzeugt werden.
+- Das Objekt soll unveränderlich sein, aber schrittweise zusammengebaut werden.
+- Zusammengesetzte Strukturen (Composite-Bäume, Dokumente, Anfragen) sollen Schritt für Schritt aufgebaut werden.
 
-## Когда не нужен
+## Wann nicht nötig
 
-- У объекта 2–3 параметра — хватит конструктора или `required init`-свойств C#.
-- Объект простой и не требует проверки согласованности параметров.
+- Das Objekt hat 2–3 Parameter – ein Konstruktor oder `required init`-Eigenschaften in C# genügen.
+- Das Objekt ist einfach und erfordert keine Konsistenzprüfung der Parameter.
 
-## Плюсы и минусы
+## Vor- und Nachteile
 
-**Плюсы**
-- Пошаговое создание, можно откладывать шаги или выполнять их рекурсивно.
-- Один и тот же код построения для разных продуктов.
-- Изоляция сложной логики сборки от бизнес-логики продукта (SRP).
-- Возможность гарантировать корректность и неизменяемость результата.
+**Vorteile**
+- Schrittweise Erzeugung, Schritte können aufgeschoben oder rekursiv ausgeführt werden.
+- Derselbe Bau-Code für verschiedene Produkte.
+- Isolation der komplexen Zusammenbaulogik von der Geschäftslogik des Produkts (SRP).
+- Korrektheit und Unveränderlichkeit des Ergebnisses lassen sich garantieren.
 
-**Минусы**
-- Больше классов (строители, директор).
-- Клиент привязан к конкретным строителям, если у них нет общего интерфейса.
+**Nachteile**
+- Mehr Klassen (Builder, Director).
+- Der Client ist an konkrete Builder gebunden, wenn diese keine gemeinsame Schnittstelle haben.
 
-## Связь с другими паттернами
+## Beziehung zu anderen Mustern
 
-- **Abstract Factory** создаёт семейства объектов и возвращает их сразу; **Builder** собирает один сложный объект по шагам и отдаёт в конце.
-- **Composite** — часто именно его деревья собирает Builder.
-- **Factory Method** нередко эволюционирует в Builder, когда параметров становится слишком много.
-- Строитель может быть **Singleton**, если он не хранит состояние.
+- **Abstract Factory** erzeugt Familien von Objekten und gibt sie sofort zurück; **Builder** baut ein komplexes Objekt schrittweise und liefert es am Ende.
+- **Composite** – oft sind es gerade dessen Bäume, die ein Builder zusammenbaut.
+- **Factory Method** entwickelt sich häufig zu einem Builder, wenn es zu viele Parameter werden.
+- Ein Builder kann ein **Singleton** sein, wenn er keinen Zustand hält.

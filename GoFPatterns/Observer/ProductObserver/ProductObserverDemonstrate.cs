@@ -11,9 +11,9 @@ namespace GoFPatterns.Observer.ProductObserver
             var notifier = new DiscountNotifier(product);
             var buyer = new Buyer(product);
 
-            product.ChangePrice(120); //Nothing happens
-            product.ChangePrice(90); //Buyer doing something
-            product.ChangePrice(40); //Notifier doing something
+            product.ChangePrice(120); // Nichts passiert
+            product.ChangePrice(90); // Der Rabatt-Benachrichtiger reagiert (Preis <= 100)
+            product.ChangePrice(40); // Der Käufer reagiert (Preis <= 50)
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿namespace GoFPatterns.Adapter.SensorFeature
 {
     /// <summary>
-    /// Adapts a Fahrenheit temperature sensor to the Celsius interface.
-    /// Converts temperature readings from Fahrenheit to Celsius.
+    /// Passt einen Fahrenheit-Temperatursensor an die Celsius-Schnittstelle an.
+    /// Rechnet die Temperaturwerte von Fahrenheit in Celsius um.
     /// </summary>
     public class FahrenheitSensorAdapter(FahrenheitSensor fahrenheitSensor) : ITemperatureSensor
     {

@@ -1,12 +1,12 @@
 ﻿namespace GoFPatterns.Facade.HomeTheater.Subsystems
 {
-    // Subsystem class.
+    // Klasse des Subsystems.
     public class MediaPlayer
     {
-        public void On() => Console.WriteLine("  Media player: on");
-        public void Off() => Console.WriteLine("  Media player: off");
-        public void Play(string movie) => Console.WriteLine($"  Media player: playing \"{movie}\"");
-        public void Stop() => Console.WriteLine("  Media player: stop");
-        public void Eject() => Console.WriteLine("  Media player: eject disk");
+        public void On() => Console.WriteLine("  Mediaplayer: an");
+        public void Off() => Console.WriteLine("  Mediaplayer: aus");
+        public void Play(string movie) => Console.WriteLine($"  Mediaplayer: spielt \"{movie}\" ab");
+        public void Stop() => Console.WriteLine("  Mediaplayer: Stopp");
+        public void Eject() => Console.WriteLine("  Mediaplayer: Disc wird ausgeworfen");
     }
 }

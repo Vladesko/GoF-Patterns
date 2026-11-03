@@ -1,11 +1,11 @@
 ﻿namespace GoFPatterns.Facade.HomeTheater.Subsystems
 {
-    // Subsystem class - knows nothing about facade.
+    // Klasse des Subsystems – weiß nichts von der Fassade.
     public class Projector
     {
-        public void On() => Console.WriteLine("  Projector: on");
-        public void Off() => Console.WriteLine("  Projector: off");
-        public void SetInput(string input) => Console.WriteLine($"  Projector: input {input}");
-        public void WideScreenMode() => Console.WriteLine("  Projector: 16:9 mode");
+        public void On() => Console.WriteLine("  Projektor: an");
+        public void Off() => Console.WriteLine("  Projektor: aus");
+        public void SetInput(string input) => Console.WriteLine($"  Projektor: Eingang {input}");
+        public void WideScreenMode() => Console.WriteLine("  Projektor: 16:9-Modus");
     }
 }

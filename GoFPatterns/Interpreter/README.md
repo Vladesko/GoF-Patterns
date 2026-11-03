@@ -1,63 +1,65 @@
-# Interpreter (Интерпретатор)
+🌐 [Русский](https://github.com/Vladesko/GoF-Patterns/tree/rus/GoFPatterns/Interpreter) | [English](https://github.com/Vladesko/GoF-Patterns/tree/eng/GoFPatterns/Interpreter) | **Deutsch** | [Italiano](https://github.com/Vladesko/GoF-Patterns/tree/ita/GoFPatterns/Interpreter) | [Español](https://github.com/Vladesko/GoF-Patterns/tree/spa/GoFPatterns/Interpreter)
 
-**Тип:** поведенческий паттерн.
+# Interpreter (Interpreter)
 
-**Interpreter** определяет **грамматику простого языка** в виде иерархии классов и интерпретирует предложения этого языка. Каждое правило грамматики — отдельный класс, а предложение языка представляется **деревом** из объектов этих классов (абстрактным синтаксическим деревом, AST).
+**Typ:** Verhaltensmuster.
 
----
-
-## Какую проблему решает
-
-Иногда одна и та же задача повторяется в разных вариантах, которые удобно описывать **маленьким языком**, а не кодом:
-
-- формулы расчёта цены/зарплаты, которые настраивает пользователь: `price * count * (1 - tax)`;
-- поисковые запросы и фильтры: `(laptop OR tablet) AND used`;
-- правила бизнес-логики, шаблоны, регулярные выражения.
-
-Если разбирать такие строки ad-hoc (`Split`, `IndexOf`, `if`), код быстро превращается в нечитаемую кашу, а добавить новую операцию (например, `NOT` или скобки) становится трудно.
-
-## Решение
-
-1. Описать **грамматику** языка.
-2. Для каждого правила грамматики завести класс с методом `Interpret(context)`:
-   - **терминальные** выражения — «листья» (число, переменная, слово);
-   - **нетерминальные** — содержат другие выражения и объединяют их результаты (сложение, `AND`, `OR`).
-3. Предложение языка превращается в дерево из этих объектов, и вызов `Interpret` у корня рекурсивно вычисляет результат.
-
-Сам паттерн **не описывает, как строить дерево**: это может делать программист вручную или отдельный парсер (в примерах есть оба варианта).
+**Interpreter** definiert die **Grammatik einer einfachen Sprache** als Klassenhierarchie und interpretiert Sätze dieser Sprache. Jede Grammatikregel ist eine eigene Klasse, und ein Satz der Sprache wird als **Baum** aus Objekten dieser Klassen dargestellt (abstrakter Syntaxbaum, AST).
 
 ---
 
-## Участники
+## Welches Problem wird gelöst
 
-| Роль | Класс в примере | Описание |
+Manchmal wiederholt sich dieselbe Aufgabe in verschiedenen Varianten, die sich bequemer in einer **kleinen Sprache** als in Code beschreiben lassen:
+
+- vom Benutzer konfigurierbare Formeln zur Preis-/Gehaltsberechnung: `price * count * (1 - tax)`;
+- Suchanfragen und Filter: `(laptop OR tablet) AND gebraucht`;
+- Geschäftsregeln, Vorlagen, reguläre Ausdrücke.
+
+Zerlegt man solche Zeichenketten ad hoc (`Split`, `IndexOf`, `if`), wird der Code schnell zu unlesbarem Durcheinander, und eine neue Operation (z. B. `NOT` oder Klammern) hinzuzufügen wird schwierig.
+
+## Lösung
+
+1. Die **Grammatik** der Sprache beschreiben.
+2. Für jede Grammatikregel eine Klasse mit der Methode `Interpret(context)` anlegen:
+   - **terminale** Ausdrücke – die „Blätter“ (Zahl, Variable, Wort);
+   - **nichtterminale** – enthalten andere Ausdrücke und verknüpfen deren Ergebnisse (Addition, `AND`, `OR`).
+3. Ein Satz der Sprache wird zu einem Baum aus diesen Objekten, und der Aufruf von `Interpret` an der Wurzel berechnet das Ergebnis rekursiv.
+
+Das Muster selbst **beschreibt nicht, wie der Baum aufgebaut wird**: Das kann der Programmierer von Hand tun oder ein eigener Parser (in den Beispielen gibt es beide Varianten).
+
+---
+
+## Beteiligte
+
+| Rolle | Klasse im Beispiel | Beschreibung |
 |------|-----------------|----------|
-| **AbstractExpression** | `IExpression`, `IQueryExpression` | Общий интерфейс узлов дерева с методом интерпретации |
-| **TerminalExpression** | `NumberExpression`, `VariableExpression`, `TagExpression` | Листья: интерпретируются без обращения к другим выражениям |
-| **NonterminalExpression** | `BinaryExpression`, `AndExpression`, `OrExpression`, `NotExpression` | Содержат дочерние выражения, интерпретируют их и объединяют результат |
-| **Context** | `Context`, `Product` | Внешняя информация для интерпретации: значения переменных, проверяемый товар |
-| **Client** | `ExpressionParser`, `QueryParser`, демо-классы | Строит дерево (вручную или парсером) и вызывает интерпретацию |
+| **AbstractExpression** | `IExpression`, `IQueryExpression` | Gemeinsame Schnittstelle der Baumknoten mit der Interpretationsmethode |
+| **TerminalExpression** | `NumberExpression`, `VariableExpression`, `TagExpression` | Blätter: werden ohne Rückgriff auf andere Ausdrücke interpretiert |
+| **NonterminalExpression** | `BinaryExpression`, `AndExpression`, `OrExpression`, `NotExpression` | Enthalten Kindausdrücke, interpretieren sie und verknüpfen das Ergebnis |
+| **Context** | `Context`, `Product` | Externe Informationen für die Interpretation: Variablenwerte, das geprüfte Produkt |
+| **Client** | `ExpressionParser`, `QueryParser`, Demo-Klassen | Baut den Baum (von Hand oder per Parser) und ruft die Interpretation auf |
 
-## Схема
+## Schema
 
 ```text
    "price * count - discount"
                │ ExpressionParser
                ▼
-          BinaryExpression '-'                 ◄── Nonterminal
+          BinaryExpression '-'                 ◄── Nichtterminal
            /                \
    BinaryExpression '*'   VariableExpression "discount"   ◄── Terminal
      /            \
  Variable "price"  Variable "count"
 
-  tree.Interpret(context)  →  context: price=250, count=3, discount=50  →  700
+  tree.Interpret(context)  →  Kontext: price=250, count=3, discount=50  →  700
 ```
 
 ---
 
-## Пример 1. Математические выражения (`MathExpressions/`)
+## Beispiel 1. Mathematische Ausdrücke (`MathExpressions/`)
 
-**Грамматика:**
+**Grammatik:**
 
 ```text
 expression := term   (('+' | '-') term)*
@@ -65,13 +67,13 @@ term       := factor (('*' | '/') factor)*
 factor     := number | variable | '(' expression ')'
 ```
 
-**AbstractExpression** — `IExpression.Interpret(Context)` возвращает `double`.
+**AbstractExpression** – `IExpression.Interpret(Context)` gibt `double` zurück.
 
-**TerminalExpression** (папка `Expressions/`):
-- `NumberExpression` — возвращает своё число;
-- `VariableExpression` — берёт значение из контекста по имени.
+**TerminalExpression** (Ordner `Expressions/`):
+- `NumberExpression` – gibt seine Zahl zurück;
+- `VariableExpression` – holt den Wert per Namen aus dem Kontext.
 
-**NonterminalExpression** — `BinaryExpression` хранит левое и правое подвыражения и операцию; сначала интерпретирует детей, потом применяет операцию:
+**NonterminalExpression** – `BinaryExpression` hält den linken und rechten Teilausdruck sowie die Operation; interpretiert zuerst die Kinder und wendet dann die Operation an:
 
 ```csharp
 public double Interpret(Context context)
@@ -82,18 +84,18 @@ public double Interpret(Context context)
 }
 ```
 
-(В «книжном» варианте на каждую операцию заводят отдельный класс `AddExpression`, `MultiplyExpression`... — здесь они объединены, чтобы не плодить одинаковый код.)
+(In der „Lehrbuch“-Variante legt man für jede Operation eine eigene Klasse an – `AddExpression`, `MultiplyExpression`... –, hier sind sie zusammengefasst, um keinen gleichartigen Code zu vervielfachen.)
 
-**Context** — `Context` хранит значения переменных.
+**Context** – `Context` speichert die Werte der Variablen.
 
 **Client**:
-- демо сначала строит дерево `(price * count) - discount` **вручную**;
-- затем `ExpressionParser` (рекурсивный спуск по грамматике выше) строит деревья из строк. Видно, что приоритет операций учтён: `2 + 3 * 4` → `(2 + (3 * 4))`;
-- одно и то же дерево интерпретируется с **разными контекстами** — разобрать формулу можно один раз, а вычислять много раз.
+- die Demo baut zuerst den Baum `(price * count) - discount` **von Hand** auf;
+- danach baut `ExpressionParser` (rekursiver Abstieg nach der obigen Grammatik) Bäume aus Zeichenketten. Man sieht, dass die Operatorpriorität berücksichtigt wird: `2 + 3 * 4` → `(2 + (3 * 4))`;
+- derselbe Baum wird mit **verschiedenen Kontexten** interpretiert – eine Formel kann einmal geparst und viele Male berechnet werden.
 
-## Пример 2. Поисковые запросы по товарам (`ProductSearch/`)
+## Beispiel 2. Suchanfragen für Produkte (`ProductSearch/`)
 
-**Грамматика** (приоритет: `NOT` > `AND` > `OR`):
+**Grammatik** (Priorität: `NOT` > `AND` > `OR`):
 
 ```text
 or   := and ('OR' and)*
@@ -102,48 +104,48 @@ not  := 'NOT' not | atom
 atom := word | '(' or ')'
 ```
 
-**AbstractExpression** — `IQueryExpression.Matches(Product)` возвращает `bool`.
+**AbstractExpression** – `IQueryExpression.Matches(Product)` gibt `bool` zurück.
 
-**TerminalExpression** — `TagExpression`: истина, если у товара есть такой тег.
+**TerminalExpression** – `TagExpression`: wahr, wenn das Produkt dieses Tag hat.
 
-**NonterminalExpression** — `AndExpression`, `OrExpression` (два потомка), `NotExpression` (один потомок):
+**NonterminalExpression** – `AndExpression`, `OrExpression` (zwei Kinder), `NotExpression` (ein Kind):
 
 ```csharp
 public bool Matches(Product product) => left.Matches(product) && right.Matches(product);
 ```
 
-**Context** — `Product` с набором тегов. Здесь контекст — это объект, который проверяют.
+**Context** – `Product` mit einer Menge von Tags. Hier ist der Kontext das Objekt, das geprüft wird.
 
-**Client** — `QueryParser` разбивает строку на токены и строит дерево, демо фильтрует товары: `products.Where(expression.Matches)`. Для каждого запроса выводится построенное дерево, чтобы был виден порядок операций.
+**Client** – `QueryParser` zerlegt die Zeichenkette in Tokens und baut den Baum, die Demo filtert die Produkte: `products.Where(expression.Matches)`. Für jede Anfrage wird der erzeugte Baum ausgegeben, damit die Reihenfolge der Operationen sichtbar ist.
 
 ---
 
-## Когда применять
+## Wann einsetzen
 
-- Есть простой язык (формулы, фильтры, правила), предложения которого удобно представить деревом.
-- Грамматика **небольшая** и меняется нечасто.
-- Эффективность не критична.
+- Es gibt eine einfache Sprache (Formeln, Filter, Regeln), deren Sätze sich gut als Baum darstellen lassen.
+- Die Grammatik ist **klein** und ändert sich selten.
+- Effizienz ist nicht kritisch.
 
-## Когда не нужен
+## Wann nicht nötig
 
-- Грамматика большая — иерархия классов станет огромной. Лучше генераторы парсеров (ANTLR) или готовые движки.
-- Нужна высокая производительность — интерпретация дерева медленнее скомпилированного кода (в .NET дерево можно скомпилировать через `System.Linq.Expressions`).
+- Die Grammatik ist groß – die Klassenhierarchie würde riesig. Besser sind Parsergeneratoren (ANTLR) oder fertige Engines.
+- Hohe Performance ist gefragt – die Interpretation eines Baums ist langsamer als kompilierter Code (in .NET lässt sich ein Baum über `System.Linq.Expressions` kompilieren).
 
-## Плюсы и минусы
+## Vor- und Nachteile
 
-**Плюсы**
-- Грамматику легко расширять: новое правило — новый класс.
-- Каждое правило реализовано в своём маленьком классе.
-- Одно дерево можно интерпретировать многократно с разными контекстами.
+**Vorteile**
+- Die Grammatik lässt sich leicht erweitern: neue Regel – neue Klasse.
+- Jede Regel ist in einer eigenen kleinen Klasse umgesetzt.
+- Ein Baum kann mehrfach mit verschiedenen Kontexten interpretiert werden.
 
-**Минусы**
-- Сложно поддерживать при большой грамматике.
-- Нужен отдельный парсер для построения дерева.
+**Nachteile**
+- Bei großer Grammatik schwer zu pflegen.
+- Für den Aufbau des Baums wird ein eigener Parser benötigt.
 
-## Связь с другими паттернами
+## Beziehung zu anderen Mustern
 
-- **Composite** — абстрактное синтаксическое дерево — это компоновщик (терминальные выражения — листья, нетерминальные — контейнеры).
-- **Visitor** — позволяет добавлять новые операции над деревом (печать, оптимизация, проверка типов), не меняя классы выражений.
-- **Iterator** — для обхода дерева.
-- **Flyweight** — терминальные выражения (одинаковые числа, переменные) можно разделять.
-- В .NET примеры — `System.Linq.Expressions` (деревья выражений, которые EF Core интерпретирует в SQL) и `Regex`.
+- **Composite** – ein abstrakter Syntaxbaum ist ein Kompositum (terminale Ausdrücke sind Blätter, nichtterminale sind Container).
+- **Visitor** – ermöglicht es, neue Operationen auf dem Baum hinzuzufügen (Ausgabe, Optimierung, Typprüfung), ohne die Ausdrucksklassen zu ändern.
+- **Iterator** – zum Durchlaufen des Baums.
+- **Flyweight** – terminale Ausdrücke (gleiche Zahlen, Variablen) können geteilt werden.
+- Beispiele in .NET sind `System.Linq.Expressions` (Ausdrucksbäume, die EF Core in SQL übersetzt) und `Regex`.

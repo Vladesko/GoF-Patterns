@@ -1,9 +1,9 @@
 ﻿namespace GoFPatterns.Strategy.Sorting.Strategies
 {
-    // Concrete strategy - quick sort, O(n log n) on average.
+    // Konkrete Strategie – Quicksort, im Mittel O(n log n).
     public class QuickSortStrategy : ISortStrategy
     {
-        public string Name => "Quick sort";
+        public string Name => "Quicksort";
 
         public void Sort(int[] items) => QuickSort(items, 0, items.Length - 1);
 

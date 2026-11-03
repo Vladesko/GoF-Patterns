@@ -1,7 +1,7 @@
 ﻿namespace GoFPatterns.Memento.TextEditorHistory
 {
-    // Originator - object whose state is saved and restored.
-    // Only it knows how to create a snapshot and how to restore from it.
+    // Urheber (Originator) – Objekt, dessen Zustand gespeichert und wiederhergestellt wird.
+    // Nur er weiß, wie ein Schnappschuss erstellt und aus ihm wiederhergestellt wird.
     public class TextEditor
     {
         private string _text = string.Empty;
@@ -22,9 +22,9 @@
 
         public void Restore(IEditorMemento memento)
         {
-            // Editor accepts only its own snapshots.
+            // Der Editor akzeptiert nur seine eigenen Schnappschüsse.
             if (memento is not Snapshot snapshot)
-                throw new ArgumentException("Unknown memento type.", nameof(memento));
+                throw new ArgumentException("Unbekannter Memento-Typ.", nameof(memento));
 
             _text = snapshot.Text;
             _cursor = snapshot.Cursor;
@@ -33,8 +33,8 @@
 
         public override string ToString() => $"\"{_text.Insert(_cursor, "|")}\" [{_font}]";
 
-        // Memento - private nested class. Its fields are visible to the editor,
-        // but outside the editor it is accessible only through IEditorMemento.
+        // Memento – private verschachtelte Klasse. Ihre Felder sind für den Editor sichtbar,
+        // außerhalb des Editors ist sie aber nur über IEditorMemento zugänglich.
         private sealed class Snapshot(string label, string text, int cursor, string font) : IEditorMemento
         {
             public string Label { get; } = label;

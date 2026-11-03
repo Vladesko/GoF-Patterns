@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Composite.OrgStructure
 {
-    // Component - unit of organization: an employee or a whole department.
+    // Komponente – Organisationseinheit: ein Mitarbeiter oder eine ganze Abteilung.
     public interface IOrgUnit
     {
         string Name { get; }

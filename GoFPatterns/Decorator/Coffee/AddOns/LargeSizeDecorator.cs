@@ -1,10 +1,10 @@
 ﻿namespace GoFPatterns.Decorator.Coffee.AddOns
 {
-    // Concrete decorator which changes the result of wrapped object instead of adding to it.
-    // Order of decorators matters: large size multiplies cost of everything inside.
+    // Konkreter Dekorierer, der das Ergebnis des umhüllten Objekts verändert, statt etwas hinzuzufügen.
+    // Die Reihenfolge der Dekorierer ist wichtig: Die große Größe vervielfacht die Kosten von allem, was darin steckt.
     public class LargeSizeDecorator(IBeverage beverage) : BeverageDecorator(beverage)
     {
-        public override string GetDescription() => $"Large ({base.GetDescription()})";
+        public override string GetDescription() => $"Groß ({base.GetDescription()})";
 
         public override decimal GetCost() => base.GetCost() * 1.5m;
     }

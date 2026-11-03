@@ -4,24 +4,24 @@
     {
         public void Demonstrate()
         {
-            Console.WriteLine("=== Interpreter: Product search queries ===\n");
+            Console.WriteLine("=== Interpreter: Suchanfragen für Produkte ===\n");
 
             Product[] products =
             [
-                new("MacBook Air", new HashSet<string> { "laptop", "apple", "new" }),
-                new("ThinkPad T14", new HashSet<string> { "laptop", "lenovo", "used", "cheap" }),
-                new("iPhone 15", new HashSet<string> { "phone", "apple", "new" }),
-                new("Galaxy S21", new HashSet<string> { "phone", "samsung", "used", "cheap" }),
-                new("iPad", new HashSet<string> { "tablet", "apple", "used" })
+                new("MacBook Air", new HashSet<string> { "laptop", "apple", "neu" }),
+                new("ThinkPad T14", new HashSet<string> { "laptop", "lenovo", "gebraucht", "günstig" }),
+                new("iPhone 15", new HashSet<string> { "handy", "apple", "neu" }),
+                new("Galaxy S21", new HashSet<string> { "handy", "samsung", "gebraucht", "günstig" }),
+                new("iPad", new HashSet<string> { "tablet", "apple", "gebraucht" })
             ];
 
             string[] queries =
             [
                 "laptop",
-                "apple AND NOT phone",
-                "cheap OR new",
-                "(laptop OR tablet) AND used",
-                "NOT apple AND (phone OR laptop) AND cheap"
+                "apple AND NOT handy",
+                "günstig OR neu",
+                "(laptop OR tablet) AND gebraucht",
+                "NOT apple AND (handy OR laptop) AND günstig"
             ];
 
             var parser = new QueryParser();
@@ -29,9 +29,9 @@
             {
                 var expression = parser.Parse(query);
                 var found = products.Where(expression.Matches).Select(p => p.Name);
-                Console.WriteLine($"Query: {query}");
-                Console.WriteLine($"  Tree:  {expression}");
-                Console.WriteLine($"  Found: {string.Join(", ", found)}\n");
+                Console.WriteLine($"Anfrage: {query}");
+                Console.WriteLine($"  Baum:     {expression}");
+                Console.WriteLine($"  Gefunden: {string.Join(", ", found)}\n");
             }
         }
     }

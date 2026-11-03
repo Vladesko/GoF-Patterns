@@ -1,20 +1,20 @@
 ﻿namespace GoFPatterns.AbtractFactory.Payments.Interfaces.Abstractions
 {
     /// <summary>
-    /// The simple payment service
+    /// Ein einfacher Zahlungsdienst
     /// </summary>
     public interface IPaymentService
     {
         /// <summary>
-        /// Processes a payment of the specified amount.
+        /// Verarbeitet eine Zahlung über den angegebenen Betrag.
         /// </summary>
-        /// <param name="amount">The amount to pay.</param>
+        /// <param name="amount">Der zu zahlende Betrag.</param>
         Guid Pay(decimal amount);
 
         /// <summary>
-        /// Refunds a payment with the specified transaction ID.
+        /// Erstattet eine Zahlung mit der angegebenen Transaktions-ID.
         /// </summary>
-        /// <param name="transactionId">The transaction ID of the payment to refund.</param>
+        /// <param name="transactionId">Die Transaktions-ID der zu erstattenden Zahlung.</param>
         void Refund(Guid transactionId);
     }
 }

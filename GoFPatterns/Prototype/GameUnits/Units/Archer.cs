@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Prototype.GameUnits.Units
 {
-    // Concrete prototype. Each class knows how to copy itself including its own fields.
+    // Konkreter Prototyp. Jede Klasse weiß, wie sie sich samt eigener Felder kopiert.
     public class Archer : Unit
     {
         public int Arrows { get; set; }
@@ -13,6 +13,6 @@
             Arrows = Arrows
         };
 
-        public override string ToString() => $"{base.ToString()}, arrows: {Arrows}";
+        public override string ToString() => $"{base.ToString()}, Pfeile: {Arrows}";
     }
 }

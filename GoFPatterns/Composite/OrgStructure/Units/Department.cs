@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Composite.OrgStructure.Units
 {
-    // Composite - department which contains employees and sub-departments.
+    // Kompositum – Abteilung, die Mitarbeiter und Unterabteilungen enthält.
     public class Department(string name) : IOrgUnit
     {
         private readonly List<IOrgUnit> _units = [];
@@ -19,7 +19,7 @@
 
         public void Display(int depth = 0)
         {
-            Console.WriteLine($"{new string(' ', depth * 2)}[{Name}] people: {GetHeadcount()}, budget: {GetSalaryBudget():N0}");
+            Console.WriteLine($"{new string(' ', depth * 2)}[{Name}] Personen: {GetHeadcount()}, Budget: {GetSalaryBudget():N0}");
             foreach (var unit in _units)
             {
                 unit.Display(depth + 1);

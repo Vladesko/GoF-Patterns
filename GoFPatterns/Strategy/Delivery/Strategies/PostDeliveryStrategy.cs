@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Strategy.Delivery.Strategies
 {
-    // Concrete strategy - cheap and slow post.
+    // Konkrete Strategie – günstige und langsame Post.
     public class PostDeliveryStrategy : IDeliveryStrategy
     {
         public string Name => "Post";

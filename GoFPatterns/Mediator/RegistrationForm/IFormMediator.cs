@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Mediator.RegistrationForm
 {
-    // Mediator - components notify it about their events.
+    // Vermittler – die Komponenten benachrichtigen ihn über ihre Ereignisse.
     public interface IFormMediator
     {
         void Notify(FormComponent sender, string eventName);

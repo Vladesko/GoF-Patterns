@@ -1,15 +1,15 @@
 ﻿namespace GoFPatterns.State.Vending.States
 {
-    // Concrete state - machine is empty. Money is returned immediately.
+    // Konkreter Zustand – der Automat ist leer. Geld wird sofort zurückgegeben.
     public class SoldOutState : IVendingState
     {
         public void InsertCoin(VendingMachine machine, int amount) =>
-            Console.WriteLine($"    sold out, coin {amount} is returned");
+            Console.WriteLine($"    ausverkauft, Münze {amount} wird zurückgegeben");
 
         public void SelectProduct(VendingMachine machine) =>
-            Console.WriteLine("    sold out");
+            Console.WriteLine("    ausverkauft");
 
         public void Refund(VendingMachine machine) =>
-            Console.WriteLine("    nothing to refund");
+            Console.WriteLine("    nichts zurückzugeben");
     }
 }

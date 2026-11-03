@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Decorator.DataStream
 {
-    // Component - source where data can be written and read from.
+    // Komponente – Quelle, in die Daten geschrieben und aus der sie gelesen werden können.
     public interface IDataSource
     {
         void Write(string data);

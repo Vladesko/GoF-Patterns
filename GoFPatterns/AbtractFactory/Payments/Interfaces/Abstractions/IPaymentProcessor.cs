@@ -3,10 +3,10 @@
     public interface IPaymentProcessor
     {
         /// <summary>
-        /// Returns a unique transaction identifier for the processed payment.
+        /// Gibt eine eindeutige Transaktionskennung für die verarbeitete Zahlung zurück.
         /// </summary>
-        /// <param name="amount">The amount to be processed.</param>
-        /// <returns>The unique transaction identifier.</returns>
+        /// <param name="amount">Der zu verarbeitende Betrag.</param>
+        /// <returns>Die eindeutige Transaktionskennung.</returns>
         Guid ProcessPayment(decimal amount);
     }
 }

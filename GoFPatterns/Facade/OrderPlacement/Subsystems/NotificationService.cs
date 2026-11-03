@@ -1,8 +1,8 @@
 ﻿namespace GoFPatterns.Facade.OrderPlacement.Subsystems
 {
-    // Subsystem - notifications.
+    // Subsystem – Benachrichtigungen.
     public class NotificationService
     {
-        public void SendEmail(string email, string text) => Console.WriteLine($"  Email to {email}: {text}");
+        public void SendEmail(string email, string text) => Console.WriteLine($"  E-Mail an {email}: {text}");
     }
 }

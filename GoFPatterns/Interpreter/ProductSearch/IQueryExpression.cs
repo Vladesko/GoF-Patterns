@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Interpreter.ProductSearch
 {
-    // Abstract expression of the search query language.
+    // Abstrakter Ausdruck der Suchanfragesprache.
     public interface IQueryExpression
     {
         bool Matches(Product product);

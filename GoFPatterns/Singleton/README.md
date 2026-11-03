@@ -1,37 +1,39 @@
-# Singleton (Одиночка)
+🌐 [Русский](https://github.com/Vladesko/GoF-Patterns/tree/rus/GoFPatterns/Singleton) | [English](https://github.com/Vladesko/GoF-Patterns/tree/eng/GoFPatterns/Singleton) | **Deutsch** | [Italiano](https://github.com/Vladesko/GoF-Patterns/tree/ita/GoFPatterns/Singleton) | [Español](https://github.com/Vladesko/GoF-Patterns/tree/spa/GoFPatterns/Singleton)
 
-**Тип:** порождающий паттерн.
+# Singleton (Einzelstück)
 
-**Singleton** гарантирует, что у класса есть **только один экземпляр**, и предоставляет к нему **глобальную точку доступа**.
+**Typ:** Erzeugungsmuster.
 
----
-
-## Какую проблему решает
-
-1. **Один экземпляр.** Есть ресурсы, которые должны существовать в одном экземпляре на всё приложение: конфигурация, логгер, пул соединений, кеш. Если каждый сервис создаст свою конфигурацию, файл будет читаться много раз, а изменения в одном месте не будут видны в другом.
-2. **Глобальный доступ.** К этому экземпляру нужно обращаться из разных частей программы, при этом не давая перезаписать его, как обычную глобальную переменную.
-
-## Решение
-
-- Сделать конструктор **приватным**, чтобы никто не мог вызвать `new`.
-- Хранить единственный экземпляр в **статическом поле**.
-- Выдавать его через **статическое свойство** `Instance`, которое создаёт объект при первом обращении (ленивая инициализация).
-- Сделать класс `sealed`, чтобы нельзя было обойти ограничение через наследника.
-
-Главная сложность — **многопоточность**: если два потока одновременно обратятся к `Instance`, наивная реализация создаст два объекта.
+**Singleton** garantiert, dass eine Klasse **nur eine einzige Instanz** hat, und stellt einen **globalen Zugriffspunkt** auf sie bereit.
 
 ---
 
-## Участники
+## Welches Problem wird gelöst
 
-| Роль | Класс в примере | Описание |
+1. **Eine Instanz.** Manche Ressourcen dürfen in der gesamten Anwendung nur einmal existieren: Konfiguration, Logger, Verbindungspool, Cache. Erzeugt jeder Dienst seine eigene Konfiguration, wird die Datei mehrfach gelesen, und Änderungen an einer Stelle sind an anderer Stelle nicht sichtbar.
+2. **Globaler Zugriff.** Auf diese Instanz muss aus verschiedenen Teilen des Programms zugegriffen werden, ohne dass man sie wie eine gewöhnliche globale Variable überschreiben kann.
+
+## Lösung
+
+- Den Konstruktor **privat** machen, damit niemand `new` aufrufen kann.
+- Die einzige Instanz in einem **statischen Feld** speichern.
+- Sie über eine **statische Eigenschaft** `Instance` herausgeben, die das Objekt beim ersten Zugriff erzeugt (verzögerte Initialisierung).
+- Die Klasse `sealed` machen, damit die Einschränkung nicht über eine Unterklasse umgangen werden kann.
+
+Die Hauptschwierigkeit ist **Multithreading**: Greifen zwei Threads gleichzeitig auf `Instance` zu, erzeugt eine naive Implementierung zwei Objekte.
+
+---
+
+## Beteiligte
+
+| Rolle | Klasse im Beispiel | Beschreibung |
 |------|-----------------|----------|
-| **Singleton** | `AppConfiguration`, `FileLogger` | Хранит единственный экземпляр, закрывает конструктор, отдаёт экземпляр через `Instance` |
-| **Client** | `CartService`, `PriceService`, демо-классы | Обращается к одиночке через `ClassName.Instance` |
+| **Singleton** | `AppConfiguration`, `FileLogger` | Hält die einzige Instanz, verbirgt den Konstruktor, gibt die Instanz über `Instance` heraus |
+| **Client** | `CartService`, `PriceService`, Demo-Klassen | Greift über `ClassName.Instance` auf das Singleton zu |
 
-У паттерна по сути один «актёр» — сам класс-одиночка.
+Das Muster hat im Grunde nur einen „Akteur“ – die Singleton-Klasse selbst.
 
-## Схема
+## Schema
 
 ```text
  ┌───────────────────────────────────────┐
@@ -43,16 +45,16 @@
  └───────────────────────────────────────┘
           ▲                 ▲
           │ .Instance       │ .Instance
-     CartService       PriceService       ← один и тот же объект
+     CartService       PriceService       ← ein und dasselbe Objekt
 ```
 
 ---
 
-## Пример 1. Конфигурация приложения (`Configuration/`) — через `Lazy<T>`
+## Beispiel 1. Anwendungskonfiguration (`Configuration/`) – mit `Lazy<T>`
 
-**Задача:** настройки (строка подключения, валюта, лимит корзины) загружаются из файла один раз и используются разными сервисами.
+**Aufgabe:** Die Einstellungen (Verbindungszeichenfolge, Währung, Warenkorblimit) werden einmal aus einer Datei geladen und von verschiedenen Diensten genutzt.
 
-**Singleton** — `AppConfiguration`:
+**Singleton** – `AppConfiguration`:
 
 ```csharp
 public sealed class AppConfiguration
@@ -61,41 +63,41 @@ public sealed class AppConfiguration
 
     public static AppConfiguration Instance => _instance.Value;
 
-    private AppConfiguration() { /* дорогая загрузка настроек */ }
+    private AppConfiguration() { /* aufwendiges Laden der Einstellungen */ }
 }
 ```
 
-`Lazy<T>` по умолчанию работает в режиме `ExecutionAndPublication`: фабрика вызывается **ровно один раз**, даже если к `Value` одновременно обратились несколько потоков. Это рекомендуемый способ в C#.
+`Lazy<T>` arbeitet standardmäßig im Modus `ExecutionAndPublication`: Die Fabrikmethode wird **genau einmal** aufgerufen, selbst wenn mehrere Threads gleichzeitig auf `Value` zugreifen. Das ist der empfohlene Weg in C#.
 
-**Clients** — `CartService` и `PriceService` (папка `Services/`) никак не связаны друг с другом, но оба получают `AppConfiguration.Instance`. В демо видно:
-- сообщение о загрузке выводится только при первом обращении (ленивость);
-- `InstanceId` одинаковый у обоих сервисов;
-- изменение валюты через `Set` сразу видно в `PriceService`;
-- 100 параллельных обращений дают 1 уникальный экземпляр.
+**Clients** – `CartService` und `PriceService` (Ordner `Services/`) haben nichts miteinander zu tun, erhalten aber beide `AppConfiguration.Instance`. In der Demo sieht man:
+- die Meldung über das Laden erscheint nur beim ersten Zugriff (Lazy-Verhalten);
+- die `InstanceId` ist bei beiden Diensten gleich;
+- eine Änderung der Währung über `Set` ist sofort in `PriceService` sichtbar;
+- 100 parallele Zugriffe ergeben 1 eindeutige Instanz.
 
-## Пример 2. Логгер (`Logger/`) — ручная потокобезопасность
+## Beispiel 2. Logger (`Logger/`) – Threadsicherheit von Hand
 
-**Задача:** показать, почему наивная реализация опасна, и как работает классическая блокировка с двойной проверкой.
+**Aufgabe:** Zeigen, warum eine naive Implementierung gefährlich ist und wie das klassische Double-Checked Locking funktioniert.
 
-**Антипример** — `NaiveLogger`:
+**Negativbeispiel** – `NaiveLogger`:
 
 ```csharp
 if (_instance is null)
 {
-    _instance = new NaiveLogger();   // два потока могут оказаться здесь одновременно
+    _instance = new NaiveLogger();   // zwei Threads können gleichzeitig hier landen
 }
 ```
 
-Медленный конструктор (`Thread.Sleep`) делает гонку наглядной: демо запускает 10 потоков, и создаётся несколько экземпляров вместо одного.
+Ein langsamer Konstruktor (`Thread.Sleep`) macht die Race Condition sichtbar: Die Demo startet 10 Threads, und es entstehen mehrere Instanzen statt einer.
 
-**Singleton** — `FileLogger` с **double-checked locking**:
+**Singleton** – `FileLogger` mit **Double-Checked Locking**:
 
 ```csharp
-if (_instance is null)              // 1-я проверка: быстро, без блокировки
+if (_instance is null)              // 1. Prüfung: schnell, ohne Sperre
 {
     lock (_lock)
     {
-        if (_instance is null)      // 2-я проверка: другой поток мог успеть создать объект
+        if (_instance is null)      // 2. Prüfung: ein anderer Thread könnte das Objekt inzwischen erzeugt haben
         {
             _instance = new FileLogger();
         }
@@ -103,45 +105,45 @@ if (_instance is null)              // 1-я проверка: быстро, бе
 }
 ```
 
-Поле помечено `volatile`, чтобы другие потоки не увидели частично сконструированный объект. Счётчик `CreatedInstances` показывает, что экземпляр создан ровно один, и все сообщения из разных потоков попадают в один и тот же логгер.
+Das Feld ist als `volatile` markiert, damit andere Threads kein teilweise konstruiertes Objekt sehen. Der Zähler `CreatedInstances` zeigt, dass genau eine Instanz erzeugt wurde und alle Nachrichten aus verschiedenen Threads im selben Logger landen.
 
 ---
 
-## Варианты реализации в C#
+## Implementierungsvarianten in C#
 
-| Способ | Потокобезопасность | Ленивость | Комментарий |
+| Variante | Threadsicherheit | Lazy | Kommentar |
 |--------|-------------------|-----------|-------------|
-| `if (_instance == null)` без lock | ❌ | ✅ | Только для однопоточного кода |
-| `lock` + двойная проверка | ✅ | ✅ | Классика, но легко ошибиться |
-| `static readonly Instance = new()` | ✅ | почти | Создаётся при первом обращении к классу (CLR гарантирует) |
-| `Lazy<T>` | ✅ | ✅ | Рекомендуемый способ |
-| DI-контейнер `AddSingleton<T>()` | ✅ | ✅ | В ASP.NET Core предпочтительнее самописного Singleton |
+| `if (_instance == null)` ohne lock | ❌ | ✅ | Nur für Single-Thread-Code |
+| `lock` + doppelte Prüfung | ✅ | ✅ | Klassiker, aber fehleranfällig |
+| `static readonly Instance = new()` | ✅ | fast | Wird beim ersten Zugriff auf die Klasse erzeugt (von der CLR garantiert) |
+| `Lazy<T>` | ✅ | ✅ | Empfohlener Weg |
+| DI-Container `AddSingleton<T>()` | ✅ | ✅ | In ASP.NET Core einem selbstgeschriebenen Singleton vorzuziehen |
 
-## Когда применять
+## Wann einsetzen
 
-- Объект действительно должен быть один (конфигурация, логгер, кеш, пул).
-- Нужна строгая гарантия единственности, а не просто «договорились создавать один».
+- Das Objekt muss wirklich einzigartig sein (Konfiguration, Logger, Cache, Pool).
+- Man braucht eine strikte Garantie der Einzigartigkeit, nicht nur die „Absprache, nur eins zu erzeugen“.
 
-## Когда не нужен
+## Wann nicht nötig
 
-- Если есть DI-контейнер — лучше зарегистрировать сервис как singleton (`services.AddSingleton<IConfig, AppConfig>()`) и получать через интерфейс: это та же единственность, но без глобального состояния и с возможностью подменить в тестах.
-- Если «одиночка» нужен только чтобы не передавать зависимость параметром — это скрытая зависимость, а не повод для паттерна.
+- Gibt es einen DI-Container, registriert man den Dienst besser als Singleton (`services.AddSingleton<IConfig, AppConfig>()`) und bezieht ihn über die Schnittstelle: Das ist dieselbe Einzigartigkeit, aber ohne globalen Zustand und mit der Möglichkeit, sie in Tests zu ersetzen.
+- Braucht man das „Singleton“ nur, um eine Abhängigkeit nicht als Parameter übergeben zu müssen, ist das eine versteckte Abhängigkeit und kein Grund für das Muster.
 
-## Плюсы и минусы
+## Vor- und Nachteile
 
-**Плюсы**
-- Гарантия единственного экземпляра.
-- Глобальная точка доступа.
-- Ленивая инициализация — объект создаётся только когда нужен.
+**Vorteile**
+- Garantie einer einzigen Instanz.
+- Globaler Zugriffspunkt.
+- Verzögerte Initialisierung – das Objekt wird erst erzeugt, wenn es gebraucht wird.
 
-**Минусы**
-- Нарушает SRP: класс и делает работу, и управляет своим жизненным циклом.
-- Скрытые зависимости: по сигнатуре `CartService` не видно, что он зависит от конфигурации.
-- Сложно тестировать: глобальное состояние переживает тесты, его нельзя подменить моком.
-- Требует аккуратности в многопоточной среде.
+**Nachteile**
+- Verletzt das SRP: Die Klasse erledigt ihre Arbeit und verwaltet zugleich ihren eigenen Lebenszyklus.
+- Versteckte Abhängigkeiten: An der Signatur von `CartService` sieht man nicht, dass er von der Konfiguration abhängt.
+- Schwer zu testen: Globaler Zustand überdauert Tests und lässt sich nicht durch ein Mock ersetzen.
+- Erfordert Sorgfalt in einer Multithreading-Umgebung.
 
-## Связь с другими паттернами
+## Beziehung zu anderen Mustern
 
-- **Facade** часто делают одиночкой — обычно достаточно одного фасада.
-- **Abstract Factory**, **Builder**, **Prototype** (реестр прототипов) могут быть реализованы как Singleton.
-- **Flyweight** похож тем, что разделяет объекты, но у него может быть много экземпляров с разным внутренним состоянием, и они неизменяемы; Singleton — ровно один, и он может быть изменяемым.
+- **Facade** wird oft als Singleton umgesetzt – meist genügt eine einzige Fassade.
+- **Abstract Factory**, **Builder**, **Prototype** (Prototyp-Registry) können als Singleton implementiert werden.
+- **Flyweight** ähnelt ihm darin, dass Objekte geteilt werden, kann aber viele Instanzen mit unterschiedlichem intrinsischem Zustand haben, und diese sind unveränderlich; ein Singleton gibt es genau einmal, und es kann veränderlich sein.

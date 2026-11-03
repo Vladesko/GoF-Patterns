@@ -2,8 +2,8 @@
 
 namespace GoFPatterns.Facade.OrderPlacement
 {
-    // Facade - hides the whole order workflow: checks, reservation, payment, rollback, shipping, notification.
-    // Controller (client) calls only PlaceOrder and doesn't depend on four services.
+    // Fassade – verbirgt den gesamten Bestellablauf: Prüfungen, Reservierung, Zahlung, Rollback, Versand, Benachrichtigung.
+    // Der Controller (Client) ruft nur PlaceOrder auf und hängt nicht von vier Diensten ab.
     public class OrderFacade(
         InventoryService inventory,
         PaymentGateway payments,
@@ -12,25 +12,25 @@ namespace GoFPatterns.Facade.OrderPlacement
     {
         public OrderResult PlaceOrder(OrderRequest order)
         {
-            Console.WriteLine($"Placing order: {order.Count} x {order.Product}");
+            Console.WriteLine($"Bestellung wird aufgegeben: {order.Count} x {order.Product}");
 
             if (!inventory.IsAvailable(order.Product, order.Count))
-                return new OrderResult(false, $"{order.Product} is out of stock");
+                return new OrderResult(false, $"{order.Product} ist nicht vorrätig");
 
             inventory.Reserve(order.Product, order.Count);
 
             var total = order.Price * order.Count + shipping.CalculateCost(order.Address);
             if (!payments.Charge(order.CardNumber, total))
             {
-                // Facade also knows how to roll back subsystem state.
+                // Die Fassade weiß auch, wie der Zustand der Subsysteme zurückgesetzt wird.
                 inventory.Release(order.Product, order.Count);
-                return new OrderResult(false, "Payment was declined");
+                return new OrderResult(false, "Zahlung wurde abgelehnt");
             }
 
             var tracking = shipping.CreateShipment(order.Product, order.Address);
-            notifications.SendEmail(order.Email, $"Order is paid ({total:F2}), tracking number {tracking}");
+            notifications.SendEmail(order.Email, $"Bestellung ist bezahlt ({total:F2}), Sendungsnummer {tracking}");
 
-            return new OrderResult(true, $"Order placed, tracking {tracking}");
+            return new OrderResult(true, $"Bestellung aufgegeben, Sendungsnummer {tracking}");
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Builder.PizzaShop
 {
-    // Builder - declares construction steps that are common for all pizza builders.
+    // Builder – deklariert die Bauschritte, die allen Pizza-Buildern gemeinsam sind.
     public interface IPizzaBuilder
     {
         void Reset();

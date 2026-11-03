@@ -1,7 +1,7 @@
 ﻿namespace GoFPatterns.Command.SmartHome
 {
-    // Invoker - remote with configurable buttons. It knows nothing about devices.
-    // Also it can put commands into a queue and execute them later (scheduler).
+    // Aufrufer (Invoker) – Fernbedienung mit konfigurierbaren Tasten. Sie weiß nichts über die Geräte.
+    // Außerdem kann sie Befehle in eine Warteschlange stellen und später ausführen (Scheduler).
     public class RemoteControl
     {
         private readonly Dictionary<int, IHomeCommand> _buttons = [];
@@ -13,12 +13,12 @@
         {
             if (_buttons.TryGetValue(button, out var command))
             {
-                Console.WriteLine($"  Button {button}: {command.Description}");
+                Console.WriteLine($"  Taste {button}: {command.Description}");
                 command.Execute();
             }
             else
             {
-                Console.WriteLine($"  Button {button}: not configured");
+                Console.WriteLine($"  Taste {button}: nicht belegt");
             }
         }
 
@@ -28,7 +28,7 @@
         {
             while (_scheduled.TryDequeue(out var command))
             {
-                Console.WriteLine($"  Scheduled: {command.Description}");
+                Console.WriteLine($"  Geplant: {command.Description}");
                 command.Execute();
             }
         }

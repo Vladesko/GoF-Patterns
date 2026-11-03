@@ -7,27 +7,27 @@ namespace GoFPatterns.Command.SmartHome
     {
         public void Demonstrate()
         {
-            Console.WriteLine("=== Command: Smart home remote ===\n");
+            Console.WriteLine("=== Command: Smart-Home-Fernbedienung ===\n");
 
-            var livingRoom = new Light("Living room");
-            var kitchen = new Light("Kitchen");
+            var livingRoom = new Light("Wohnzimmer");
+            var kitchen = new Light("Küche");
             var thermostat = new Thermostat();
             var security = new SecuritySystem();
 
-            var livingRoomOn = new ActionCommand("Living room light on", livingRoom.TurnOn);
-            var allLightsOff = new MacroCommand("All lights off",
-                new ActionCommand("Living room off", livingRoom.TurnOff),
-                new ActionCommand("Kitchen off", kitchen.TurnOff));
+            var livingRoomOn = new ActionCommand("Licht Wohnzimmer an", livingRoom.TurnOn);
+            var allLightsOff = new MacroCommand("Alle Lichter aus",
+                new ActionCommand("Wohnzimmer aus", livingRoom.TurnOff),
+                new ActionCommand("Küche aus", kitchen.TurnOff));
 
-            // "Leave home" scenario is built from other commands, including another macro.
-            var leaveHome = new MacroCommand("Leave home",
+            // Das Szenario "Haus verlassen" wird aus anderen Befehlen gebaut, darunter ein weiteres Makro.
+            var leaveHome = new MacroCommand("Haus verlassen",
                 allLightsOff,
-                new ActionCommand("Eco temperature", () => thermostat.SetTemperature(17)),
-                new ActionCommand("Arm security", security.Arm));
+                new ActionCommand("Eco-Temperatur", () => thermostat.SetTemperature(17)),
+                new ActionCommand("Alarmanlage scharf schalten", security.Arm));
 
-            var comeHome = new MacroCommand("Come home",
-                new ActionCommand("Disarm security", security.Disarm),
-                new ActionCommand("Comfort temperature", () => thermostat.SetTemperature(22)),
+            var comeHome = new MacroCommand("Nach Hause kommen",
+                new ActionCommand("Alarmanlage entschärfen", security.Disarm),
+                new ActionCommand("Komforttemperatur", () => thermostat.SetTemperature(22)),
                 livingRoomOn);
 
             var remote = new RemoteControl();
@@ -41,11 +41,11 @@ namespace GoFPatterns.Command.SmartHome
             remote.PressButton(4);
             remote.PressButton(9);
 
-            // Commands are objects, so they can be stored and executed later.
-            Console.WriteLine("\nScheduling commands for the night:");
+            // Befehle sind Objekte, daher können sie gespeichert und später ausgeführt werden.
+            Console.WriteLine("\nBefehle für die Nacht werden eingeplant:");
             remote.Schedule(allLightsOff);
-            remote.Schedule(new ActionCommand("Night temperature", () => thermostat.SetTemperature(19)));
-            Console.WriteLine("  ...it's 23:00...");
+            remote.Schedule(new ActionCommand("Nachttemperatur", () => thermostat.SetTemperature(19)));
+            Console.WriteLine("  ...es ist 23:00 Uhr...");
             remote.RunScheduled();
         }
     }

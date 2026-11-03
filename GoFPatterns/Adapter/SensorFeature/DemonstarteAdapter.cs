@@ -4,22 +4,22 @@
     {
         public void Demonstarte()
         {
-            Console.WriteLine("=== Adapter Pattern Demo ===\n");
+            Console.WriteLine("=== Demo des Adapter-Musters ===\n");
 
-            // Modern sensor - works directly
+            // Moderner Sensor – funktioniert direkt
             ITemperatureSensor celsiusSensor = new CelsiusSensor();
-            Console.WriteLine($"Celsius sensor: {celsiusSensor.GetTemperatureCelsius()}°C");
+            Console.WriteLine($"Celsius-Sensor: {celsiusSensor.GetTemperatureCelsius()}°C");
 
-            // Legacy sensor - needs adapter
+            // Legacy-Sensor – benötigt einen Adapter
             var fahrenheitSensor = new FahrenheitSensor();
-            Console.WriteLine($"Fahrenheit sensor (incompatible): {fahrenheitSensor.GetCurrentTemperature()}°F");
+            Console.WriteLine($"Fahrenheit-Sensor (inkompatibel): {fahrenheitSensor.GetCurrentTemperature()}°F");
 
-            // Using adapter
+            // Verwendung des Adapters
             ITemperatureSensor adapter = new FahrenheitSensorAdapter(fahrenheitSensor);
-            Console.WriteLine($"Fahrenheit sensor via adapter: {adapter.GetTemperatureCelsius()}°C");
+            Console.WriteLine($"Fahrenheit-Sensor über Adapter: {adapter.GetTemperatureCelsius()}°C");
 
-            // Both work with the same interface
-            Console.WriteLine("\n=== Using unified interface ===");
+            // Beide arbeiten mit derselben Schnittstelle
+            Console.WriteLine("\n=== Verwendung der einheitlichen Schnittstelle ===");
             DisplayTemperature(celsiusSensor);
             DisplayTemperature(adapter);
         }
@@ -29,11 +29,11 @@
             var temp = sensor.GetTemperatureCelsius();
             var status = temp switch
             {
-                < 15 => "Cold ",
-                >= 15 and < 25 => "Comfortable ",
-                _ => "Hot "
+                < 15 => "Kalt ",
+                >= 15 and < 25 => "Angenehm ",
+                _ => "Heiß "
             };
-            Console.WriteLine($"Temperature: {temp}°C - {status}");
+            Console.WriteLine($"Temperatur: {temp}°C - {status}");
         }
     }
 }

@@ -2,13 +2,13 @@
 
 namespace GoFPatterns.Facade.HomeTheater
 {
-    // Facade - simple interface for a complex subsystem.
-    // It knows which subsystem objects to call and in which order.
+    // Fassade – einfache Schnittstelle zu einem komplexen Subsystem.
+    // Sie weiß, welche Objekte des Subsystems in welcher Reihenfolge aufzurufen sind.
     public class HomeTheaterFacade(Projector projector, SoundSystem sound, MediaPlayer player, Lights lights)
     {
         public void WatchMovie(string movie)
         {
-            Console.WriteLine($"Get ready to watch \"{movie}\"...");
+            Console.WriteLine($"Vorbereitung auf den Film \"{movie}\"...");
             lights.Dim(10);
             projector.On();
             projector.SetInput("HDMI-1");
@@ -22,7 +22,7 @@ namespace GoFPatterns.Facade.HomeTheater
 
         public void EndMovie()
         {
-            Console.WriteLine("Shutting movie theater down...");
+            Console.WriteLine("Heimkino wird heruntergefahren...");
             player.Stop();
             player.Eject();
             player.Off();

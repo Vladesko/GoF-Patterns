@@ -1,13 +1,13 @@
 ﻿namespace GoFPatterns.TemplateMethod.Beverages.Drinks
 {
-    // Concrete class with hook that depends on customer's choice.
+    // Konkrete Klasse mit einem Hook, der von der Wahl des Kunden abhängt.
     public class Coffee(bool withMilk) : HotBeverage
     {
         protected override int WaterTemperature => 92;
 
-        protected override void Brew() => Console.WriteLine("  drip coffee through filter");
+        protected override void Brew() => Console.WriteLine("  Kaffee durch den Filter laufen lassen");
 
-        protected override void AddCondiments() => Console.WriteLine("  add sugar and milk");
+        protected override void AddCondiments() => Console.WriteLine("  Zucker und Milch hinzufügen");
 
         protected override bool CustomerWantsCondiments() => withMilk;
     }

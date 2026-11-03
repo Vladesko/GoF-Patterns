@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Interpreter.ProductSearch.Expressions
 {
-    // Terminal expression - single word of the query. Matches if product has such tag.
+    // Terminaler Ausdruck – ein einzelnes Wort der Anfrage. Trifft zu, wenn das Produkt dieses Tag hat.
     public class TagExpression(string tag) : IQueryExpression
     {
         public bool Matches(Product product) => product.Tags.Contains(tag);

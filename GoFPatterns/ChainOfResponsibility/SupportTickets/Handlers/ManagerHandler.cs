@@ -1,13 +1,13 @@
 ﻿namespace GoFPatterns.ChainOfResponsibility.SupportTickets.Handlers
 {
-    // Concrete handler - the last one. Handles critical incidents.
+    // Konkreter Handler – der letzte. Bearbeitet kritische Störungen.
     public class ManagerHandler : SupportHandler
     {
         public override void Handle(SupportTicket ticket)
         {
             if (ticket.Severity == TicketSeverity.Critical)
             {
-                Console.WriteLine($"  Manager: started incident procedure for ticket #{ticket.Id}");
+                Console.WriteLine($"  Manager: Störungsprozess für Ticket Nr. {ticket.Id} gestartet");
                 return;
             }
             base.Handle(ticket);

@@ -1,9 +1,9 @@
 ﻿namespace GoFPatterns.Command.TextEditor.Commands
 {
-    // Concrete command - stores receiver and all parameters needed to execute and undo the operation.
+    // Konkreter Befehl – speichert den Empfänger und alle Parameter, die zum Ausführen und Rückgängigmachen nötig sind.
     public class InsertTextCommand(Document document, int position, string text) : ICommand
     {
-        public string Name => $"Insert \"{text}\"";
+        public string Name => $"\"{text}\" einfügen";
 
         public void Execute() => document.Insert(position, text);
 

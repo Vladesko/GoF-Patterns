@@ -1,7 +1,7 @@
 ﻿namespace GoFPatterns.Singleton.Logger
 {
-    // Singleton - classic implementation with double-checked locking.
-    // Shown to understand how thread safety works "by hand". In real code Lazy<T> is simpler.
+    // Singleton – klassische Implementierung mit Double-Checked Locking.
+    // Gezeigt, um zu verstehen, wie Threadsicherheit "von Hand" funktioniert. In echtem Code ist Lazy<T> einfacher.
     public sealed class FileLogger
     {
         private static readonly object _lock = new();
@@ -15,12 +15,12 @@
         {
             get
             {
-                // First check without lock - fast path when instance already exists.
+                // Erste Prüfung ohne Sperre – schneller Weg, wenn die Instanz bereits existiert.
                 if (_instance is null)
                 {
                     lock (_lock)
                     {
-                        // Second check - other thread could create instance while we were waiting for lock.
+                        // Zweite Prüfung – ein anderer Thread könnte die Instanz erzeugt haben, während wir auf die Sperre gewartet haben.
                         if (_instance is null)
                         {
                             _instance = new FileLogger();
@@ -34,7 +34,7 @@
         private FileLogger()
         {
             CreatedInstances++;
-            Thread.Sleep(50); // Emulation of opening a log file.
+            Thread.Sleep(50); // Emulation des Öffnens einer Logdatei.
         }
 
         public void Log(string message)

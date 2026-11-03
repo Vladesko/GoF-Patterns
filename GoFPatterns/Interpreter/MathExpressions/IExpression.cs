@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Interpreter.MathExpressions
 {
-    // Abstract expression - every node of the syntax tree can interpret itself.
+    // Abstrakter Ausdruck – jeder Knoten des Syntaxbaums kann sich selbst interpretieren.
     public interface IExpression
     {
         double Interpret(Context context);

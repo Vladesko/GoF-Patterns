@@ -1,7 +1,7 @@
 ﻿namespace GoFPatterns.Mediator.ChatRoom
 {
-    // Concrete mediator - contains all logic of communication: who receives the message,
-    // filtering of banned words, private messages, join/leave notifications.
+    // Konkreter Vermittler – enthält die gesamte Kommunikationslogik: wer die Nachricht erhält,
+    // Filtern verbotener Wörter, private Nachrichten, Benachrichtigungen über Betreten/Verlassen.
     public class ChatRoomMediator : IChatMediator
     {
         private static readonly string[] _bannedWords = ["spam", "scam"];
@@ -10,13 +10,13 @@
         public void Join(ChatUser user)
         {
             _users[user.Name] = user;
-            Console.WriteLine($"  [room] {user.Name} joined");
+            Console.WriteLine($"  [Raum] {user.Name} ist beigetreten");
         }
 
         public void Leave(ChatUser user)
         {
             _users.Remove(user.Name);
-            Console.WriteLine($"  [room] {user.Name} left");
+            Console.WriteLine($"  [Raum] {user.Name} hat den Raum verlassen");
         }
 
         public void SendMessage(ChatUser sender, string message)
@@ -24,7 +24,7 @@
             Console.WriteLine($"  {sender.Name}: {message}");
             if (_bannedWords.Any(w => message.Contains(w, StringComparison.OrdinalIgnoreCase)))
             {
-                Console.WriteLine($"  [room] message from {sender.Name} is blocked");
+                Console.WriteLine($"  [Raum] Nachricht von {sender.Name} wurde blockiert");
                 return;
             }
 
@@ -37,9 +37,9 @@
         public void SendPrivate(ChatUser sender, string receiverName, string message)
         {
             if (_users.TryGetValue(receiverName, out var receiver))
-                receiver.Receive($"{sender.Name} (private)", message);
+                receiver.Receive($"{sender.Name} (privat)", message);
             else
-                sender.Receive("room", $"user {receiverName} is not in the room");
+                sender.Receive("Raum", $"Benutzer {receiverName} ist nicht im Raum");
         }
     }
 }

@@ -2,68 +2,68 @@
 
 Console.OutputEncoding = Encoding.UTF8;
 
-// Every demo: group of pattern, name shown in menu and action which runs it.
+// Jede Demo: Mustergruppe, im Menü angezeigter Name und die Aktion, die sie startet.
 (string Group, string Name, Action Run)[] demos =
 [
-    ("Creational", "Abstract Factory: Payments", () => new GoFPatterns.AbtractFactory.Payments.DemontrateAbstractFactory().Demonstrate()),
-    ("Creational", "Builder: Pizza shop", () => new GoFPatterns.Builder.PizzaShop.DemonstratePizzaBuilder().Demonstrate()),
-    ("Creational", "Builder: HTTP request", () => new GoFPatterns.Builder.HttpRequest.DemonstrateHttpRequestBuilder().Demonstrate()),
-    ("Creational", "Factory Method: Fitness memberships", GoFPatterns.FactoryMethod.DemondtrsteFactoryMethod.DemonstrateFitnes),
-    ("Creational", "Factory Method: Notifications", GoFPatterns.FactoryMethod.DemondtrsteFactoryMethod.DemonstrateNotify),
-    ("Creational", "Prototype: Documents", () => new GoFPatterns.Prototype.Documents.DemonstratePrototype().Demonstrate()),
-    ("Creational", "Prototype: Game units", () => new GoFPatterns.Prototype.GameUnits.DemonstrateGameUnits().Demonstrate()),
-    ("Creational", "Singleton: Configuration", () => new GoFPatterns.Singleton.Configuration.DemonstrateConfiguration().Demonstrate()),
-    ("Creational", "Singleton: Logger", () => new GoFPatterns.Singleton.Logger.DemonstrateLogger().Demonstrate()),
+    ("Erzeugungsmuster", "Abstract Factory: Zahlungen", () => new GoFPatterns.AbtractFactory.Payments.DemontrateAbstractFactory().Demonstrate()),
+    ("Erzeugungsmuster", "Builder: Pizzeria", () => new GoFPatterns.Builder.PizzaShop.DemonstratePizzaBuilder().Demonstrate()),
+    ("Erzeugungsmuster", "Builder: HTTP-Anfrage", () => new GoFPatterns.Builder.HttpRequest.DemonstrateHttpRequestBuilder().Demonstrate()),
+    ("Erzeugungsmuster", "Factory Method: Fitness-Mitgliedschaften", GoFPatterns.FactoryMethod.DemondtrsteFactoryMethod.DemonstrateFitnes),
+    ("Erzeugungsmuster", "Factory Method: Benachrichtigungen", GoFPatterns.FactoryMethod.DemondtrsteFactoryMethod.DemonstrateNotify),
+    ("Erzeugungsmuster", "Prototype: Dokumente", () => new GoFPatterns.Prototype.Documents.DemonstratePrototype().Demonstrate()),
+    ("Erzeugungsmuster", "Prototype: Spieleinheiten", () => new GoFPatterns.Prototype.GameUnits.DemonstrateGameUnits().Demonstrate()),
+    ("Erzeugungsmuster", "Singleton: Konfiguration", () => new GoFPatterns.Singleton.Configuration.DemonstrateConfiguration().Demonstrate()),
+    ("Erzeugungsmuster", "Singleton: Logger", () => new GoFPatterns.Singleton.Logger.DemonstrateLogger().Demonstrate()),
 
-    ("Structural", "Adapter: Temperature sensors", () => new GoFPatterns.Adapter.SensorFeature.DemonstarteAdapter().Demonstarte()),
-    ("Structural", "Bridge: Remote control", () => new GoFPatterns.Bridge.RemoteControl.DemonstrateRemoteControl().Demonstrate()),
-    ("Structural", "Bridge: Reports", () => new GoFPatterns.Bridge.Reports.DemonstrateReports().Demonstrate()),
-    ("Structural", "Composite: File system", () => new GoFPatterns.Composite.FileSystem.DemonstrateFileSystem().Demonstrate()),
-    ("Structural", "Composite: Organization structure", () => new GoFPatterns.Composite.OrgStructure.DemonstrateOrgStructure().Demonstrate()),
-    ("Structural", "Decorator: Coffee shop", () => new GoFPatterns.Decorator.Coffee.DemonstrateCoffee().Demonstrate()),
-    ("Structural", "Decorator: Data source", () => new GoFPatterns.Decorator.DataStream.DemonstrateDataStream().Demonstrate()),
-    ("Structural", "Facade: Home theater", () => new GoFPatterns.Facade.HomeTheater.DemonstrateHomeTheater().Demonstrate()),
-    ("Structural", "Facade: Order placement", () => new GoFPatterns.Facade.OrderPlacement.DemonstrateOrderPlacement().Demonstrate()),
-    ("Structural", "Flyweight: Forest", () => new GoFPatterns.Flyweight.Forest.DemonstrateForest().Demonstrate()),
-    ("Structural", "Flyweight: Text formatting", () => new GoFPatterns.Flyweight.TextFormatting.DemonstrateTextFormatting().Demonstrate()),
-    ("Structural", "Proxy: Lazy image loading", () => new GoFPatterns.Proxy.ImageLoading.DemonstrateImageLoading().Demonstrate()),
-    ("Structural", "Proxy: Bank account", () => new GoFPatterns.Proxy.BankAccount.DemonstrateBankAccount().Demonstrate()),
+    ("Strukturmuster", "Adapter: Temperatursensoren", () => new GoFPatterns.Adapter.SensorFeature.DemonstarteAdapter().Demonstarte()),
+    ("Strukturmuster", "Bridge: Fernbedienung", () => new GoFPatterns.Bridge.RemoteControl.DemonstrateRemoteControl().Demonstrate()),
+    ("Strukturmuster", "Bridge: Berichte", () => new GoFPatterns.Bridge.Reports.DemonstrateReports().Demonstrate()),
+    ("Strukturmuster", "Composite: Dateisystem", () => new GoFPatterns.Composite.FileSystem.DemonstrateFileSystem().Demonstrate()),
+    ("Strukturmuster", "Composite: Organisationsstruktur", () => new GoFPatterns.Composite.OrgStructure.DemonstrateOrgStructure().Demonstrate()),
+    ("Strukturmuster", "Decorator: Café", () => new GoFPatterns.Decorator.Coffee.DemonstrateCoffee().Demonstrate()),
+    ("Strukturmuster", "Decorator: Datenquelle", () => new GoFPatterns.Decorator.DataStream.DemonstrateDataStream().Demonstrate()),
+    ("Strukturmuster", "Facade: Heimkino", () => new GoFPatterns.Facade.HomeTheater.DemonstrateHomeTheater().Demonstrate()),
+    ("Strukturmuster", "Facade: Bestellabwicklung", () => new GoFPatterns.Facade.OrderPlacement.DemonstrateOrderPlacement().Demonstrate()),
+    ("Strukturmuster", "Flyweight: Wald", () => new GoFPatterns.Flyweight.Forest.DemonstrateForest().Demonstrate()),
+    ("Strukturmuster", "Flyweight: Textformatierung", () => new GoFPatterns.Flyweight.TextFormatting.DemonstrateTextFormatting().Demonstrate()),
+    ("Strukturmuster", "Proxy: Verzögertes Laden von Bildern", () => new GoFPatterns.Proxy.ImageLoading.DemonstrateImageLoading().Demonstrate()),
+    ("Strukturmuster", "Proxy: Bankkonto", () => new GoFPatterns.Proxy.BankAccount.DemonstrateBankAccount().Demonstrate()),
 
-    ("Behavioral", "Chain of Responsibility: Support tickets", () => new GoFPatterns.ChainOfResponsibility.SupportTickets.DemonstrateSupportTickets().Demonstrate()),
-    ("Behavioral", "Chain of Responsibility: Middleware", () => new GoFPatterns.ChainOfResponsibility.Middleware.DemonstrateRequestPipeline().Demonstrate()),
-    ("Behavioral", "Command: Text editor", () => new GoFPatterns.Command.TextEditor.DemonstrateTextEditor().Demonstrate()),
-    ("Behavioral", "Command: Smart home", () => new GoFPatterns.Command.SmartHome.DemonstrateSmartHome().Demonstrate()),
-    ("Behavioral", "Interpreter: Math expressions", () => new GoFPatterns.Interpreter.MathExpressions.DemonstrateMathExpressions().Demonstrate()),
-    ("Behavioral", "Interpreter: Product search", () => new GoFPatterns.Interpreter.ProductSearch.DemonstrateProductSearch().Demonstrate()),
-    ("Behavioral", "Iterator: Book collection", () => new GoFPatterns.Iterator.BookCollection.DemonstrateBookCollection().Demonstrate()),
-    ("Behavioral", "Iterator: Tree traversal", () => new GoFPatterns.Iterator.Tree.DemonstrateTree().Demonstrate()),
-    ("Behavioral", "Mediator: Chat room", () => new GoFPatterns.Mediator.ChatRoom.DemonstrateChatRoom().Demonstrate()),
-    ("Behavioral", "Mediator: Registration form", () => new GoFPatterns.Mediator.RegistrationForm.DemonstrateRegistrationForm().Demonstrate()),
-    ("Behavioral", "Memento: Text editor history", () => new GoFPatterns.Memento.TextEditorHistory.DemonstrateTextEditorHistory().Demonstrate()),
-    ("Behavioral", "Memento: Game saves", () => new GoFPatterns.Memento.GameSave.DemonstrateGameSave().Demonstrate()),
-    ("Behavioral", "Observer: Product price", () => new GoFPatterns.Observer.ProductObserver.ProductObserverDemonstrate().Demonstrate()),
-    ("Behavioral", "State: Order lifecycle", () => new GoFPatterns.State.OrderLifecycle.DemonstrateOrderLifecycle().Demonstrate()),
-    ("Behavioral", "State: Vending machine", () => new GoFPatterns.State.Vending.DemonstrateVendingMachine().Demonstrate()),
-    ("Behavioral", "Strategy: Delivery cost", () => new GoFPatterns.Strategy.Delivery.DemonstrateDelivery().Demonstrate()),
-    ("Behavioral", "Strategy: Sorting", () => new GoFPatterns.Strategy.Sorting.DemonstrateSorting().Demonstrate()),
-    ("Behavioral", "Template Method: Data import", () => new GoFPatterns.TemplateMethod.DataImport.DemonstrateDataImport().Demonstrate()),
-    ("Behavioral", "Template Method: Hot beverages", () => new GoFPatterns.TemplateMethod.Beverages.DemonstrateBeverages().Demonstrate()),
-    ("Behavioral", "Visitor: Shapes", () => new GoFPatterns.Visitor.Shapes.ShapeDemostrateVisitor().Demonstrate()),
+    ("Verhaltensmuster", "Chain of Responsibility: Support-Tickets", () => new GoFPatterns.ChainOfResponsibility.SupportTickets.DemonstrateSupportTickets().Demonstrate()),
+    ("Verhaltensmuster", "Chain of Responsibility: Middleware", () => new GoFPatterns.ChainOfResponsibility.Middleware.DemonstrateRequestPipeline().Demonstrate()),
+    ("Verhaltensmuster", "Command: Texteditor", () => new GoFPatterns.Command.TextEditor.DemonstrateTextEditor().Demonstrate()),
+    ("Verhaltensmuster", "Command: Smart Home", () => new GoFPatterns.Command.SmartHome.DemonstrateSmartHome().Demonstrate()),
+    ("Verhaltensmuster", "Interpreter: Mathematische Ausdrücke", () => new GoFPatterns.Interpreter.MathExpressions.DemonstrateMathExpressions().Demonstrate()),
+    ("Verhaltensmuster", "Interpreter: Produktsuche", () => new GoFPatterns.Interpreter.ProductSearch.DemonstrateProductSearch().Demonstrate()),
+    ("Verhaltensmuster", "Iterator: Büchersammlung", () => new GoFPatterns.Iterator.BookCollection.DemonstrateBookCollection().Demonstrate()),
+    ("Verhaltensmuster", "Iterator: Baumdurchlauf", () => new GoFPatterns.Iterator.Tree.DemonstrateTree().Demonstrate()),
+    ("Verhaltensmuster", "Mediator: Chatraum", () => new GoFPatterns.Mediator.ChatRoom.DemonstrateChatRoom().Demonstrate()),
+    ("Verhaltensmuster", "Mediator: Registrierungsformular", () => new GoFPatterns.Mediator.RegistrationForm.DemonstrateRegistrationForm().Demonstrate()),
+    ("Verhaltensmuster", "Memento: Verlauf im Texteditor", () => new GoFPatterns.Memento.TextEditorHistory.DemonstrateTextEditorHistory().Demonstrate()),
+    ("Verhaltensmuster", "Memento: Spielstände", () => new GoFPatterns.Memento.GameSave.DemonstrateGameSave().Demonstrate()),
+    ("Verhaltensmuster", "Observer: Produktpreis", () => new GoFPatterns.Observer.ProductObserver.ProductObserverDemonstrate().Demonstrate()),
+    ("Verhaltensmuster", "State: Lebenszyklus einer Bestellung", () => new GoFPatterns.State.OrderLifecycle.DemonstrateOrderLifecycle().Demonstrate()),
+    ("Verhaltensmuster", "State: Verkaufsautomat", () => new GoFPatterns.State.Vending.DemonstrateVendingMachine().Demonstrate()),
+    ("Verhaltensmuster", "Strategy: Lieferkosten", () => new GoFPatterns.Strategy.Delivery.DemonstrateDelivery().Demonstrate()),
+    ("Verhaltensmuster", "Strategy: Sortierung", () => new GoFPatterns.Strategy.Sorting.DemonstrateSorting().Demonstrate()),
+    ("Verhaltensmuster", "Template Method: Datenimport", () => new GoFPatterns.TemplateMethod.DataImport.DemonstrateDataImport().Demonstrate()),
+    ("Verhaltensmuster", "Template Method: Heißgetränke", () => new GoFPatterns.TemplateMethod.Beverages.DemonstrateBeverages().Demonstrate()),
+    ("Verhaltensmuster", "Visitor: Formen", () => new GoFPatterns.Visitor.Shapes.ShapeDemostrateVisitor().Demonstrate()),
 ];
 
 while (true)
 {
     PrintMenu();
-    Console.Write("Choose demo number (0 - exit): ");
+    Console.Write("Demo-Nummer wählen (0 – Beenden): ");
     var input = Console.ReadLine();
 
-    // null means that input stream is closed (for example, input was redirected from file).
+    // null bedeutet, dass der Eingabestrom geschlossen ist (z. B. wenn die Eingabe aus einer Datei umgeleitet wurde).
     if (input is null || input.Trim() == "0")
         break;
 
     if (!int.TryParse(input, out var number) || number < 1 || number > demos.Length)
     {
-        Console.WriteLine("Wrong number, try again.\n");
+        Console.WriteLine("Ungültige Nummer, bitte erneut versuchen.\n");
         continue;
     }
 
@@ -74,14 +74,14 @@ while (true)
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"Demo failed: {ex.Message}");
+        Console.WriteLine($"Demo fehlgeschlagen: {ex.Message}");
     }
     Console.WriteLine();
 }
 
 void PrintMenu()
 {
-    Console.WriteLine("=== GoF Design Patterns ===");
+    Console.WriteLine("=== GoF-Entwurfsmuster ===");
     string? group = null;
     for (var i = 0; i < demos.Length; i++)
     {

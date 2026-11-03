@@ -2,18 +2,18 @@
 
 namespace GoFPatterns.State.OrderLifecycle
 {
-    // Context - order. It doesn't contain "switch (status)" anywhere,
-    // it just delegates every action to the current state object.
+    // Kontext – die Bestellung. Sie enthält nirgends ein "switch (status)",
+    // sondern delegiert jede Aktion einfach an das aktuelle Zustandsobjekt.
     public class Order(int id, decimal amount)
     {
         public int Id { get; } = id;
         public decimal Amount { get; } = amount;
         public IOrderState State { get; private set; } = new NewState();
 
-        // States call this method to switch the order to the next state.
+        // Die Zustände rufen diese Methode auf, um die Bestellung in den nächsten Zustand zu versetzen.
         internal void TransitionTo(IOrderState state)
         {
-            Console.WriteLine($"    Order #{Id}: {State.Name} -> {state.Name}");
+            Console.WriteLine($"    Bestellung Nr. {Id}: {State.Name} -> {state.Name}");
             State = state;
         }
 

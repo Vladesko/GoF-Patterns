@@ -1,8 +1,8 @@
 ﻿namespace GoFPatterns.State.OrderLifecycle.States
 {
-    // Concrete state - final state. All actions are denied by base class.
+    // Konkreter Zustand – Endzustand. Alle Aktionen werden von der Basisklasse abgelehnt.
     public class DeliveredState : OrderStateBase
     {
-        public override string Name => "Delivered";
+        public override string Name => "Zugestellt";
     }
 }

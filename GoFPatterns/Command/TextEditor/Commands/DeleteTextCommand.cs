@@ -1,11 +1,11 @@
 ﻿namespace GoFPatterns.Command.TextEditor.Commands
 {
-    // Concrete command - remembers deleted text to be able to restore it on Undo.
+    // Konkreter Befehl – merkt sich den gelöschten Text, um ihn bei Undo wiederherstellen zu können.
     public class DeleteTextCommand(Document document, int position, int length) : ICommand
     {
         private string _deletedText = string.Empty;
 
-        public string Name => $"Delete {length} chars";
+        public string Name => $"{length} Zeichen löschen";
 
         public void Execute()
         {
