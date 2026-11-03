@@ -1,14 +1,16 @@
-# Decorator (Декоратор)
+🌐 [Русский](https://github.com/Vladesko/GoF-Patterns/tree/rus/GoFPatterns/Decorator) | **English** | [Deutsch](https://github.com/Vladesko/GoF-Patterns/tree/deu/GoFPatterns/Decorator) | [Italiano](https://github.com/Vladesko/GoF-Patterns/tree/ita/GoFPatterns/Decorator) | [Español](https://github.com/Vladesko/GoF-Patterns/tree/spa/GoFPatterns/Decorator)
 
-**Тип:** структурный паттерн.
+# Decorator
 
-**Decorator** позволяет динамически добавлять объекту новое поведение, «оборачивая» его в объекты-обёртки с тем же интерфейсом. Обёртки можно вкладывать друг в друга в любом порядке и количестве.
+**Type:** structural pattern.
+
+**Decorator** lets you dynamically add new behavior to an object by "wrapping" it in wrapper objects with the same interface. Wrappers can be nested in each other in any order and number.
 
 ---
 
-## Какую проблему решает
+## The problem
 
-Кофейня продаёт напитки, к которым можно добавлять молоко, сироп, увеличенный объём... Если решать через наследование:
+A coffee shop sells drinks to which you can add milk, syrup, a larger size... If you solve this with inheritance:
 
 ```text
 Espresso
@@ -16,35 +18,35 @@ Espresso
  ├── EspressoWithSyrup
  ├── EspressoWithMilkAndSyrup
  ├── LargeEspressoWithMilkAndSyrup
- └── ...  (и всё то же для чая)
+ └── ...  (and all the same for tea)
 ```
 
-Число подклассов растёт комбинаторно. Кроме того, наследование **статично**: нельзя во время работы программы «добавить молоко» к уже созданному объекту. А двойное молоко вообще не выразить без ещё одного класса.
+The number of subclasses grows combinatorially. Moreover, inheritance is **static**: you cannot "add milk" to an already created object while the program is running. And double milk cannot be expressed at all without yet another class.
 
-То же со хранилищем данных: иногда нужно сжатие, иногда шифрование, иногда и то, и другое, иногда ещё и логирование — подклассов под каждую комбинацию не напасёшься.
+The same goes for data storage: sometimes you need compression, sometimes encryption, sometimes both, sometimes logging on top — you cannot keep up with a subclass for every combination.
 
-## Решение
+## Solution
 
-Заменить наследование **композицией**. Декоратор:
-- реализует **тот же интерфейс**, что и оборачиваемый объект;
-- хранит ссылку на оборачиваемый объект;
-- делегирует ему вызовы, добавляя своё поведение **до или после**.
+Replace inheritance with **composition**. A decorator:
+- implements **the same interface** as the wrapped object;
+- holds a reference to the wrapped object;
+- delegates calls to it, adding its own behavior **before or after**.
 
-Так как декоратор выглядит для клиента как обычный компонент, его можно обернуть ещё одним декоратором — получится «матрёшка». Клиент не знает, работает он с исходным объектом или с цепочкой обёрток.
+Since a decorator looks like a regular component to the client, it can be wrapped in yet another decorator — you get a "nesting doll". The client does not know whether it works with the original object or with a chain of wrappers.
 
 ---
 
-## Участники
+## Participants
 
-| Роль | Класс в примере | Описание |
-|------|-----------------|----------|
-| **Component** | `IBeverage`, `IDataSource` | Общий интерфейс и для обёрток, и для оборачиваемых объектов |
-| **ConcreteComponent** | `Espresso`, `BlackTea`, `InMemoryDataSource` | Базовый объект, к которому добавляют поведение |
-| **BaseDecorator** | `BeverageDecorator`, `DataSourceDecorator` | Хранит ссылку на Component и по умолчанию просто делегирует ему вызовы |
-| **ConcreteDecorator** | `MilkDecorator`, `SyrupDecorator`, `LargeSizeDecorator`, `CompressionDecorator`, `EncryptionDecorator`, `LoggingDecorator` | Добавляют конкретное поведение до/после вызова обёрнутого объекта |
-| **Client** | демо-классы | Собирает нужную комбинацию обёрток и работает с ней через Component |
+| Role | Class in the example | Description |
+|------|----------------------|-------------|
+| **Component** | `IBeverage`, `IDataSource` | The common interface for both wrappers and wrapped objects |
+| **ConcreteComponent** | `Espresso`, `BlackTea`, `InMemoryDataSource` | The base object to which behavior is added |
+| **BaseDecorator** | `BeverageDecorator`, `DataSourceDecorator` | Holds a reference to Component and by default simply delegates calls to it |
+| **ConcreteDecorator** | `MilkDecorator`, `SyrupDecorator`, `LargeSizeDecorator`, `CompressionDecorator`, `EncryptionDecorator`, `LoggingDecorator` | Add specific behavior before/after calling the wrapped object |
+| **Client** | demo classes | Assembles the required combination of wrappers and works with it through Component |
 
-## Схема
+## Diagram
 
 ```text
             ┌───────────────────────┐
@@ -70,13 +72,13 @@ Espresso
 
 ---
 
-## Пример 1. Кофейня (`Coffee/`)
+## Example 1. Coffee shop (`Coffee/`)
 
-**Component** — `IBeverage` с методами `GetDescription()` и `GetCost()`.
+**Component** — `IBeverage` with the methods `GetDescription()` and `GetCost()`.
 
-**ConcreteComponent** — `Espresso` и `BlackTea` (папка `Beverages/`) знают только свою базовую цену.
+**ConcreteComponent** — `Espresso` and `BlackTea` (folder `Beverages/`) know only their base price.
 
-**BaseDecorator** — `BeverageDecorator` (папка `AddOns/`) хранит обёрнутый напиток и делегирует ему всё через `virtual`-методы:
+**BaseDecorator** — `BeverageDecorator` (folder `AddOns/`) holds the wrapped beverage and delegates everything to it via `virtual` methods:
 
 ```csharp
 public abstract class BeverageDecorator(IBeverage beverage) : IBeverage
@@ -88,7 +90,7 @@ public abstract class BeverageDecorator(IBeverage beverage) : IBeverage
 }
 ```
 
-**ConcreteDecorator** — каждая добавка переопределяет методы, вызывая `base` и дополняя результат:
+**ConcreteDecorator** — each add-on overrides the methods, calling `base` and extending the result:
 
 ```csharp
 public class MilkDecorator(IBeverage beverage) : BeverageDecorator(beverage)
@@ -98,34 +100,34 @@ public class MilkDecorator(IBeverage beverage) : BeverageDecorator(beverage)
 }
 ```
 
-- `SyrupDecorator` показывает, что у декоратора может быть **своё состояние** (вкус сиропа).
-- `LargeSizeDecorator` не прибавляет, а **умножает** цену. Поэтому в демо видно, что **порядок обёрток важен**: «большой (эспрессо + сироп)» дороже, чем «большой эспрессо + сироп».
+- `SyrupDecorator` shows that a decorator can have **its own state** (the syrup flavor).
+- `LargeSizeDecorator` does not add to the price but **multiplies** it. That is why the demo shows that **the order of wrappers matters**: "large (espresso + syrup)" costs more than "large espresso + syrup".
 
-**Client** — собирает напитки «матрёшкой»: `new MilkDecorator(new MilkDecorator(new Espresso()))` — двойное молоко без отдельного класса. Те же добавки без изменений работают и с чаем.
+**Client** — assembles drinks as "nesting dolls": `new MilkDecorator(new MilkDecorator(new Espresso()))` — double milk without a separate class. The same add-ons work with tea without any changes.
 
-## Пример 2. Источник данных (`DataStream/`)
+## Example 2. Data source (`DataStream/`)
 
-**Задача:** данные (например, данные клиента с номером карты) сохраняются в хранилище. В зависимости от настроек их нужно сжимать, шифровать, логировать — в любой комбинации.
+**Task:** data (e.g. customer data with a card number) is saved to storage. Depending on the settings, it must be compressed, encrypted, logged — in any combination.
 
-**Component** — `IDataSource` с `Write`/`Read`.
+**Component** — `IDataSource` with `Write`/`Read`.
 
-**ConcreteComponent** — `InMemoryDataSource` хранит строку как есть (имитация файла или записи в БД).
+**ConcreteComponent** — `InMemoryDataSource` stores the string as is (simulating a file or a database record).
 
-**BaseDecorator** — `DataSourceDecorator` (папка `Decorators/`).
+**BaseDecorator** — `DataSourceDecorator` (folder `Decorators/`).
 
-**ConcreteDecorator** — здесь хорошо видно поведение «до» и «после»:
+**ConcreteDecorator** — the "before" and "after" behavior is clearly visible here:
 
 ```csharp
 // CompressionDecorator
-public override void Write(string data) => base.Write(Compress(data));   // ДО записи — сжать
-public override string Read() => Decompress(base.Read());                // ПОСЛЕ чтения — распаковать
+public override void Write(string data) => base.Write(Compress(data));   // BEFORE writing — compress
+public override string Read() => Decompress(base.Read());                // AFTER reading — decompress
 ```
 
 - `CompressionDecorator` — GZip + Base64.
-- `EncryptionDecorator` — XOR с ключом (только для демонстрации, это не настоящее шифрование!).
-- `LoggingDecorator` — данные не меняет, только пишет в консоль размер.
+- `EncryptionDecorator` — XOR with a key (for demonstration only, this is not real encryption!).
+- `LoggingDecorator` — does not change the data, only writes its size to the console.
 
-**Client** — демо оборачивает хранилище:
+**Client** — the demo wraps the storage:
 
 ```csharp
 IDataSource source = new LoggingDecorator(
@@ -134,40 +136,40 @@ IDataSource source = new LoggingDecorator(
     "client");
 ```
 
-При записи данные проходят снаружи внутрь (лог → сжатие → шифрование → хранилище), при чтении — изнутри наружу. В хранилище лежит сжатая зашифрованная строка, а клиент читает исходный текст и даже не знает об этом.
+When writing, the data passes from the outside in (log → compression → encryption → storage); when reading, from the inside out. The storage holds a compressed, encrypted string, while the client reads the original text without even knowing it.
 
-Это ровно то, как устроены потоки в .NET: `new GZipStream(new CryptoStream(new FileStream(...)))` — классический Decorator. Также декораторами являются `BufferedStream`, `StreamReader` (поверх `Stream`), а в ASP.NET Core — middleware-конвейер и декорирование сервисов в DI (например, через Scrutor).
+This is exactly how streams are designed in .NET: `new GZipStream(new CryptoStream(new FileStream(...)))` is a classic Decorator. `BufferedStream` and `StreamReader` (on top of `Stream`) are decorators too, and in ASP.NET Core so are the middleware pipeline and service decoration in DI (e.g. via Scrutor).
 
 ---
 
-## Когда применять
+## When to use
 
-- Нужно добавлять обязанности объектам **динамически** и незаметно для клиента.
-- Расширение наследованием невозможно (класс `sealed`) или приводит к взрыву числа подклассов.
-- Нужно комбинировать независимые «надстройки»: кеширование, логирование, повторные попытки, валидация, метрики.
+- You need to add responsibilities to objects **dynamically** and transparently to the client.
+- Extension through inheritance is impossible (the class is `sealed`) or leads to an explosion of subclasses.
+- You need to combine independent "add-ons": caching, logging, retries, validation, metrics.
 
-## Когда не нужен
+## When not to use
 
-- Нужна одна фиксированная комбинация поведения — проще написать класс.
-- Поведение должно зависеть от того, какие обёртки уже есть (декораторы друг о друге знать не должны).
+- You need one fixed combination of behavior — it is simpler to write a class.
+- Behavior must depend on which wrappers are already present (decorators should not know about each other).
 
-## Плюсы и минусы
+## Pros and cons
 
-**Плюсы**
-- Гибче наследования: поведение добавляется и комбинируется во время выполнения.
-- Каждый декоратор отвечает за одну вещь (SRP).
-- Можно применять несколько раз (двойное молоко).
-- Можно расширять `sealed`-классы и сторонний код через их интерфейс.
+**Pros**
+- More flexible than inheritance: behavior is added and combined at runtime.
+- Each decorator is responsible for one thing (SRP).
+- Can be applied several times (double milk).
+- Lets you extend `sealed` classes and third-party code through their interface.
 
-**Минусы**
-- Много мелких классов.
-- Трудно убрать конкретную обёртку из середины цепочки.
-- Поведение зависит от порядка обёрток — это легко упустить.
-- Код конфигурации «матрёшки» бывает громоздким.
+**Cons**
+- Many small classes.
+- It is hard to remove a specific wrapper from the middle of the chain.
+- Behavior depends on the order of wrappers — this is easy to overlook.
+- The code that configures the "nesting doll" can be cumbersome.
 
-## Связь с другими паттернами
+## Relations with other patterns
 
-- **Adapter** меняет интерфейс объекта; **Decorator** оставляет интерфейс тем же и расширяет поведение; **Proxy** оставляет интерфейс тем же и **контролирует доступ** (обычно сам управляет жизненным циклом объекта, а декоратор получает объект от клиента).
-- **Composite** структурно похож (рекурсивная композиция), но у декоратора один вложенный объект и цель — добавить поведение.
-- **Chain of Responsibility** тоже передаёт запрос по цепочке, но её звенья могут **прервать** обработку; декоратор всегда передаёт вызов дальше.
-- **Strategy** меняет «внутренности» объекта, **Decorator** — его «оболочку».
+- **Adapter** changes an object's interface; **Decorator** keeps the interface the same and extends behavior; **Proxy** keeps the interface the same and **controls access** (it usually manages the object's lifecycle itself, while a decorator receives the object from the client).
+- **Composite** is structurally similar (recursive composition), but a decorator has one nested object and aims to add behavior.
+- **Chain of Responsibility** also passes a request along a chain, but its links can **stop** the processing; a decorator always passes the call on.
+- **Strategy** changes an object's "guts", **Decorator** changes its "skin".

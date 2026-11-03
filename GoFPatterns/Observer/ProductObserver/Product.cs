@@ -29,7 +29,7 @@
         }
 
         // Notify all observers about the price change.
-        // This method also need for implementation of the IObservable interface.
+        // This method is also needed for the implementation of the IObservable interface.
         // But it is private because it is not intended to be called from outside the class.
         private void NotifyObservers()
         {

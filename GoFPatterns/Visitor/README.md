@@ -1,21 +1,23 @@
-# Visitor (Посетитель)
+🌐 [Русский](https://github.com/Vladesko/GoF-Patterns/tree/rus/GoFPatterns/Visitor) | **English** | [Deutsch](https://github.com/Vladesko/GoF-Patterns/tree/deu/GoFPatterns/Visitor) | [Italiano](https://github.com/Vladesko/GoF-Patterns/tree/ita/GoFPatterns/Visitor) | [Español](https://github.com/Vladesko/GoF-Patterns/tree/spa/GoFPatterns/Visitor)
 
-**Тип:** поведенческий паттерн.
+# Visitor
 
-**Visitor** позволяет **добавлять новые операции** к иерархии классов, **не изменяя сами классы**. Операция выносится в отдельный объект-посетитель, который «обходит» элементы и выполняет над каждым нужное действие.
+**Type:** behavioral pattern.
+
+**Visitor** lets you **add new operations** to a class hierarchy **without changing the classes themselves**. An operation is moved into a separate visitor object that "walks" over the elements and performs the required action on each one.
 
 ---
 
-## Какую проблему решает
+## The problem
 
-Есть стабильная иерархия фигур: `Circle`, `Rectangle`. Над ними нужно выполнять всё новые операции: посчитать площадь, экспортировать в XML, потом в JSON, нарисовать, посчитать периметр...
+There is a stable hierarchy of shapes: `Circle`, `Rectangle`. More and more operations need to be performed on them: calculate the area, export to XML, then to JSON, draw, calculate the perimeter...
 
-Если добавлять каждую операцию методом в классы фигур:
-- классы фигур **разрастаются** кодом, который к ним не относится (экспорт в XML — это не обязанность круга);
-- каждая новая операция требует правки **всех** классов иерархии;
-- иногда классы вообще нельзя менять (сторонний код).
+If each operation is added as a method to the shape classes:
+- the shape classes **grow** with code that does not belong to them (exporting to XML is not a circle's responsibility);
+- every new operation requires editing **all** classes of the hierarchy;
+- sometimes the classes cannot be changed at all (third-party code).
 
-Если писать операцию снаружи через проверку типов:
+If the operation is written outside using type checks:
 
 ```csharp
 foreach (var shape in shapes)
@@ -25,30 +27,30 @@ foreach (var shape in shapes)
 }
 ```
 
-…то при добавлении новой фигуры легко **забыть** обновить одну из таких цепочек — компилятор не подскажет.
+…then when a new shape is added, it is easy to **forget** to update one of these chains — the compiler will not warn you.
 
-## Решение
+## Solution
 
-1. Каждую операцию вынести в отдельный класс — **посетителя**, у которого есть по методу на каждый тип элемента: `VisitCircle`, `VisitRectangle`.
-2. В элементы добавить **один** метод `Accept(visitor)`, который вызывает «свой» метод у посетителя: круг вызывает `VisitCircle(this)`, прямоугольник — `VisitRectangle(this)`.
+1. Move each operation into a separate class — a **visitor** — that has one method per element type: `VisitCircle`, `VisitRectangle`.
+2. Add **one** method `Accept(visitor)` to the elements, which calls "its own" method on the visitor: a circle calls `VisitCircle(this)`, a rectangle calls `VisitRectangle(this)`.
 
-Этот приём называется **двойной диспетчеризацией**: нужный код выбирается по **двум** типам — типу элемента (через виртуальный `Accept`) и типу посетителя (через виртуальный `Visit…`). Без проверок типов и приведений.
+This technique is called **double dispatch**: the code to run is selected by **two** types — the element type (via the virtual `Accept`) and the visitor type (via the virtual `Visit…`). No type checks and no casts.
 
-Новая операция — это новый класс-посетитель. Классы фигур больше не меняются.
+A new operation is a new visitor class. The shape classes no longer change.
 
 ---
 
-## Участники
+## Participants
 
-| Роль | Класс в примере | Описание |
-|------|-----------------|----------|
-| **Visitor** | `IShapeVisitor` | Объявляет метод посещения для каждого типа элемента |
-| **ConcreteVisitor** | `AreaCalculatorVisitor`, `XmlExportVisitor` | Реализует одну операцию для всех типов элементов. Может накапливать результат |
-| **Element** | `IShape` | Объявляет метод `Accept(IShapeVisitor)` |
-| **ConcreteElement** | `Circle`, `Rectangle` | Реализует `Accept`, вызывая соответствующий метод посетителя |
-| **Client / ObjectStructure** | `ShapeDemostrateVisitor` (список `List<IShape>`) | Хранит коллекцию элементов и «проводит» посетителя по ней |
+| Role | Class in the example | Description |
+|------|----------------------|-------------|
+| **Visitor** | `IShapeVisitor` | Declares a visit method for each element type |
+| **ConcreteVisitor** | `AreaCalculatorVisitor`, `XmlExportVisitor` | Implements one operation for all element types. Can accumulate a result |
+| **Element** | `IShape` | Declares the `Accept(IShapeVisitor)` method |
+| **ConcreteElement** | `Circle`, `Rectangle` | Implements `Accept` by calling the corresponding visitor method |
+| **Client / ObjectStructure** | `ShapeDemostrateVisitor` (a `List<IShape>`) | Stores the collection of elements and "walks" the visitor through it |
 
-## Схема
+## Diagram
 
 ```text
  «interface» IShape                    «interface» IShapeVisitor
@@ -60,12 +62,12 @@ foreach (var shape in shapes)
    v.VisitCircle(this)             TotalArea               GetXml()
                  v.VisitRectangle(this)
 
- shape.Accept(visitor)  ──►  visitor.VisitCircle(circle)     ← двойная диспетчеризация
+ shape.Accept(visitor)  ──►  visitor.VisitCircle(circle)     ← double dispatch
 ```
 
 ---
 
-## Пример. Фигуры: площадь и экспорт в XML (`Shapes/`)
+## Example. Shapes: area and XML export (`Shapes/`)
 
 **Element** — `IShape`:
 
@@ -76,7 +78,7 @@ public interface IShape
 }
 ```
 
-**ConcreteElement** (папка `VisitShapes/`) — `Circle` (радиус) и `Rectangle` (ширина, высота) хранят только свои данные (`required init`-свойства) и реализуют `Accept`:
+**ConcreteElement** (folder `VisitShapes/`) — `Circle` (radius) and `Rectangle` (width, height) store only their own data (`required init` properties) and implement `Accept`:
 
 ```csharp
 public class Circle : IShape
@@ -87,24 +89,24 @@ public class Circle : IShape
 }
 ```
 
-Обратите внимание: в фигурах **нет** ни расчёта площади, ни экспорта.
+Note that the shapes contain **neither** area calculation **nor** export.
 
-**Visitor** — `IShapeVisitor` с методами `VisitCircle(Circle)` и `VisitRectangle(Rectangle)`.
+**Visitor** — `IShapeVisitor` with the methods `VisitCircle(Circle)` and `VisitRectangle(Rectangle)`.
 
-**ConcreteVisitor** (папка `Visiotrs/`):
+**ConcreteVisitor** (folder `Visiotrs/`):
 
-`AreaCalculatorVisitor` — накапливает суммарную площадь всех посещённых фигур:
+`AreaCalculatorVisitor` — accumulates the total area of all visited shapes:
 
 ```csharp
 public void VisitCircle(Circle circle) => TotalArea += Math.PI * circle.Radius * circle.Radius;
 public void VisitRectangle(Rectangle rectangle) => TotalArea += rectangle.Width * rectangle.Height;
 ```
 
-`XmlExportVisitor` — собирает XML-представление в `StringBuilder` и отдаёт его через `GetXml()`.
+`XmlExportVisitor` — builds an XML representation in a `StringBuilder` and returns it via `GetXml()`.
 
-Оба посетителя **хранят состояние** между посещениями — это удобно, когда результат собирается по всей коллекции.
+Both visitors **keep state** between visits — this is convenient when the result is collected over the whole collection.
 
-**Client** — `ShapeDemostrateVisitor` создаёт список фигур и двух посетителей, затем проходит по фигурам и «принимает» каждого посетителя:
+**Client** — `ShapeDemostrateVisitor` creates a list of shapes and two visitors, then goes through the shapes and has each one "accept" both visitors:
 
 ```csharp
 foreach (var shape in shapes)
@@ -116,45 +118,45 @@ Console.WriteLine($"Total Area: {areaVisitor.TotalArea}");
 Console.WriteLine(xmlVisitor.GetXml());
 ```
 
-Чтобы добавить, например, `JsonExportVisitor` или `PerimeterVisitor`, нужен один новый класс — `Circle` и `Rectangle` не меняются.
+To add, for example, a `JsonExportVisitor` or a `PerimeterVisitor`, one new class is needed — `Circle` and `Rectangle` do not change.
 
 ---
 
-## Цена гибкости
+## The price of flexibility
 
-Visitor делает лёгким добавление **операций**, но трудным добавление **элементов**. Добавили `Triangle` — нужно добавить `VisitTriangle` в `IShapeVisitor` и реализовать его во **всех** посетителях. Зато компилятор сам покажет все места, которые надо обновить, — в отличие от цепочек `if (shape is ...)`.
+Visitor makes adding **operations** easy but adding **elements** hard. Add a `Triangle` — and you need to add `VisitTriangle` to `IShapeVisitor` and implement it in **all** visitors. On the other hand, the compiler itself will point out every place that needs updating — unlike chains of `if (shape is ...)`.
 
-Поэтому паттерн подходит, когда **иерархия элементов стабильна**, а **операции часто добавляются**.
+That is why the pattern fits when the **element hierarchy is stable** and **operations are added often**.
 
-> В современном C# похожего результата иногда добиваются `switch`-выражением по типам (`shape switch { Circle c => ..., Rectangle r => ... }`). Это короче, но компилятор не гарантирует, что обработаны все типы (если иерархия не закрыта). Visitor даёт эту гарантию.
+> In modern C#, a similar result is sometimes achieved with a `switch` expression on types (`shape switch { Circle c => ..., Rectangle r => ... }`). It is shorter, but the compiler does not guarantee that all types are handled (unless the hierarchy is closed). Visitor provides this guarantee.
 
-## Когда применять
+## When to use
 
-- Над объектами сложной структуры (дерево, AST, документ) нужно выполнять много разных несвязанных операций.
-- Не хочется «засорять» классы элементов посторонней логикой.
-- Иерархия элементов стабильна, а операции добавляются часто.
-- Примеры: компиляторы и анализаторы кода (Roslyn — `CSharpSyntaxVisitor`), `ExpressionVisitor` в `System.Linq.Expressions`, экспорт документов в разные форматы, расчёты над структурой заказа/склада.
+- Many different, unrelated operations need to be performed on objects of a complex structure (a tree, an AST, a document).
+- You do not want to "pollute" the element classes with unrelated logic.
+- The element hierarchy is stable, while operations are added often.
+- Examples: compilers and code analyzers (Roslyn — `CSharpSyntaxVisitor`), `ExpressionVisitor` in `System.Linq.Expressions`, exporting documents to different formats, calculations over an order/warehouse structure.
 
-## Когда не нужен
+## When not to use
 
-- Иерархия элементов часто меняется — каждый новый класс потребует правки всех посетителей.
-- Операций мало, и они естественно относятся к самим элементам.
+- The element hierarchy changes often — every new class will require editing all visitors.
+- There are few operations, and they naturally belong to the elements themselves.
 
-## Плюсы и минусы
+## Pros and cons
 
-**Плюсы**
-- Новые операции без изменения классов элементов (Open/Closed).
-- Родственные операции собраны в одном классе (SRP).
-- Посетитель может накапливать состояние при обходе структуры.
-- Нет проверок типов и приведений.
+**Pros**
+- New operations without changing the element classes (Open/Closed).
+- Related operations are gathered in one class (SRP).
+- A visitor can accumulate state while traversing the structure.
+- No type checks or casts.
 
-**Минусы**
-- Трудно добавлять новые типы элементов.
-- Посетителю может понадобиться доступ к внутренностям элементов, что заставляет делать их поля публичными.
+**Cons**
+- It is hard to add new element types.
+- A visitor may need access to the elements' internals, which forces you to make their fields public.
 
-## Связь с другими паттернами
+## Relations with other patterns
 
-- **Composite** — посетитель часто обходит дерево компоновщика, выполняя операцию над всеми узлами.
-- **Iterator** — итератор обходит структуру, посетитель выполняет действие над каждым элементом.
-- **Interpreter** — посетители добавляют новые операции над синтаксическим деревом (печать, оптимизация, проверка) без изменения классов выражений.
-- **Command** — посетитель можно рассматривать как расширенную команду, которая умеет работать с разными типами объектов.
+- **Composite** — a visitor often traverses a composite tree, performing an operation on all nodes.
+- **Iterator** — the iterator traverses the structure, the visitor performs an action on each element.
+- **Interpreter** — visitors add new operations on the syntax tree (printing, optimization, checking) without changing the expression classes.
+- **Command** — a visitor can be seen as an extended command that can work with different types of objects.

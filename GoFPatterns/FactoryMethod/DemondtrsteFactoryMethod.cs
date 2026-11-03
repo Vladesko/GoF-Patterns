@@ -7,7 +7,7 @@ namespace GoFPatterns.FactoryMethod
     {
         public static void DemonstrateFitnes()
         {
-            //You can make choise between different membership types by using the appropriate factory.
+            // You can choose between different membership types by using the appropriate factory.
             var gymPoolFactory = new GymPoolMembershipFactory();
             var gymPoolMembership = gymPoolFactory.CreateMembership();
 

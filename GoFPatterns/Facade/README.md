@@ -1,42 +1,44 @@
-# Facade (Фасад)
+🌐 [Русский](https://github.com/Vladesko/GoF-Patterns/tree/rus/GoFPatterns/Facade) | **English** | [Deutsch](https://github.com/Vladesko/GoF-Patterns/tree/deu/GoFPatterns/Facade) | [Italiano](https://github.com/Vladesko/GoF-Patterns/tree/ita/GoFPatterns/Facade) | [Español](https://github.com/Vladesko/GoF-Patterns/tree/spa/GoFPatterns/Facade)
 
-**Тип:** структурный паттерн.
+# Facade
 
-**Facade** предоставляет **простой интерфейс** к сложной подсистеме (набору классов, библиотеке, фреймворку). Фасад сам знает, каким объектам подсистемы и в каком порядке передать запрос.
+**Type:** structural pattern.
 
----
-
-## Какую проблему решает
-
-Чтобы посмотреть фильм на домашнем кинотеатре, нужно: приглушить свет, включить проектор, выбрать вход, включить широкоэкранный режим, включить звук, выбрать surround, выставить громкость, включить плеер, запустить фильм. А в конце всё это выключить в правильном порядке.
-
-Чтобы оформить заказ в интернет-магазине: проверить остатки, зарезервировать товар, посчитать доставку, списать деньги, при отказе — снять резерв, создать отправку, уведомить клиента.
-
-Если клиентский код (UI, контроллер) делает это сам:
-- он **сильно связан** с десятком классов подсистемы и знает детали их работы;
-- одна и та же последовательность **дублируется** во всех местах, где она нужна;
-- любое изменение подсистемы ломает всех клиентов.
-
-## Решение
-
-Создать класс-**фасад**, который:
-- хранит ссылки на объекты подсистемы;
-- предоставляет несколько высокоуровневых методов (`WatchMovie`, `PlaceOrder`);
-- внутри вызывает нужные объекты подсистемы в нужном порядке.
-
-Клиент зависит только от фасада. Подсистема при этом **не прячется насовсем**: если нужно что-то нестандартное, к её классам можно обратиться напрямую.
+**Facade** provides a **simple interface** to a complex subsystem (a set of classes, a library, a framework). The facade itself knows which subsystem objects to forward a request to and in what order.
 
 ---
 
-## Участники
+## The problem
 
-| Роль | Класс в примере | Описание |
-|------|-----------------|----------|
-| **Facade** | `HomeTheaterFacade`, `OrderFacade` | Предоставляет простой интерфейс, знает, кому и в каком порядке делегировать работу |
-| **Subsystem classes** | `Projector`, `SoundSystem`, `MediaPlayer`, `Lights`, `InventoryService`, `PaymentGateway`, `ShippingService`, `NotificationService` | Выполняют реальную работу. **Ничего не знают о фасаде** |
-| **Client** | демо-классы | Работает с подсистемой через фасад |
+To watch a movie on a home theater you need to: dim the lights, turn on the projector, select the input, enable widescreen mode, turn on the sound, select surround, set the volume, turn on the player, start the movie. And at the end, turn all of it off in the right order.
 
-## Схема
+To place an order in an online store: check stock, reserve the product, calculate shipping, charge the money, release the reservation if the payment is declined, create a shipment, notify the customer.
+
+If the client code (UI, controller) does this itself:
+- it is **tightly coupled** to a dozen subsystem classes and knows the details of how they work;
+- the same sequence is **duplicated** in every place it is needed;
+- any change to the subsystem breaks all clients.
+
+## Solution
+
+Create a **facade** class that:
+- holds references to the subsystem objects;
+- provides a few high-level methods (`WatchMovie`, `PlaceOrder`);
+- internally calls the required subsystem objects in the right order.
+
+The client depends only on the facade. The subsystem is **not hidden completely**, though: if something non-standard is needed, its classes can be accessed directly.
+
+---
+
+## Participants
+
+| Role | Class in the example | Description |
+|------|----------------------|-------------|
+| **Facade** | `HomeTheaterFacade`, `OrderFacade` | Provides a simple interface; knows to whom and in what order to delegate work |
+| **Subsystem classes** | `Projector`, `SoundSystem`, `MediaPlayer`, `Lights`, `InventoryService`, `PaymentGateway`, `ShippingService`, `NotificationService` | Do the actual work. **Know nothing about the facade** |
+| **Client** | demo classes | Works with the subsystem through the facade |
+
+## Diagram
 
 ```text
             Client
@@ -47,17 +49,17 @@
    └──────────────────────┘
      │       │       │       │
      ▼       ▼       ▼       ▼
- Projector Sound  MediaPlayer Lights      ← подсистема
+ Projector Sound  MediaPlayer Lights      ← subsystem
             System
 ```
 
 ---
 
-## Пример 1. Домашний кинотеатр (`HomeTheater/`)
+## Example 1. Home theater (`HomeTheater/`)
 
-**Subsystem** — классы в папке `Subsystems/` (`Projector`, `SoundSystem`, `MediaPlayer`, `Lights`). У каждого свой набор низкоуровневых методов. Они не зависят ни друг от друга, ни от фасада.
+**Subsystem** — the classes in the `Subsystems/` folder (`Projector`, `SoundSystem`, `MediaPlayer`, `Lights`). Each has its own set of low-level methods. They depend neither on each other nor on the facade.
 
-**Facade** — `HomeTheaterFacade` получает объекты подсистемы через конструктор и объединяет их в сценарии:
+**Facade** — `HomeTheaterFacade` receives the subsystem objects through its constructor and combines them into scenarios:
 
 ```csharp
 public void WatchMovie(string movie)
@@ -74,17 +76,17 @@ public void WatchMovie(string movie)
 }
 ```
 
-`EndMovie()` выключает всё в обратном порядке.
+`EndMovie()` turns everything off in reverse order.
 
-**Client** — вызывает `theater.WatchMovie("Inception")` — одну строку вместо десяти. В конце демо показано, что прямой доступ к подсистеме (`new Lights().Dim(50)`) по-прежнему возможен.
+**Client** — calls `theater.WatchMovie("Inception")` — one line instead of ten. At the end the demo shows that direct access to the subsystem (`new Lights().Dim(50)`) is still possible.
 
-## Пример 2. Оформление заказа (`OrderPlacement/`)
+## Example 2. Order placement (`OrderPlacement/`)
 
-**Задача:** бизнес-процесс, затрагивающий несколько сервисов, — с проверками и откатом при ошибке.
+**Task:** a business process involving several services — with checks and rollback on failure.
 
-**Subsystem** — `InventoryService` (остатки и резерв), `PaymentGateway` (списание; карты на `0000` отклоняются), `ShippingService` (стоимость и создание отправки), `NotificationService` (письма).
+**Subsystem** — `InventoryService` (stock and reservations), `PaymentGateway` (charging; cards ending in `0000` are declined), `ShippingService` (cost and shipment creation), `NotificationService` (emails).
 
-**Facade** — `OrderFacade.PlaceOrder(OrderRequest)` инкапсулирует весь процесс:
+**Facade** — `OrderFacade.PlaceOrder(OrderRequest)` encapsulates the whole process:
 
 ```csharp
 if (!inventory.IsAvailable(order.Product, order.Count))
@@ -95,44 +97,44 @@ inventory.Reserve(order.Product, order.Count);
 var total = order.Price * order.Count + shipping.CalculateCost(order.Address);
 if (!payments.Charge(order.CardNumber, total))
 {
-    inventory.Release(order.Product, order.Count);   // откат
+    inventory.Release(order.Product, order.Count);   // rollback
     return new OrderResult(false, "Payment was declined");
 }
 ```
 
-Фасад знает не только порядок вызовов, но и **правила согласования** подсистем: например, что резерв надо снять, если оплата не прошла. Входные и выходные данные упакованы в простые `record`-ы (`OrderRequest`, `OrderResult`), чтобы клиенту не нужно было знать типы подсистемы.
+The facade knows not only the order of calls but also the **coordination rules** of the subsystems: for example, that the reservation must be released if the payment fails. Input and output data are packed into simple `record`s (`OrderRequest`, `OrderResult`), so the client does not need to know the subsystem types.
 
-**Client** — демо отправляет три заказа: успешный, с отсутствующим товаром и с отклонённой картой. Клиент видит только результат.
+**Client** — the demo sends three orders: a successful one, one with an out-of-stock product, and one with a declined card. The client sees only the result.
 
-В реальном приложении на ASP.NET Core такой фасад обычно называют «сервисом приложения» (`OrderService`, `CheckoutService`), а контроллер зависит только от него.
+In a real ASP.NET Core application such a facade is usually called an "application service" (`OrderService`, `CheckoutService`), and the controller depends only on it.
 
 ---
 
-## Когда применять
+## When to use
 
-- Нужен простой интерфейс к сложной подсистеме или сторонней библиотеке.
-- Нужно уменьшить связанность клиента с множеством классов.
-- Нужно разбить систему на слои: фасад — точка входа в каждый слой/модуль.
+- You need a simple interface to a complex subsystem or a third-party library.
+- You need to reduce the client's coupling to many classes.
+- You need to split the system into layers: a facade is the entry point to each layer/module.
 
-## Когда не нужен
+## When not to use
 
-- Подсистема и так простая — фасад станет лишней прослойкой.
-- Клиентам постоянно нужны разные низкоуровневые возможности — фасад будет только мешать.
+- The subsystem is already simple — the facade would be an unnecessary layer.
+- Clients constantly need different low-level capabilities — the facade would only get in the way.
 
-## Плюсы и минусы
+## Pros and cons
 
-**Плюсы**
-- Изолирует клиентов от компонентов подсистемы.
-- Уменьшает связанность: подсистему можно менять, не трогая клиентов.
-- Убирает дублирование сценариев.
+**Pros**
+- Isolates clients from subsystem components.
+- Reduces coupling: the subsystem can be changed without touching the clients.
+- Removes duplication of scenarios.
 
-**Минусы**
-- Риск превратиться в **«божественный объект»**, который знает обо всём и делает всё. Лучше несколько небольших фасадов по задачам.
+**Cons**
+- Risk of turning into a **"god object"** that knows about everything and does everything. Several small task-specific facades are better.
 
-## Связь с другими паттернами
+## Relations with other patterns
 
-- **Adapter** приспосабливает **один** существующий интерфейс к нужному; **Facade** придумывает **новый упрощённый** интерфейс для целой подсистемы.
-- **Mediator** тоже централизует взаимодействие, но объекты подсистемы **знают** о посреднике и общаются через него; в Facade подсистема о фасаде не знает, а связь идёт в одну сторону.
-- **Abstract Factory** можно использовать вместе с Facade, чтобы скрыть, как создаются объекты подсистемы.
-- Фасад часто делают **Singleton**, так как обычно нужен один экземпляр.
-- **Proxy** имеет тот же интерфейс, что и объект; у **Facade** интерфейс свой.
+- **Adapter** adapts **one** existing interface to the required one; **Facade** invents a **new simplified** interface for a whole subsystem.
+- **Mediator** also centralizes interaction, but the subsystem objects **know** about the mediator and communicate through it; in Facade the subsystem does not know about the facade, and the communication is one-way.
+- **Abstract Factory** can be used together with Facade to hide how subsystem objects are created.
+- A facade is often made a **Singleton**, since usually one instance is needed.
+- **Proxy** has the same interface as the object; **Facade** has its own interface.

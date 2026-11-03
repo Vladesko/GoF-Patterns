@@ -1,54 +1,56 @@
-# Iterator (Итератор)
+🌐 [Русский](https://github.com/Vladesko/GoF-Patterns/tree/rus/GoFPatterns/Iterator) | **English** | [Deutsch](https://github.com/Vladesko/GoF-Patterns/tree/deu/GoFPatterns/Iterator) | [Italiano](https://github.com/Vladesko/GoF-Patterns/tree/ita/GoFPatterns/Iterator) | [Español](https://github.com/Vladesko/GoF-Patterns/tree/spa/GoFPatterns/Iterator)
 
-**Тип:** поведенческий паттерн.
+# Iterator
 
-**Iterator** даёт способ **последовательно обходить элементы** составного объекта (коллекции), **не раскрывая его внутреннего устройства** — массив это, список, дерево или что-то ещё.
+**Type:** behavioral pattern.
+
+**Iterator** provides a way to **traverse the elements** of a composite object (a collection) **sequentially without exposing its internal structure** — whether it is an array, a list, a tree or something else.
 
 ---
 
-## Какую проблему решает
+## The problem
 
-Коллекции бывают разными: массив, связный список, дерево, граф, результат запроса к БД. Клиенту нужно просто «пройти по всем элементам», но:
+Collections come in different shapes: an array, a linked list, a tree, a graph, a database query result. The client just needs to "go through all the elements", but:
 
-- если обход написан в клиенте, клиент **привязан к структуре** коллекции (индексы для массива, рекурсия для дерева). Поменяли массив на дерево — переписываем всех клиентов;
-- обходов может быть **несколько** (прямой, обратный, с фильтром, в глубину, в ширину). Если добавлять их в саму коллекцию, она обрастает чужими обязанностями;
-- иногда нужно **несколько независимых обходов одновременно** — значит, позиция обхода не может храниться в самой коллекции.
+- if the traversal is written in the client, the client is **tied to the collection's structure** (indexes for an array, recursion for a tree). Replace the array with a tree — and all clients have to be rewritten;
+- there may be **several** traversals (forward, reverse, filtered, depth-first, breadth-first). If they are added to the collection itself, it accumulates responsibilities that are not its own;
+- sometimes **several independent traversals at the same time** are needed — which means the traversal position cannot be stored in the collection itself.
 
-## Решение
+## Solution
 
-Вынести логику обхода в отдельный объект — **итератор**. Итератор:
-- хранит **текущую позицию**;
-- предоставляет простой интерфейс: «есть ли следующий?» и «дай следующий»;
-- знает внутреннее устройство коллекции, а клиент — нет.
+Move the traversal logic into a separate object — the **iterator**. The iterator:
+- stores the **current position**;
+- provides a simple interface: "is there a next one?" and "give me the next one";
+- knows the collection's internal structure, while the client does not.
 
-Коллекция (**агрегат**) умеет создавать для себя итераторы. Каждый вызов создаёт новый итератор со своей позицией.
+The collection (the **aggregate**) can create iterators for itself. Each call creates a new iterator with its own position.
 
-### Iterator в .NET
+### Iterator in .NET
 
-В C# паттерн встроен в язык:
+In C# the pattern is built into the language:
 
 | GoF | .NET |
 |-----|------|
 | Aggregate | `IEnumerable<T>` (`GetEnumerator()`) |
 | Iterator | `IEnumerator<T>` (`MoveNext()`, `Current`, `Reset()`) |
-| Клиентский цикл | `foreach` |
-| Написание итератора | `yield return` — компилятор сам генерирует класс-итератор |
+| Client loop | `foreach` |
+| Writing an iterator | `yield return` — the compiler generates the iterator class for you |
 
-Поэтому в реальном коде свой `IBookIterator` обычно не пишут — реализуют `IEnumerable<T>`. Оба способа показаны ниже.
+That is why in real code you usually do not write your own `IBookIterator` — you implement `IEnumerable<T>`. Both approaches are shown below.
 
 ---
 
-## Участники
+## Participants
 
-| Роль | Класс в примере | Описание |
-|------|-----------------|----------|
-| **Iterator** | `IBookIterator`, `IEnumerator<T>` | Интерфейс обхода: `HasNext()`, `Next()`, `Reset()` |
-| **ConcreteIterator** | `ForwardBookIterator`, `ReverseBookIterator`, `AuthorFilterIterator`, итераторы, сгенерированные из `yield return` | Реализует конкретный алгоритм обхода и хранит текущую позицию |
-| **Aggregate** | `IBookAggregate`, `IEnumerable<T>` | Интерфейс коллекции, создающей итераторы |
-| **ConcreteAggregate** | `Library`, `CategoryNode` | Коллекция, которая возвращает нужные итераторы |
-| **Client** | демо-классы | Обходит коллекцию только через итератор |
+| Role | Class in the example | Description |
+|------|----------------------|-------------|
+| **Iterator** | `IBookIterator`, `IEnumerator<T>` | The traversal interface: `HasNext()`, `Next()`, `Reset()` |
+| **ConcreteIterator** | `ForwardBookIterator`, `ReverseBookIterator`, `AuthorFilterIterator`, iterators generated from `yield return` | Implements a specific traversal algorithm and stores the current position |
+| **Aggregate** | `IBookAggregate`, `IEnumerable<T>` | The interface of a collection that creates iterators |
+| **ConcreteAggregate** | `Library`, `CategoryNode` | A collection that returns the required iterators |
+| **Client** | demo classes | Traverses the collection only through an iterator |
 
-## Схема
+## Diagram
 
 ```text
  Client ─────► «interface» IBookAggregate        «interface» IBookIterator
@@ -56,22 +58,22 @@
                         ▲                                   ▲
                         │                ┌──────────────────┼──────────────────┐
                      Library             │                  │                  │
-                  (Book[] внутри) ◄── ForwardBookIterator  ReverseBookIterator  AuthorFilterIterator
+                  (Book[] inside) ◄── ForwardBookIterator  ReverseBookIterator  AuthorFilterIterator
                                          _position          _position           _position, author
 ```
 
 ---
 
-## Пример 1. Библиотека книг (`BookCollection/`) — классический Iterator и `IEnumerable<T>`
+## Example 1. Book library (`BookCollection/`) — classic Iterator and `IEnumerable<T>`
 
-**ConcreteAggregate** — `Library` хранит книги в **массиве** с ручным расширением (`Array.Resize`). Клиенты об этом не знают — массив можно заменить на что угодно, не трогая их.
+**ConcreteAggregate** — `Library` stores books in an **array** that is grown manually (`Array.Resize`). Clients do not know this — the array can be replaced with anything without touching them.
 
-**Iterator** — `IBookIterator` с методами `HasNext()`, `Next()`, `Reset()`.
+**Iterator** — `IBookIterator` with the methods `HasNext()`, `Next()`, `Reset()`.
 
-**ConcreteIterator** (папка `Iterators/`):
-- `ForwardBookIterator` — от первой книги к последней;
-- `ReverseBookIterator` — от последней к первой;
-- `AuthorFilterIterator` — пропускает книги других авторов:
+**ConcreteIterator** (folder `Iterators/`):
+- `ForwardBookIterator` — from the first book to the last;
+- `ReverseBookIterator` — from the last to the first;
+- `AuthorFilterIterator` — skips books by other authors:
 
 ```csharp
 public bool HasNext()
@@ -82,13 +84,13 @@ public bool HasNext()
 }
 ```
 
-Итераторы обращаются к коллекции через `internal`-метод `GetAt` — клиентам он не виден.
+The iterators access the collection through the `internal` method `GetAt` — it is not visible to clients.
 
-**Aggregate** — `IBookAggregate` объявляет фабричные методы итераторов; `Library` их реализует.
+**Aggregate** — `IBookAggregate` declares factory methods for iterators; `Library` implements them.
 
-**Client** — метод `Print` в демо принимает **любой** `IBookIterator` и обходит его одним и тем же циклом `while (iterator.HasNext())`.
+**Client** — the `Print` method in the demo accepts **any** `IBookIterator` and traverses it with the same `while (iterator.HasNext())` loop.
 
-Также `Library` реализует `IEnumerable<Book>` через `yield return`:
+`Library` also implements `IEnumerable<Book>` via `yield return`:
 
 ```csharp
 public IEnumerator<Book> GetEnumerator()
@@ -98,15 +100,15 @@ public IEnumerator<Book> GetEnumerator()
 }
 ```
 
-Это сразу даёт `foreach` и весь LINQ (`library.Where(...).OrderBy(...)`).
+This immediately gives you `foreach` and all of LINQ (`library.Where(...).OrderBy(...)`).
 
-## Пример 2. Обход дерева категорий (`Tree/`)
+## Example 2. Category tree traversal (`Tree/`)
 
-**ConcreteAggregate** — `CategoryNode`: узел дерева каталога. Список детей приватный.
+**ConcreteAggregate** — `CategoryNode`: a node of the catalog tree. The list of children is private.
 
-**ConcreteIterator** — два алгоритма обхода, написанные через `yield return`:
-- `DepthFirst()` — **в глубину** (как меню с отступами). Используется явный `Stack`, а не рекурсия, чтобы глубокое дерево не вызвало `StackOverflowException`;
-- `BreadthFirst()` — **в ширину**, по уровням, через `Queue`.
+**ConcreteIterator** — two traversal algorithms written with `yield return`:
+- `DepthFirst()` — **depth-first** (like an indented menu). An explicit `Stack` is used instead of recursion so that a deep tree does not cause a `StackOverflowException`;
+- `BreadthFirst()` — **breadth-first**, level by level, using a `Queue`.
 
 ```csharp
 public IEnumerable<(CategoryNode Node, int Depth)> BreadthFirst()
@@ -123,38 +125,38 @@ public IEnumerable<(CategoryNode Node, int Depth)> BreadthFirst()
 }
 ```
 
-**Client** — обходит одно и то же дерево двумя способами через обычный `foreach`.
+**Client** — traverses the same tree in two ways using a regular `foreach`.
 
-Важное свойство итераторов на `yield` — **ленивость**: элементы вычисляются по одному, по требованию. В демо поиск `First(n => n.Name == "Laptops")` останавливает обход, как только узел найден, и посещает только часть дерева.
+An important property of `yield`-based iterators is **laziness**: elements are computed one at a time, on demand. In the demo, the search `First(n => n.Name == "Laptops")` stops the traversal as soon as the node is found and visits only part of the tree.
 
 ---
 
-## Когда применять
+## When to use
 
-- Нужно скрыть от клиента внутреннее устройство сложной коллекции.
-- Нужно несколько вариантов обхода одной коллекции.
-- Нужен единый интерфейс обхода для разных коллекций.
-- Нужен ленивый обход (большие или бесконечные последовательности, постраничная загрузка из БД).
+- You need to hide the internal structure of a complex collection from the client.
+- You need several ways of traversing the same collection.
+- You need a uniform traversal interface for different collections.
+- You need lazy traversal (large or infinite sequences, paged loading from a database).
 
-## Когда не нужен
+## When not to use
 
-- Коллекция простая (`List<T>`, массив) — используйте встроенный `foreach`.
+- The collection is simple (`List<T>`, an array) — use the built-in `foreach`.
 
-## Плюсы и минусы
+## Pros and cons
 
-**Плюсы**
-- Упрощает коллекции: логика обхода вынесена (SRP).
-- Разные алгоритмы обхода без изменения коллекции (Open/Closed).
-- Несколько независимых обходов одновременно.
-- Ленивые вычисления.
+**Pros**
+- Simplifies collections: the traversal logic is extracted (SRP).
+- Different traversal algorithms without changing the collection (Open/Closed).
+- Several independent traversals at the same time.
+- Lazy evaluation.
 
-**Минусы**
-- Для простых коллекций — лишнее усложнение.
-- Изменение коллекции во время обхода — отдельная проблема (стандартные коллекции .NET бросают `InvalidOperationException`).
+**Cons**
+- Unnecessary complexity for simple collections.
+- Modifying the collection during traversal is a separate problem (standard .NET collections throw `InvalidOperationException`).
 
-## Связь с другими паттернами
+## Relations with other patterns
 
-- **Composite** — итераторы часто используют для обхода деревьев Composite.
-- **Factory Method** — `CreateIterator()` в коллекции — это фабричный метод, возвращающий нужный подкласс итератора.
-- **Memento** — можно сохранить состояние итерации и вернуться к нему.
-- **Visitor** + Iterator: итератор обходит структуру, а посетитель выполняет операцию над каждым элементом.
+- **Composite** — iterators are often used to traverse Composite trees.
+- **Factory Method** — `CreateIterator()` in a collection is a factory method that returns the required iterator subclass.
+- **Memento** — the iteration state can be saved and restored later.
+- **Visitor** + Iterator: the iterator traverses the structure, and the visitor performs an operation on each element.

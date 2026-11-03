@@ -1,14 +1,16 @@
-# Chain of Responsibility (Цепочка обязанностей)
+🌐 [Русский](https://github.com/Vladesko/GoF-Patterns/tree/rus/GoFPatterns/ChainOfResponsibility) | **English** | [Deutsch](https://github.com/Vladesko/GoF-Patterns/tree/deu/GoFPatterns/ChainOfResponsibility) | [Italiano](https://github.com/Vladesko/GoF-Patterns/tree/ita/GoFPatterns/ChainOfResponsibility) | [Español](https://github.com/Vladesko/GoF-Patterns/tree/spa/GoFPatterns/ChainOfResponsibility)
 
-**Тип:** поведенческий паттерн.
+# Chain of Responsibility
 
-**Chain of Responsibility** позволяет передавать запрос последовательно по **цепочке обработчиков**. Каждый обработчик решает: обработать запрос сам, передать его дальше по цепочке — или и то, и другое.
+**Type:** behavioral pattern.
+
+**Chain of Responsibility** lets you pass a request sequentially along a **chain of handlers**. Each handler decides whether to process the request itself, pass it further along the chain — or both.
 
 ---
 
-## Какую проблему решает
+## The problem
 
-**Служба поддержки.** Обращение может закрыть бот (если это частый вопрос), оператор (простая проблема), инженер (баг) или менеджер (авария). Если писать это одним методом:
+**Customer support.** A ticket may be closed by a bot (if it is a frequently asked question), an operator (a simple issue), an engineer (a bug) or a manager (an outage). If you write this as one method:
 
 ```csharp
 if (ticket.Severity == Low && IsFaq(ticket)) Bot(...);
@@ -17,30 +19,30 @@ else if (ticket.Severity == High) Engineer(...);
 else Manager(...);
 ```
 
-…то любая новая линия поддержки, изменение порядка или ночная смена «без бота и менеджера» требуют правки этого метода. Отправитель жёстко связан со всеми получателями.
+…then any new support line, a change of order, or a night shift "without the bot and the manager" requires editing this method. The sender is tightly coupled to all receivers.
 
-**Обработка HTTP-запроса.** Перед тем как запрос дойдёт до бизнес-логики, нужно: залогировать, проверить лимит запросов, аутентифицировать, провалидировать. Каждая проверка может **остановить** обработку. Если всё это написать в контроллере, он разрастётся и смешает разные обязанности.
+**HTTP request processing.** Before a request reaches the business logic, you need to log it, check the rate limit, authenticate, and validate. Each check may **stop** the processing. If you write all of this in the controller, it grows and mixes different responsibilities.
 
-## Решение
+## Solution
 
-Превратить каждую проверку/обработку в отдельный объект-**обработчик** с общим интерфейсом. Обработчики связываются в цепочку: каждый знает только о **следующем**. Клиент отправляет запрос **первому** обработчику и не знает, кто в итоге его обработает.
+Turn each check/processing step into a separate **handler** object with a common interface. Handlers are linked into a chain: each one knows only about the **next** one. The client sends the request to the **first** handler and does not know who will eventually process it.
 
-Есть два варианта поведения цепочки:
-1. **Классический (GoF):** запрос обрабатывает **один** обработчик — первый, кто может; остальные просто передают дальше (пример `SupportTickets`).
-2. **Конвейер (pipeline/middleware):** **каждый** обработчик делает свою часть работы и решает, звать ли следующего; любой может прервать цепочку (пример `Middleware`).
+There are two variants of chain behavior:
+1. **Classic (GoF):** the request is processed by **one** handler — the first one that can; the rest simply pass it on (the `SupportTickets` example).
+2. **Pipeline (middleware):** **each** handler does its part of the work and decides whether to call the next one; any of them can break the chain (the `Middleware` example).
 
 ---
 
-## Участники
+## Participants
 
-| Роль | Класс в примере | Описание |
-|------|-----------------|----------|
-| **Handler** | `SupportHandler`, `IRequestHandler` | Общий интерфейс обработчиков. Часто содержит ссылку на следующий обработчик (или получает его как делегат) |
-| **ConcreteHandler** | `ChatBotHandler`, `OperatorHandler`, `EngineerHandler`, `ManagerHandler`, `LoggingHandler`, `RateLimitHandler`, `AuthenticationHandler`, `ValidationHandler`, `EndpointHandler` | Решает, может ли обработать запрос; если нет — передаёт дальше |
-| **Request** | `SupportTicket`, `HttpRequestContext` | Данные, которые путешествуют по цепочке |
-| **Client** | демо-классы, `RequestPipeline` | Собирает цепочку и отправляет запрос первому звену |
+| Role | Class in the example | Description |
+|------|----------------------|-------------|
+| **Handler** | `SupportHandler`, `IRequestHandler` | The common handler interface. Often holds a reference to the next handler (or receives it as a delegate) |
+| **ConcreteHandler** | `ChatBotHandler`, `OperatorHandler`, `EngineerHandler`, `ManagerHandler`, `LoggingHandler`, `RateLimitHandler`, `AuthenticationHandler`, `ValidationHandler`, `EndpointHandler` | Decides whether it can handle the request; if not, passes it on |
+| **Request** | `SupportTicket`, `HttpRequestContext` | The data that travels along the chain |
+| **Client** | demo classes, `RequestPipeline` | Assembles the chain and sends the request to the first link |
 
-## Схема
+## Diagram
 
 ```text
  Client ──► ChatBot ──► Operator ──► Engineer ──► Manager ──► (null)
@@ -51,17 +53,17 @@ else Manager(...);
 
 ---
 
-## Пример 1. Служба поддержки (`SupportTickets/`) — классическая цепочка
+## Example 1. Customer support (`SupportTickets/`) — classic chain
 
-**Request** — `SupportTicket(Id, Description, Severity)` (`record`), уровень — `TicketSeverity`.
+**Request** — `SupportTicket(Id, Description, Severity)` (a `record`); the severity is `TicketSeverity`.
 
-**Handler** — абстрактный `SupportHandler` хранит ссылку на следующего и реализует поведение «по умолчанию» — передать дальше:
+**Handler** — the abstract `SupportHandler` holds a reference to the next handler and implements the "default" behavior — pass the request on:
 
 ```csharp
 public SupportHandler SetNext(SupportHandler next)
 {
     _next = next;
-    return next;           // возвращаем next, чтобы строить цепочку «в линию»
+    return next;           // return next so the chain can be built "in a line"
 }
 
 public virtual void Handle(SupportTicket ticket)
@@ -73,7 +75,7 @@ public virtual void Handle(SupportTicket ticket)
 }
 ```
 
-**ConcreteHandler** (папка `Handlers/`) — каждый проверяет «своё» условие; если подходит — обрабатывает и **останавливает** цепочку (`return`), иначе вызывает `base.Handle(ticket)`:
+**ConcreteHandler** (folder `Handlers/`) — each one checks "its own" condition; if it matches, it processes the ticket and **stops** the chain (`return`), otherwise it calls `base.Handle(ticket)`:
 
 ```csharp
 public override void Handle(SupportTicket ticket)
@@ -87,22 +89,22 @@ public override void Handle(SupportTicket ticket)
 }
 ```
 
-**Client** — собирает цепочку `bot → operator → engineer → manager` и отправляет все обращения **только первому звену**. В выводе видно, как далеко прошло каждое обращение. В конце показана другая конфигурация («ночная смена» — только оператор): критичную заявку никто не взял — это нормальная ситуация для паттерна, и её надо предусматривать.
+**Client** — assembles the chain `bot → operator → engineer → manager` and sends all tickets **only to the first link**. The output shows how far each ticket went. At the end a different configuration is shown ("night shift" — operator only): nobody took the critical ticket — this is a normal situation for the pattern, and it has to be anticipated.
 
-## Пример 2. Конвейер обработки запроса (`Middleware/`) — как в ASP.NET Core
+## Example 2. Request processing pipeline (`Middleware/`) — as in ASP.NET Core
 
-**Request** — `HttpRequestContext`: входные данные (путь, IP, токен, тело) и результат (код ответа, текст). Обработчики могут **обогащать** контекст — например, аутентификация записывает `UserName`.
+**Request** — `HttpRequestContext`: input data (path, IP, token, body) and the result (status code, text). Handlers can **enrich** the context — for example, authentication writes `UserName`.
 
-**Handler** — `IRequestHandler.Handle(context, Action next)`. Обработчик не хранит ссылку на следующего, а получает её **делегатом** — так обработчики полностью независимы.
+**Handler** — `IRequestHandler.Handle(context, Action next)`. A handler does not store a reference to the next one but receives it as a **delegate** — this makes handlers completely independent.
 
-**ConcreteHandler** (папка `Handlers/`):
-- `LoggingHandler` — работает **до и после** остальной цепочки (пишет запрос, вызывает `next()`, пишет ответ);
-- `RateLimitHandler` — после N запросов с одного IP отвечает `429` и **не вызывает** `next()`;
-- `AuthenticationHandler` — проверяет токен (`401`), иначе записывает пользователя в контекст;
-- `ValidationHandler` — проверяет тело (`400`);
-- `EndpointHandler` — конечная точка, выполняет работу (`201`).
+**ConcreteHandler** (folder `Handlers/`):
+- `LoggingHandler` — works **before and after** the rest of the chain (logs the request, calls `next()`, logs the response);
+- `RateLimitHandler` — after N requests from the same IP responds with `429` and **does not call** `next()`;
+- `AuthenticationHandler` — checks the token (`401`), otherwise writes the user into the context;
+- `ValidationHandler` — validates the body (`400`);
+- `EndpointHandler` — the endpoint that does the actual work (`201`).
 
-**Client** — `RequestPipeline` собирает цепочку методом `Use(...)` и рекурсивно связывает обработчики:
+**Client** — `RequestPipeline` assembles the chain with the `Use(...)` method and links the handlers recursively:
 
 ```csharp
 private void Invoke(int index, HttpRequestContext context)
@@ -112,38 +114,38 @@ private void Invoke(int index, HttpRequestContext context)
 }
 ```
 
-Это упрощённая копия того, как работает `app.Use(...)` в ASP.NET Core: каждый middleware получает `next` и сам решает, передавать ли запрос дальше. Также цепочкой являются `DelegatingHandler` в `HttpClient` и pipeline behaviors в MediatR.
+This is a simplified copy of how `app.Use(...)` works in ASP.NET Core: each middleware receives `next` and decides itself whether to pass the request on. `DelegatingHandler` in `HttpClient` and pipeline behaviors in MediatR are chains as well.
 
 ---
 
-## Когда применять
+## When to use
 
-- Запрос могут обработать разные объекты, и заранее неизвестно какой.
-- Набор и порядок обработчиков должен настраиваться динамически.
-- Нужно выполнить несколько независимых проверок/шагов по очереди с возможностью прерывания.
-- Нужно отвязать отправителя запроса от получателей.
+- A request can be handled by different objects, and it is not known in advance which one.
+- The set and order of handlers must be configurable dynamically.
+- You need to execute several independent checks/steps in turn with the ability to stop.
+- You need to decouple the sender of a request from its receivers.
 
-## Когда не нужен
+## When not to use
 
-- Обработчик всегда один и известен заранее.
-- Порядок и набор шагов никогда не меняется — простой последовательный код читается проще.
+- There is always one handler and it is known in advance.
+- The order and set of steps never change — simple sequential code is easier to read.
 
-## Плюсы и минусы
+## Pros and cons
 
-**Плюсы**
-- Уменьшает связанность отправителя и получателей.
-- Каждый обработчик отвечает за одну вещь (SRP).
-- Новые обработчики добавляются без изменения существующих (Open/Closed).
-- Цепочку можно перестраивать во время выполнения.
+**Pros**
+- Reduces coupling between the sender and the receivers.
+- Each handler is responsible for one thing (SRP).
+- New handlers are added without changing existing ones (Open/Closed).
+- The chain can be rebuilt at runtime.
 
-**Минусы**
-- Запрос может остаться необработанным.
-- Сложнее отлаживать: путь запроса не виден из кода в одном месте.
-- Важен порядок звеньев (например, логирование должно стоять первым, а аутентификация — до валидации).
+**Cons**
+- A request may remain unhandled.
+- Harder to debug: the request's path is not visible in one place in the code.
+- The order of links matters (e.g. logging must come first, and authentication before validation).
 
-## Связь с другими паттернами
+## Relations with other patterns
 
-- **Decorator** устроен похоже (цепочка обёрток), но декоратор **всегда** передаёт вызов дальше и добавляет поведение; звено цепочки может **прервать** обработку.
-- **Command** — запрос в цепочке часто оформляют как команду.
-- **Composite** — цепочку часто строят по дереву: запрос идёт от элемента к его родителю (например, обработка событий в UI).
-- **Mediator** и **Observer** — другие способы связать отправителей и получателей: через посредника или через подписку.
+- **Decorator** has a similar structure (a chain of wrappers), but a decorator **always** passes the call on and adds behavior; a chain link can **stop** the processing.
+- **Command** — a request in a chain is often implemented as a command.
+- **Composite** — a chain is often built along a tree: the request goes from an element to its parent (e.g. event handling in a UI).
+- **Mediator** and **Observer** — other ways to connect senders and receivers: through a mediator or through subscription.

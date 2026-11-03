@@ -1,41 +1,43 @@
-# Observer (Наблюдатель)
+🌐 [Русский](https://github.com/Vladesko/GoF-Patterns/tree/rus/GoFPatterns/Observer) | **English** | [Deutsch](https://github.com/Vladesko/GoF-Patterns/tree/deu/GoFPatterns/Observer) | [Italiano](https://github.com/Vladesko/GoF-Patterns/tree/ita/GoFPatterns/Observer) | [Español](https://github.com/Vladesko/GoF-Patterns/tree/spa/GoFPatterns/Observer)
 
-**Тип:** поведенческий паттерн.
+# Observer
 
-**Observer** создаёт механизм **подписки**: одни объекты (наблюдатели) подписываются на изменения другого объекта (издателя) и автоматически получают уведомления, когда в нём что-то происходит. Связь «один ко многим».
+**Type:** behavioral pattern.
 
----
-
-## Какую проблему решает
-
-У товара меняется цена. На это должны реагировать разные части системы:
-- **покупатель** ждёт, когда цена упадёт достаточно, чтобы купить;
-- **сервис скидок** сообщает об акции, когда цена ниже порога;
-- **сборщик статистики** считает все изменения цены.
-
-Варианты без паттерна:
-- **Опрос (polling)**: каждый заинтересованный объект периодически спрашивает цену. Лишняя нагрузка и задержка реакции.
-- **Товар сам вызывает всех**: `buyer.Check(price); discounts.Check(price); stats.Add(price);` — товар знает о каждом конкретном классе. Новый заинтересованный — правка товара. Убрать кого-то во время работы нельзя.
-
-## Решение
-
-Издатель (товар) хранит **список подписчиков** и предоставляет методы `Subscribe`/`Unsubscribe`. Все подписчики реализуют общий интерфейс с методом `Update`. Когда состояние меняется, издатель проходит по списку и вызывает `Update` у каждого.
-
-Издатель знает о подписчиках только то, что они реализуют интерфейс. Подписчиков можно добавлять и удалять во время выполнения — в том числе подписчик может отписаться сам.
+**Observer** defines a **subscription** mechanism: some objects (observers) subscribe to changes of another object (the publisher) and automatically receive notifications when something happens to it. A "one-to-many" relationship.
 
 ---
 
-## Участники
+## The problem
 
-| Роль | Класс в примере | Описание |
-|------|-----------------|----------|
-| **Subject (Observable)** | `IObservable` | Интерфейс издателя: подписка и отписка |
-| **ConcreteSubject** | `Product` | Хранит состояние (цену) и список подписчиков, уведомляет их об изменениях |
-| **Observer** | `IObserver` | Интерфейс подписчика с методом `Update(decimal price)` |
-| **ConcreteObserver** | `Buyer`, `DiscountNotifier`, `StatisticsCollector` | Реагируют на уведомления по-своему |
-| **Client** | `ProductObserverDemonstrate` | Создаёт издателя и подписчиков, меняет состояние |
+A product's price changes. Different parts of the system must react to this:
+- a **buyer** waits for the price to drop low enough to buy;
+- a **discount service** announces a sale when the price is below a threshold;
+- a **statistics collector** counts all price changes.
 
-## Схема
+Options without the pattern:
+- **Polling**: every interested object periodically asks for the price. Extra load and delayed reaction.
+- **The product calls everyone itself**: `buyer.Check(price); discounts.Check(price); stats.Add(price);` — the product knows about every concrete class. A new interested party means editing the product. Nobody can be removed at runtime.
+
+## Solution
+
+The publisher (the product) stores a **list of subscribers** and provides `Subscribe`/`Unsubscribe` methods. All subscribers implement a common interface with an `Update` method. When the state changes, the publisher goes through the list and calls `Update` on each one.
+
+The publisher knows about the subscribers only that they implement the interface. Subscribers can be added and removed at runtime — a subscriber can even unsubscribe itself.
+
+---
+
+## Participants
+
+| Role | Class in the example | Description |
+|------|----------------------|-------------|
+| **Subject (Observable)** | `IObservable` | The publisher interface: subscribe and unsubscribe |
+| **ConcreteSubject** | `Product` | Stores the state (the price) and the list of subscribers; notifies them about changes |
+| **Observer** | `IObserver` | The subscriber interface with the `Update(decimal price)` method |
+| **ConcreteObserver** | `Buyer`, `DiscountNotifier`, `StatisticsCollector` | React to notifications in their own way |
+| **Client** | `ProductObserverDemonstrate` | Creates the publisher and the subscribers, changes the state |
+
+## Diagram
 
 ```text
  ┌───────────────────────────┐        ┌──────────────────────────┐
@@ -53,11 +55,11 @@
 
 ---
 
-## Пример. Изменение цены товара (`ProductObserver/`)
+## Example. Product price changes (`ProductObserver/`)
 
-**Subject** — `IObservable` с методами `Subscribe(IObserver)` и `Unsubscribe(IObserver)`.
+**Subject** — `IObservable` with the methods `Subscribe(IObserver)` and `Unsubscribe(IObserver)`.
 
-**Observer** — `IObserver` с методом `Update(decimal price)`. Издатель передаёт новое значение прямо в уведомлении (так называемая **push-модель**).
+**Observer** — `IObserver` with the `Update(decimal price)` method. The publisher passes the new value directly in the notification (the so-called **push model**).
 
 **ConcreteSubject** — `Product`:
 
@@ -69,7 +71,7 @@ public class Product(decimal initialPrice) : IObservable
 
     public void ChangePrice(decimal newPrice)
     {
-        if (_price == newPrice) return;      // не уведомляем, если ничего не изменилось
+        if (_price == newPrice) return;      // do not notify if nothing has changed
         _price = newPrice;
         NotifyObservers();
     }
@@ -82,16 +84,16 @@ public class Product(decimal initialPrice) : IObservable
 }
 ```
 
-Важные детали реализации:
-- `HashSet` — один и тот же подписчик не будет подписан дважды;
-- `ArgumentNullException.ThrowIfNull` в `Subscribe`/`Unsubscribe` — защита от `null`;
-- `NotifyObservers` — `private`: уведомлять подписчиков может только сам товар;
-- обход идёт по **копии** списка (`_observers.ToArray()`), потому что подписчик может **отписаться прямо во время уведомления** (так делает `Buyer`). Изменять `HashSet` во время перебора самого `HashSet` нельзя — это вызвало бы `InvalidOperationException`.
+Important implementation details:
+- `HashSet` — the same subscriber cannot be subscribed twice;
+- `ArgumentNullException.ThrowIfNull` in `Subscribe`/`Unsubscribe` — protection against `null`;
+- `NotifyObservers` is `private`: only the product itself can notify subscribers;
+- the iteration goes over a **copy** of the list (`_observers.ToArray()`) because a subscriber can **unsubscribe right during the notification** (as `Buyer` does). Modifying a `HashSet` while iterating over that same `HashSet` is not allowed — it would throw an `InvalidOperationException`.
 
-**ConcreteObserver** (папка `Observers/`) — каждый подписывается в конструкторе (`_observable.Subscribe(this)`) и по-своему реагирует на цену:
-- `StatisticsCollector` — считает каждое изменение цены и выводит счётчик;
-- `DiscountNotifier` — при цене ≤ 100 сообщает о скидке;
-- `Buyer` — при цене ≤ 50 покупает товар и **сам отписывается**, так как больше не заинтересован:
+**ConcreteObserver** (folder `Observers/`) — each one subscribes in its constructor (`_observable.Subscribe(this)`) and reacts to the price in its own way:
+- `StatisticsCollector` — counts every price change and prints the counter;
+- `DiscountNotifier` — announces a discount when the price is ≤ 100;
+- `Buyer` — buys the product when the price is ≤ 50 and **unsubscribes itself**, since it is no longer interested:
 
 ```csharp
 public void Update(decimal price)
@@ -102,46 +104,46 @@ public void Update(decimal price)
 }
 ```
 
-**Client** — `ProductObserverDemonstrate` создаёт товар с ценой 150 и трёх подписчиков, затем меняет цену: 120 → 90 → 40. При каждом изменении срабатывает статистика; на 90 появляется скидка; на 40 — скидка и покупка.
+**Client** — `ProductObserverDemonstrate` creates a product with a price of 150 and three subscribers, then changes the price: 120 → 90 → 40. Statistics fire on every change; at 90 a discount appears; at 40, a discount and a purchase.
 
 ---
 
-## Push и pull
+## Push and pull
 
-- **Push** (как здесь) — издатель передаёт данные в `Update(price)`. Просто, но интерфейс завязан на конкретные данные.
-- **Pull** — издатель передаёт себя (`Update(IObservable sender)`), а подписчик сам читает нужные свойства. Гибче, но подписчик зависит от издателя.
+- **Push** (as here) — the publisher passes the data in `Update(price)`. Simple, but the interface is tied to specific data.
+- **Pull** — the publisher passes itself (`Update(IObservable sender)`), and the subscriber reads the properties it needs. More flexible, but the subscriber depends on the publisher.
 
-## Observer в .NET
+## Observer in .NET
 
-- **События C#** (`event EventHandler<T>`) — встроенная реализация паттерна: `+=` — подписка, `-=` — отписка, вызов события — уведомление.
-- Интерфейсы `IObservable<T>` / `IObserver<T>` в BCL и библиотека **Rx.NET** — реактивные потоки.
-- `INotifyPropertyChanged` в WPF/MAUI — привязка UI к модели.
+- **C# events** (`event EventHandler<T>`) — a built-in implementation of the pattern: `+=` subscribes, `-=` unsubscribes, raising the event notifies.
+- The `IObservable<T>` / `IObserver<T>` interfaces in the BCL and the **Rx.NET** library — reactive streams.
+- `INotifyPropertyChanged` in WPF/MAUI — binding the UI to the model.
 
-## Когда применять
+## When to use
 
-- Изменение одного объекта требует реакции других, и заранее неизвестно, каких и сколько.
-- Подписчики должны добавляться и удаляться во время работы.
-- Нужно ослабить связь между источником событий и реакциями на них.
+- A change in one object requires a reaction from others, and it is not known in advance which ones and how many.
+- Subscribers must be added and removed at runtime.
+- You need to loosen the coupling between the source of events and the reactions to them.
 
-## Когда не нужен
+## When not to use
 
-- Подписчик ровно один и известен заранее — проще прямой вызов.
-- Важен строгий порядок и транзакционность реакций — у наблюдателей порядок уведомления обычно не гарантирован.
+- There is exactly one subscriber, known in advance — a direct call is simpler.
+- A strict order and transactional reactions are important — observers usually do not get a guaranteed notification order.
 
-## Плюсы и минусы
+## Pros and cons
 
-**Плюсы**
-- Издатель не зависит от конкретных классов подписчиков (Open/Closed).
-- Подписка и отписка во время выполнения.
-- Одно событие — сколько угодно реакций.
+**Pros**
+- The publisher does not depend on concrete subscriber classes (Open/Closed).
+- Subscribing and unsubscribing at runtime.
+- One event — any number of reactions.
 
-**Минусы**
-- Порядок уведомления подписчиков не гарантирован.
-- **Утечки памяти**: если подписчик забыл отписаться, издатель держит на него ссылку, и сборщик мусора его не удалит (классическая проблема с событиями в .NET).
-- Каскад уведомлений бывает трудно отлаживать.
+**Cons**
+- The order in which subscribers are notified is not guaranteed.
+- **Memory leaks**: if a subscriber forgets to unsubscribe, the publisher keeps a reference to it and the garbage collector will not collect it (a classic problem with events in .NET).
+- A cascade of notifications can be hard to debug.
 
-## Связь с другими паттернами
+## Relations with other patterns
 
-- **Mediator** — часто реализуется через Observer: компоненты публикуют события, посредник на них подписан. Цели разные: Observer — динамическая рассылка, Mediator — централизованная логика взаимодействия.
-- **Chain of Responsibility**, **Command**, **Mediator**, **Observer** — разные способы связать отправителей и получателей запросов.
-- **Singleton** — иногда издатель-менеджер событий делают одиночкой (event bus).
+- **Mediator** — often implemented through Observer: components publish events, and the mediator subscribes to them. The goals differ: Observer is dynamic broadcasting, Mediator is centralized interaction logic.
+- **Chain of Responsibility**, **Command**, **Mediator**, **Observer** — different ways to connect senders and receivers of requests.
+- **Singleton** — an event manager publisher is sometimes made a singleton (an event bus).
