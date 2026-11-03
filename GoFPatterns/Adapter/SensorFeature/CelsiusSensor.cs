@@ -1,14 +1,14 @@
 ﻿namespace GoFPatterns.Adapter.SensorFeature
 {
-    //That is class for modern feature. There is no need adapter
+    // Это класс для современной функциональности. Адаптер здесь не нужен
     public class CelsiusSensor : ITemperatureSensor
     {
 
-        //Need for demonstartion
-        //Should be private or Get from other Service
-        private readonly int CurrentTemperature = new Random().Next(15, 35); //Emulation temperature
+        // Нужно для демонстрации
+        // Должно быть приватным или получаться из другого сервиса
+        private readonly int CurrentTemperature = new Random().Next(15, 35); // Эмуляция температуры
 
-        //There is some work. It would be a some request to other service
+        // Здесь выполняется некоторая работа. Это мог бы быть запрос к другому сервису
         public decimal GetTemperatureCelsius() => CurrentTemperature;
     }
 }

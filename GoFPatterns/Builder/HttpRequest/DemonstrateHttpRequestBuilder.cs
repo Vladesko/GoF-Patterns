@@ -4,7 +4,7 @@
     {
         public void Demonstrate()
         {
-            Console.WriteLine("=== Builder: Fluent HTTP request ===\n");
+            Console.WriteLine("=== Строитель: fluent-построение HTTP-запроса ===\n");
 
             var searchRequest = new HttpRequestBuilder()
                 .Get("https://api.shop.com/products")
@@ -24,14 +24,14 @@
                 .Build();
             Console.WriteLine(createOrderRequest);
 
-            // Builder protects us from creating an invalid object.
+            // Строитель защищает нас от создания некорректного объекта.
             try
             {
                 new HttpRequestBuilder().WithHeader("Accept", "text/html").Build();
             }
             catch (InvalidOperationException ex)
             {
-                Console.WriteLine($"\nInvalid request was not built: {ex.Message}");
+                Console.WriteLine($"\nНекорректный запрос не был построен: {ex.Message}");
             }
         }
     }

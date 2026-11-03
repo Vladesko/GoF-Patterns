@@ -4,7 +4,7 @@
     {
         public void Demonstrate()
         {
-            Console.WriteLine("=== Interpreter: Product search queries ===\n");
+            Console.WriteLine("=== Интерпретатор: поисковые запросы по товарам ===\n");
 
             Product[] products =
             [
@@ -29,9 +29,9 @@
             {
                 var expression = parser.Parse(query);
                 var found = products.Where(expression.Matches).Select(p => p.Name);
-                Console.WriteLine($"Query: {query}");
-                Console.WriteLine($"  Tree:  {expression}");
-                Console.WriteLine($"  Found: {string.Join(", ", found)}\n");
+                Console.WriteLine($"Запрос:  {query}");
+                Console.WriteLine($"  Дерево:  {expression}");
+                Console.WriteLine($"  Найдено: {string.Join(", ", found)}\n");
             }
         }
     }

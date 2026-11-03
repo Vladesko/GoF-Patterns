@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Strategy.Delivery
 {
-    // Strategy - common interface for all algorithms of delivery cost calculation.
+    // Стратегия - общий интерфейс для всех алгоритмов расчёта стоимости доставки.
     public interface IDeliveryStrategy
     {
         string Name { get; }

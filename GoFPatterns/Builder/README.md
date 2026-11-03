@@ -1,3 +1,5 @@
+🌐 **Русский** | [English](https://github.com/Vladesko/GoF-Patterns/tree/eng/GoFPatterns/Builder) | [Deutsch](https://github.com/Vladesko/GoF-Patterns/tree/deu/GoFPatterns/Builder) | [Italiano](https://github.com/Vladesko/GoF-Patterns/tree/ita/GoFPatterns/Builder) | [Español](https://github.com/Vladesko/GoF-Patterns/tree/spa/GoFPatterns/Builder)
+
 # Builder (Строитель)
 
 **Тип:** порождающий паттерн.
@@ -72,8 +74,8 @@ public interface IPizzaBuilder
 **ConcreteBuilder** — каждый строитель по-своему интерпретирует шаги. Например, `AmericanPizzaBuilder` делает тесто толстым и удваивает начинки:
 
 ```csharp
-public void SetDough(string dough) => _pizza.Dough = $"thick {dough}";
-public void AddTopping(string topping) => _pizza.Toppings.Add($"double {topping}");
+public void SetDough(string dough) => _pizza.Dough = $"толстое {dough}";
+public void AddTopping(string topping) => _pizza.Toppings.Add($"{topping} x2");
 ```
 
 `GetResult()` возвращает собранную пиццу и сразу вызывает `Reset()`, чтобы строитель был готов к следующему заказу.
@@ -84,11 +86,11 @@ public void AddTopping(string topping) => _pizza.Toppings.Add($"double {topping}
 public Pizza MakeMargherita()
 {
     _builder.Reset();
-    _builder.SetSize("Medium");
-    _builder.SetDough("wheat");
-    _builder.SetSauce("tomato");
-    _builder.AddTopping("mozzarella");
-    _builder.AddTopping("basil");
+    _builder.SetSize("средняя");
+    _builder.SetDough("пшеничное");
+    _builder.SetSauce("томатный");
+    _builder.AddTopping("моцарелла");
+    _builder.AddTopping("базилик");
     return _builder.GetResult();
 }
 ```

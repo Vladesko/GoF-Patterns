@@ -6,34 +6,34 @@ namespace GoFPatterns.Composite.OrgStructure
     {
         public void Demonstrate()
         {
-            Console.WriteLine("=== Composite: Organization structure ===\n");
+            Console.WriteLine("=== Компоновщик: структура организации ===\n");
 
-            var backend = new Department("Backend").Add(
-                new Employee("Anna", "Team lead", 4_000),
-                new Employee("Ivan", "Developer", 3_000),
-                new Employee("Oleg", "Developer", 2_800));
+            var backend = new Department("Бэкенд").Add(
+                new Employee("Анна", "Тимлид", 4_000),
+                new Employee("Иван", "Разработчик", 3_000),
+                new Employee("Олег", "Разработчик", 2_800));
 
-            var frontend = new Department("Frontend").Add(
-                new Employee("Maria", "Developer", 2_900));
+            var frontend = new Department("Фронтенд").Add(
+                new Employee("Мария", "Разработчик", 2_900));
 
-            var development = new Department("Development").Add(
-                new Employee("Pavel", "CTO", 6_000),
+            var development = new Department("Разработка").Add(
+                new Employee("Павел", "CTO", 6_000),
                 backend,
                 frontend);
 
-            var company = new Department("Company").Add(
-                new Employee("Elena", "CEO", 8_000),
+            var company = new Department("Компания").Add(
+                new Employee("Елена", "CEO", 8_000),
                 development,
-                new Department("HR").Add(new Employee("Olga", "Recruiter", 2_000)));
+                new Department("HR").Add(new Employee("Ольга", "Рекрутер", 2_000)));
 
             company.Display();
 
-            // Any unit - employee or department - can be analyzed in the same way.
-            IOrgUnit[] units = [company, development, backend, new Employee("Intern", "Trainee", 800)];
+            // Любую единицу - сотрудника или отдел - можно анализировать одинаково.
+            IOrgUnit[] units = [company, development, backend, new Employee("Стажёр", "Стажёр", 800)];
             Console.WriteLine();
             foreach (var unit in units)
             {
-                Console.WriteLine($"{unit.Name,-12} people: {unit.GetHeadcount(),2}, budget: {unit.GetSalaryBudget(),8:N0}");
+                Console.WriteLine($"{unit.Name,-12} человек: {unit.GetHeadcount(),2}, бюджет: {unit.GetSalaryBudget(),8:N0}");
             }
         }
     }

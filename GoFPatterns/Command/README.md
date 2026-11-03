@@ -1,3 +1,5 @@
+🌐 **Русский** | [English](https://github.com/Vladesko/GoF-Patterns/tree/eng/GoFPatterns/Command) | [Deutsch](https://github.com/Vladesko/GoF-Patterns/tree/deu/GoFPatterns/Command) | [Italiano](https://github.com/Vladesko/GoF-Patterns/tree/ita/GoFPatterns/Command) | [Español](https://github.com/Vladesko/GoF-Patterns/tree/spa/GoFPatterns/Command)
+
 # Command (Команда)
 
 **Тип:** поведенческий паттерн.

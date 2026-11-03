@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Flyweight.Forest
 {
-    // Client - stores contexts (trees) and uses factory to get flyweights.
+    // Клиент - хранит контексты (деревья) и использует фабрику для получения легковесов.
     public class ForestMap
     {
         private readonly List<Tree> _trees = [];

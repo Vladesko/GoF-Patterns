@@ -1,9 +1,9 @@
 ﻿namespace GoFPatterns.Strategy.Sorting.Strategies
 {
-    // Concrete strategy - simple, but O(n^2). Good only for tiny arrays.
+    // Конкретная стратегия - простая, но O(n^2). Подходит только для совсем маленьких массивов.
     public class BubbleSortStrategy : ISortStrategy
     {
-        public string Name => "Bubble sort";
+        public string Name => "Пузырьковая";
 
         public void Sort(int[] items)
         {

@@ -12,7 +12,7 @@
         public void Update(decimal price)
         {
             _count++;
-            Console.WriteLine($"Price updated {_count} times to {price}");
+            Console.WriteLine($"Цена обновлена {_count} раз(а), новая цена: {price}");
         }
     }
 }

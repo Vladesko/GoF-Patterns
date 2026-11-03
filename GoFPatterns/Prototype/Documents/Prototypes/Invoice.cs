@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Prototype.Documents.Prototypes
 {
-    // Concrete prototype - invoice with lines.
+    // Конкретный прототип - счёт с позициями.
     public class Invoice : IDocumentPrototype
     {
         public string Title { get; set; } = string.Empty;
@@ -17,6 +17,6 @@
         };
 
         public override string ToString() =>
-            $"Invoice '{Title}', tax {TaxRate:P0}, lines: {Lines.Count}, total: {Total:F2}";
+            $"Счёт '{Title}', налог {TaxRate:P0}, позиций: {Lines.Count}, итого: {Total:F2}";
     }
 }

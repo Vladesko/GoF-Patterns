@@ -1,3 +1,5 @@
+🌐 **Русский** | [English](https://github.com/Vladesko/GoF-Patterns/tree/eng/GoFPatterns/Visitor) | [Deutsch](https://github.com/Vladesko/GoF-Patterns/tree/deu/GoFPatterns/Visitor) | [Italiano](https://github.com/Vladesko/GoF-Patterns/tree/ita/GoFPatterns/Visitor) | [Español](https://github.com/Vladesko/GoF-Patterns/tree/spa/GoFPatterns/Visitor)
+
 # Visitor (Посетитель)
 
 **Тип:** поведенческий паттерн.
@@ -112,7 +114,7 @@ foreach (var shape in shapes)
     shape.Accept(areaVisitor);
     shape.Accept(xmlVisitor);
 }
-Console.WriteLine($"Total Area: {areaVisitor.TotalArea}");
+Console.WriteLine($"Общая площадь: {areaVisitor.TotalArea}");
 Console.WriteLine(xmlVisitor.GetXml());
 ```
 

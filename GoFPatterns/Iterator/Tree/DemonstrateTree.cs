@@ -4,36 +4,36 @@
     {
         public void Demonstrate()
         {
-            Console.WriteLine("=== Iterator: Tree traversal ===\n");
+            Console.WriteLine("=== Итератор: обход дерева ===\n");
 
-            var catalog = new CategoryNode("Catalog").Add(
-                new CategoryNode("Electronics").Add(
-                    new CategoryNode("Phones"),
-                    new CategoryNode("Laptops").Add(
-                        new CategoryNode("Gaming"),
-                        new CategoryNode("Ultrabooks"))),
-                new CategoryNode("Books").Add(
-                    new CategoryNode("Fiction"),
-                    new CategoryNode("Science")));
+            var catalog = new CategoryNode("Каталог").Add(
+                new CategoryNode("Электроника").Add(
+                    new CategoryNode("Телефоны"),
+                    new CategoryNode("Ноутбуки").Add(
+                        new CategoryNode("Игровые"),
+                        new CategoryNode("Ультрабуки"))),
+                new CategoryNode("Книги").Add(
+                    new CategoryNode("Художественная литература"),
+                    new CategoryNode("Наука")));
 
-            Console.WriteLine("Depth-first (as a menu):");
+            Console.WriteLine("В глубину (как меню):");
             foreach (var (node, depth) in catalog.DepthFirst())
             {
                 Console.WriteLine($"  {new string(' ', depth * 2)}{node.Name}");
             }
 
-            Console.WriteLine("\nBreadth-first (level by level):");
+            Console.WriteLine("\nВ ширину (уровень за уровнем):");
             foreach (var (node, depth) in catalog.BreadthFirst())
             {
-                Console.WriteLine($"  level {depth}: {node.Name}");
+                Console.WriteLine($"  уровень {depth}: {node.Name}");
             }
 
-            // Iterators are lazy: traversal stops as soon as we have found what we need.
+            // Итераторы ленивые: обход останавливается, как только мы нашли то, что нужно.
             var visited = 0;
             var found = catalog.DepthFirst()
                 .Select(x => { visited++; return x.Node; })
-                .First(n => n.Name == "Laptops");
-            Console.WriteLine($"\nFound '{found.Name}' after visiting {visited} of {catalog.DepthFirst().Count()} nodes.");
+                .First(n => n.Name == "Ноутбуки");
+            Console.WriteLine($"\nНайдено '{found.Name}' после посещения {visited} из {catalog.DepthFirst().Count()} узлов.");
         }
     }
 }

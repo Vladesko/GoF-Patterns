@@ -1,7 +1,7 @@
 ﻿namespace GoFPatterns.Mediator.ChatRoom
 {
-    // Concrete mediator - contains all logic of communication: who receives the message,
-    // filtering of banned words, private messages, join/leave notifications.
+    // Конкретный посредник - содержит всю логику общения: кто получает сообщение,
+    // фильтрацию запрещённых слов, личные сообщения, уведомления о входе и выходе.
     public class ChatRoomMediator : IChatMediator
     {
         private static readonly string[] _bannedWords = ["spam", "scam"];
@@ -10,13 +10,13 @@
         public void Join(ChatUser user)
         {
             _users[user.Name] = user;
-            Console.WriteLine($"  [room] {user.Name} joined");
+            Console.WriteLine($"  [комната] {user.Name} входит в чат");
         }
 
         public void Leave(ChatUser user)
         {
             _users.Remove(user.Name);
-            Console.WriteLine($"  [room] {user.Name} left");
+            Console.WriteLine($"  [комната] {user.Name} выходит из чата");
         }
 
         public void SendMessage(ChatUser sender, string message)
@@ -24,7 +24,7 @@
             Console.WriteLine($"  {sender.Name}: {message}");
             if (_bannedWords.Any(w => message.Contains(w, StringComparison.OrdinalIgnoreCase)))
             {
-                Console.WriteLine($"  [room] message from {sender.Name} is blocked");
+                Console.WriteLine($"  [комната] сообщение от {sender.Name} заблокировано");
                 return;
             }
 
@@ -37,9 +37,9 @@
         public void SendPrivate(ChatUser sender, string receiverName, string message)
         {
             if (_users.TryGetValue(receiverName, out var receiver))
-                receiver.Receive($"{sender.Name} (private)", message);
+                receiver.Receive($"{sender.Name} (лично)", message);
             else
-                sender.Receive("room", $"user {receiverName} is not in the room");
+                sender.Receive("комната", $"пользователя {receiverName} нет в комнате");
         }
     }
 }

@@ -6,7 +6,7 @@ namespace GoFPatterns.TemplateMethod.Beverages
     {
         public void Demonstrate()
         {
-            Console.WriteLine("=== Template Method: Hot beverages ===\n");
+            Console.WriteLine("=== Шаблонный метод: горячие напитки ===\n");
 
             HotBeverage[] order = [new Tea(), new GreenTea(), new Coffee(withMilk: true), new Coffee(withMilk: false)];
             foreach (var beverage in order)

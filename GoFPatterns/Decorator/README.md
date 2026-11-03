@@ -1,3 +1,5 @@
+🌐 **Русский** | [English](https://github.com/Vladesko/GoF-Patterns/tree/eng/GoFPatterns/Decorator) | [Deutsch](https://github.com/Vladesko/GoF-Patterns/tree/deu/GoFPatterns/Decorator) | [Italiano](https://github.com/Vladesko/GoF-Patterns/tree/ita/GoFPatterns/Decorator) | [Español](https://github.com/Vladesko/GoF-Patterns/tree/spa/GoFPatterns/Decorator)
+
 # Decorator (Декоратор)
 
 **Тип:** структурный паттерн.
@@ -93,7 +95,7 @@ public abstract class BeverageDecorator(IBeverage beverage) : IBeverage
 ```csharp
 public class MilkDecorator(IBeverage beverage) : BeverageDecorator(beverage)
 {
-    public override string GetDescription() => $"{base.GetDescription()} + milk";
+    public override string GetDescription() => $"{base.GetDescription()} + молоко";
     public override decimal GetCost() => base.GetCost() + 0.50m;
 }
 ```
@@ -131,7 +133,7 @@ public override string Read() => Decompress(base.Read());                // ПО
 IDataSource source = new LoggingDecorator(
     new CompressionDecorator(
         new EncryptionDecorator(protectedStorage, "secret")),
-    "client");
+    "клиент");
 ```
 
 При записи данные проходят снаружи внутрь (лог → сжатие → шифрование → хранилище), при чтении — изнутри наружу. В хранилище лежит сжатая зашифрованная строка, а клиент читает исходный текст и даже не знает об этом.

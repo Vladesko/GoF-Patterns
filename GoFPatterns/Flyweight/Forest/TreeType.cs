@@ -1,10 +1,10 @@
 ﻿namespace GoFPatterns.Flyweight.Forest
 {
-    // Flyweight - contains intrinsic (shared) state: name, color and heavy texture.
-    // It is immutable, so one object can be safely used by thousands of trees.
+    // Легковес - содержит внутреннее (разделяемое) состояние: название, цвет и тяжёлую текстуру.
+    // Он неизменяем, поэтому один объект можно безопасно использовать в тысячах деревьев.
     public sealed class TreeType(string name, string color, string texturePath)
     {
-        // Emulation of heavy data - texture of 1 MB.
+        // Эмуляция тяжёлых данных - текстура размером 1 МБ.
         private readonly byte[] _texture = new byte[1024 * 1024];
 
         public string Name { get; } = name;
@@ -13,7 +13,7 @@
 
         public static long TextureSize => 1024 * 1024;
 
-        // Extrinsic (unique) state - coordinates - is passed as parameters.
-        public string Draw(int x, int y) => $"{Name} ({Color}) at [{x}, {y}] using {TexturePath} ({_texture.Length / 1024} KB)";
+        // Внешнее (уникальное) состояние - координаты - передаётся через параметры.
+        public string Draw(int x, int y) => $"{Name} ({Color}) в точке [{x}, {y}], текстура {TexturePath} ({_texture.Length / 1024} КБ)";
     }
 }

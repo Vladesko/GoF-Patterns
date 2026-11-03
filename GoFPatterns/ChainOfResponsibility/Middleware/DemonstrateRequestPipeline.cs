@@ -6,7 +6,7 @@ namespace GoFPatterns.ChainOfResponsibility.Middleware
     {
         public void Demonstrate()
         {
-            Console.WriteLine("=== Chain of Responsibility: Request pipeline (middleware) ===\n");
+            Console.WriteLine("=== Цепочка обязанностей: конвейер обработки запросов (middleware) ===\n");
 
             var pipeline = new RequestPipeline()
                 .Use(new LoggingHandler())

@@ -1,7 +1,7 @@
 ﻿namespace GoFPatterns.Flyweight.Forest
 {
-    // Context - contains extrinsic (unique) state and a reference to flyweight.
-    // It is very small: two ints and one reference.
+    // Контекст - содержит внешнее (уникальное) состояние и ссылку на легковес.
+    // Он очень маленький: два int и одна ссылка.
     public class Tree(int x, int y, TreeType type)
     {
         public int X { get; } = x;

@@ -1,9 +1,9 @@
 ﻿namespace GoFPatterns.TemplateMethod.DataImport.Importers
 {
-    // Concrete class - knows only how to parse CSV. The rest of the algorithm is inherited.
+    // Конкретный класс - умеет только разбирать CSV. Остальная часть алгоритма унаследована.
     public class CsvCustomerImporter : CustomerImporter
     {
-        // Hook override - remove header line.
+        // Переопределение хука - удаляем строку заголовка.
         protected override string Preprocess(string rawData) =>
             string.Join('\n', base.Preprocess(rawData).Split('\n').Skip(1));
 

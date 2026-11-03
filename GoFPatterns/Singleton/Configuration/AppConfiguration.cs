@@ -1,8 +1,8 @@
 ﻿namespace GoFPatterns.Singleton.Configuration
 {
-    // Singleton - application configuration which must exist in a single instance.
-    // Lazy<T> guarantees thread-safe lazy initialization out of the box.
-    // Class is sealed, so nobody can inherit it and create a second instance through a subclass.
+    // Одиночка - конфигурация приложения, которая должна существовать в единственном экземпляре.
+    // Lazy<T> из коробки гарантирует потокобезопасную ленивую инициализацию.
+    // Класс sealed, поэтому никто не сможет унаследоваться от него и создать второй экземпляр через подкласс.
     public sealed class AppConfiguration
     {
         private static readonly Lazy<AppConfiguration> _instance = new(() => new AppConfiguration());
@@ -13,11 +13,11 @@
 
         public Guid InstanceId { get; } = Guid.NewGuid();
 
-        // Private constructor - nobody can call "new AppConfiguration()" outside the class.
+        // Приватный конструктор - никто не может вызвать "new AppConfiguration()" вне класса.
         private AppConfiguration()
         {
-            // Emulation of expensive loading, for example from appsettings.json.
-            Console.WriteLine("  [AppConfiguration] Loading settings from file...");
+            // Эмуляция дорогой загрузки, например из appsettings.json.
+            Console.WriteLine("  [AppConfiguration] Загрузка настроек из файла...");
             _settings = new Dictionary<string, string>
             {
                 ["ConnectionString"] = "Server=localhost;Database=Shop",

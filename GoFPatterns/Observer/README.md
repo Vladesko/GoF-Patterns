@@ -1,3 +1,5 @@
+🌐 **Русский** | [English](https://github.com/Vladesko/GoF-Patterns/tree/eng/GoFPatterns/Observer) | [Deutsch](https://github.com/Vladesko/GoF-Patterns/tree/deu/GoFPatterns/Observer) | [Italiano](https://github.com/Vladesko/GoF-Patterns/tree/ita/GoFPatterns/Observer) | [Español](https://github.com/Vladesko/GoF-Patterns/tree/spa/GoFPatterns/Observer)
+
 # Observer (Наблюдатель)
 
 **Тип:** поведенческий паттерн.
@@ -97,7 +99,7 @@ public class Product(decimal initialPrice) : IObservable
 public void Update(decimal price)
 {
     if (price > 50) return;
-    Console.WriteLine("Buying product!");
+    Console.WriteLine("Покупаем товар!");
     _observable.Unsubscribe(this);
 }
 ```

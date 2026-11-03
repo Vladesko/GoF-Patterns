@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.State.Vending
 {
-    // State - reaction of the machine to user actions.
+    // Состояние - реакция автомата на действия пользователя.
     public interface IVendingState
     {
         void InsertCoin(VendingMachine machine, int amount);

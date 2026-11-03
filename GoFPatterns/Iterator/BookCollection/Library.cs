@@ -3,8 +3,8 @@ using GoFPatterns.Iterator.BookCollection.Iterators;
 
 namespace GoFPatterns.Iterator.BookCollection
 {
-    // Concrete aggregate - library. Books are stored in array, but clients don't know about it.
-    // It also implements IEnumerable<Book> - the .NET way of Iterator pattern - so foreach and LINQ work.
+    // Конкретный агрегат - библиотека. Книги хранятся в массиве, но клиенты об этом не знают.
+    // Также реализует IEnumerable<Book> - способ .NET для паттерна Итератор, - поэтому работают foreach и LINQ.
     public class Library : IBookAggregate, IEnumerable<Book>
     {
         private Book[] _books = new Book[2];
@@ -27,7 +27,7 @@ namespace GoFPatterns.Iterator.BookCollection
 
         public IBookIterator CreateAuthorIterator(string author) => new AuthorFilterIterator(this, author);
 
-        // "yield return" - compiler generates an iterator class for us.
+        // "yield return" - компилятор сам генерирует для нас класс итератора.
         public IEnumerator<Book> GetEnumerator()
         {
             for (var i = 0; i < _count; i++)

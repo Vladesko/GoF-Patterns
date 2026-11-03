@@ -1,9 +1,9 @@
 ﻿namespace GoFPatterns.Command.SmartHome.Devices
 {
-    // Receiver.
+    // Получатель.
     public class SecuritySystem
     {
-        public void Arm() => Console.WriteLine("    Security: armed");
-        public void Disarm() => Console.WriteLine("    Security: disarmed");
+        public void Arm() => Console.WriteLine("    Охрана: включена");
+        public void Disarm() => Console.WriteLine("    Охрана: выключена");
     }
 }

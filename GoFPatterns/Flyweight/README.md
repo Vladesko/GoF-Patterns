@@ -1,3 +1,5 @@
+🌐 **Русский** | [English](https://github.com/Vladesko/GoF-Patterns/tree/eng/GoFPatterns/Flyweight) | [Deutsch](https://github.com/Vladesko/GoF-Patterns/tree/deu/GoFPatterns/Flyweight) | [Italiano](https://github.com/Vladesko/GoF-Patterns/tree/ita/GoFPatterns/Flyweight) | [Español](https://github.com/Vladesko/GoF-Patterns/tree/spa/GoFPatterns/Flyweight)
+
 # Flyweight (Легковес, Приспособленец)
 
 **Тип:** структурный паттерн.
@@ -38,9 +40,9 @@
 
 ```text
  ForestMap (Client)
-   │ PlantTree(x, y, "Oak", ...)
+   │ PlantTree(x, y, "Дуб", ...)
    ▼
- TreeTypeFactory ── _types: "Oak|dark green|oak.png" ─► TreeType ◄──┐
+ TreeTypeFactory─_types: "Дуб|тёмно-зелёный|oak.png" ─► TreeType ◄──┐
                                                        (1 MB)        │
                                                                      │ shared
    Tree(x=10, y=20) ─────────────────────────────────────────────────┤
@@ -56,7 +58,7 @@
 **Flyweight** — `TreeType`. Хранит название, цвет, путь к текстуре и сами «тяжёлые» данные текстуры (массив 1 МБ). Класс `sealed`, все свойства только для чтения. Координаты в нём **не хранятся** — они приходят в метод:
 
 ```csharp
-public string Draw(int x, int y) => $"{Name} ({Color}) at [{x}, {y}] using {TexturePath}";
+public string Draw(int x, int y) => $"{Name} ({Color}) в точке [{x}, {y}], текстура {TexturePath}";
 ```
 
 **FlyweightFactory** — `TreeTypeFactory` хранит словарь `ключ → TreeType`. Новый объект создаётся только если такого ещё нет (в демо видно, что сообщение «created new tree type» печатается ровно 4 раза на 100 000 деревьев):

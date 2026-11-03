@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Prototype.GameUnits
 {
-    // Prototype - abstract unit with Clone method.
+    // Прототип - абстрактный юнит с методом Clone.
     public abstract class Unit
     {
         public string Name { get; set; } = string.Empty;
@@ -9,10 +9,10 @@
 
         public abstract Unit Clone();
 
-        public override string ToString() => $"{GetType().Name} '{Name}' HP:{Health} at {Position}";
+        public override string ToString() => $"{GetType().Name} '{Name}' HP:{Health} в точке {Position}";
     }
 
-    // Record is immutable, so it can be safely shared between clones.
-    // "with" expression is a built-in C# way to clone record with changes.
+    // Record неизменяем, поэтому его можно безопасно разделять между клонами.
+    // Выражение "with" - встроенный в C# способ клонировать record с изменениями.
     public record Position(int X, int Y);
 }

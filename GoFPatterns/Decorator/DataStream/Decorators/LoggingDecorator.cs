@@ -1,18 +1,18 @@
 ﻿namespace GoFPatterns.Decorator.DataStream.Decorators
 {
-    // Concrete decorator - doesn't change data, only adds logging around the call.
+    // Конкретный декоратор - не изменяет данные, только добавляет логирование вокруг вызова.
     public class LoggingDecorator(IDataSource source, string name) : DataSourceDecorator(source)
     {
         public override void Write(string data)
         {
-            Console.WriteLine($"  [{name}] write {data.Length} chars");
+            Console.WriteLine($"  [{name}] запись {data.Length} символов");
             base.Write(data);
         }
 
         public override string Read()
         {
             var data = base.Read();
-            Console.WriteLine($"  [{name}] read {data.Length} chars");
+            Console.WriteLine($"  [{name}] чтение {data.Length} символов");
             return data;
         }
     }

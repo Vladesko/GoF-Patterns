@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Bridge.Reports.ReportTypes
 {
-    // Abstraction - knows WHAT is in the report, but delegates rendering to implementor.
+    // Абстракция - знает, ЧТО содержится в отчёте, но делегирует отрисовку исполнителю.
     public abstract class Report(IReportRenderer renderer)
     {
         protected IReportRenderer Renderer { get; } = renderer;

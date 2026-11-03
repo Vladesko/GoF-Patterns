@@ -1,3 +1,5 @@
+🌐 **Русский** | [English](https://github.com/Vladesko/GoF-Patterns/tree/eng/GoFPatterns/Facade) | [Deutsch](https://github.com/Vladesko/GoF-Patterns/tree/deu/GoFPatterns/Facade) | [Italiano](https://github.com/Vladesko/GoF-Patterns/tree/ita/GoFPatterns/Facade) | [Español](https://github.com/Vladesko/GoF-Patterns/tree/spa/GoFPatterns/Facade)
+
 # Facade (Фасад)
 
 **Тип:** структурный паттерн.
@@ -40,7 +42,7 @@
 
 ```text
             Client
-              │  WatchMovie("Inception")
+              │  WatchMovie("Начало")
               ▼
    ┌──────────────────────┐
    │  HomeTheaterFacade   │
@@ -88,7 +90,7 @@ public void WatchMovie(string movie)
 
 ```csharp
 if (!inventory.IsAvailable(order.Product, order.Count))
-    return new OrderResult(false, $"{order.Product} is out of stock");
+    return new OrderResult(false, $"{order.Product}: нет в наличии");
 
 inventory.Reserve(order.Product, order.Count);
 
@@ -96,7 +98,7 @@ var total = order.Price * order.Count + shipping.CalculateCost(order.Address);
 if (!payments.Charge(order.CardNumber, total))
 {
     inventory.Release(order.Product, order.Count);   // откат
-    return new OrderResult(false, "Payment was declined");
+    return new OrderResult(false, "Платёж отклонён");
 }
 ```
 

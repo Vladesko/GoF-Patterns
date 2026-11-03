@@ -1,9 +1,9 @@
 ﻿namespace GoFPatterns.Decorator.Coffee.Beverages
 {
-    // Concrete component - another basic beverage.
+    // Конкретный компонент - ещё один базовый напиток.
     public class BlackTea : IBeverage
     {
-        public string GetDescription() => "Black tea";
+        public string GetDescription() => "Чёрный чай";
 
         public decimal GetCost() => 1.50m;
     }

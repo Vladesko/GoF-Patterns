@@ -1,7 +1,7 @@
 ﻿namespace GoFPatterns.Memento.GameSave
 {
-    // Caretaker - stores saves in named slots. It can read public data of memento (to show list of saves),
-    // but changes hero state only through hero.Load().
+    // Опекун (Caretaker) - хранит сохранения в именованных слотах. Он может читать публичные данные снимка (чтобы показать список сохранений),
+    // но изменяет состояние героя только через hero.Load().
     public class SaveManager
     {
         private readonly Dictionary<string, HeroMemento> _slots = [];
@@ -9,21 +9,21 @@
         public void Save(Hero hero, string slot)
         {
             _slots[slot] = hero.Save(slot);
-            Console.WriteLine($"  [save] game saved to slot \"{slot}\"");
+            Console.WriteLine($"  [сохранение] игра сохранена в слот \"{slot}\"");
         }
 
         public bool TryLoad(Hero hero, string slot)
         {
             if (!_slots.TryGetValue(slot, out var memento))
             {
-                Console.WriteLine($"  [save] slot \"{slot}\" is empty");
+                Console.WriteLine($"  [сохранение] слот \"{slot}\" пуст");
                 return false;
             }
             hero.Load(memento);
-            Console.WriteLine($"  [save] game loaded from slot \"{slot}\"");
+            Console.WriteLine($"  [сохранение] игра загружена из слота \"{slot}\"");
             return true;
         }
 
-        public IEnumerable<string> Slots => _slots.Values.Select(m => $"{m.SlotName}: lvl {m.Level} at {m.Location}");
+        public IEnumerable<string> Slots => _slots.Values.Select(m => $"{m.SlotName}: ур. {m.Level}, локация: {m.Location}");
     }
 }

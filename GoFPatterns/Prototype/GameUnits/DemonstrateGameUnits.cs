@@ -6,11 +6,11 @@ namespace GoFPatterns.Prototype.GameUnits
     {
         public void Demonstrate()
         {
-            Console.WriteLine("=== Prototype: Game units spawner ===\n");
+            Console.WriteLine("=== Прототип: создание игровых юнитов ===\n");
 
-            // Prototypes are configured once - for example, loaded from game config.
-            var eliteArcher = new Archer { Name = "Elite archer", Health = 120, Arrows = 50 };
-            var fireMage = new Mage { Name = "Fire mage", Health = 80, Spells = ["Fireball", "Flame wall"] };
+            // Прототипы настраиваются один раз - например, загружаются из игрового конфига.
+            var eliteArcher = new Archer { Name = "Элитный лучник", Health = 120, Arrows = 50 };
+            var fireMage = new Mage { Name = "Огненный маг", Health = 80, Spells = ["Огненный шар", "Стена огня"] };
 
             var spawners = new List<Spawner> { new(eliteArcher), new(fireMage) };
 
@@ -22,10 +22,10 @@ namespace GoFPatterns.Prototype.GameUnits
                 }
             }
 
-            // Record clone with "with" expression.
+            // Клонирование record с помощью выражения "with".
             var start = new Position(1, 1);
             var moved = start with { X = 7 };
-            Console.WriteLine($"\nRecord clone: {start} -> {moved}");
+            Console.WriteLine($"\nКлон record: {start} -> {moved}");
         }
     }
 }

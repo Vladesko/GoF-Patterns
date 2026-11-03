@@ -4,17 +4,17 @@
     {
         public void Demonstrate()
         {
-            Console.WriteLine("=== Singleton: Logger (double-checked locking) ===\n");
+            Console.WriteLine("=== Одиночка: логгер (блокировка с двойной проверкой) ===\n");
 
             NaiveLogger.Reset();
             var before = NaiveLogger.CreatedInstances;
             Parallel.For(0, 10, _ => GC.KeepAlive(NaiveLogger.Instance));
-            Console.WriteLine($"Naive singleton - instances created by 10 threads: {NaiveLogger.CreatedInstances - before} (should be 1!)");
+            Console.WriteLine($"Наивный одиночка - экземпляров создано 10 потоками: {NaiveLogger.CreatedInstances - before} (должен быть 1!)");
 
-            Parallel.For(0, 10, i => FileLogger.Instance.Log($"message from task {i}"));
-            Console.WriteLine($"Thread-safe singleton - instances created: {FileLogger.CreatedInstances}");
+            Parallel.For(0, 10, i => FileLogger.Instance.Log($"сообщение из задачи {i}"));
+            Console.WriteLine($"Потокобезопасный одиночка - экземпляров создано: {FileLogger.CreatedInstances}");
 
-            Console.WriteLine("\nAll messages are in the same logger:");
+            Console.WriteLine("\nВсе сообщения находятся в одном логгере:");
             foreach (var line in FileLogger.Instance.GetLines().TakeLast(10))
             {
                 Console.WriteLine($"  {line}");

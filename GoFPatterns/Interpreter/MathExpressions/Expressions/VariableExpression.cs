@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Interpreter.MathExpressions.Expressions
 {
-    // Terminal expression - variable. Its value is taken from context.
+    // Терминальное выражение - переменная. Её значение берётся из контекста.
     public class VariableExpression(string name) : IExpression
     {
         public double Interpret(Context context) => context.Get(name);

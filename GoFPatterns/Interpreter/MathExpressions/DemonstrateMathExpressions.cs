@@ -6,9 +6,9 @@ namespace GoFPatterns.Interpreter.MathExpressions
     {
         public void Demonstrate()
         {
-            Console.WriteLine("=== Interpreter: Math expressions ===\n");
+            Console.WriteLine("=== Интерпретатор: математические выражения ===\n");
 
-            // Syntax tree can be built by hand: (price * count) - discount
+            // Синтаксическое дерево можно построить вручную: (price * count) - discount
             IExpression manual = new BinaryExpression(
                 new BinaryExpression(new VariableExpression("price"), '*', new VariableExpression("count")),
                 '-',
@@ -18,9 +18,9 @@ namespace GoFPatterns.Interpreter.MathExpressions
             context.Set("price", 250);
             context.Set("count", 3);
             context.Set("discount", 50);
-            Console.WriteLine($"Manual tree {manual} = {manual.Interpret(context)}");
+            Console.WriteLine($"Дерево, построенное вручную, {manual} = {manual.Interpret(context)}");
 
-            // ... or by parser from a string.
+            // ... или с помощью парсера из строки.
             var parser = new ExpressionParser();
             string[] formulas = ["2 + 3 * 4", "(2 + 3) * 4", "price * count * (1 - tax)", "salary / 12"];
             context.Set("tax", 0.2);
@@ -30,12 +30,12 @@ namespace GoFPatterns.Interpreter.MathExpressions
             foreach (var formula in formulas)
             {
                 var tree = parser.Parse(formula);
-                Console.WriteLine($"{formula,-28} tree: {tree,-32} = {tree.Interpret(context)}");
+                Console.WriteLine($"{formula,-28} дерево: {tree,-32} = {tree.Interpret(context)}");
             }
 
-            // The same tree is interpreted with different contexts.
+            // Одно и то же дерево интерпретируется с разными контекстами.
             var totalPrice = parser.Parse("price * count");
-            Console.WriteLine("\nOne tree, different contexts:");
+            Console.WriteLine("\nОдно дерево, разные контексты:");
             foreach (var (price, count) in new[] { (10.0, 2.0), (99.9, 1.0), (5.0, 100.0) })
             {
                 context.Set("price", price);

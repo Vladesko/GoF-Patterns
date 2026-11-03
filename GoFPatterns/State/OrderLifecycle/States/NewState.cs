@@ -1,13 +1,13 @@
 ﻿namespace GoFPatterns.State.OrderLifecycle.States
 {
-    // Concrete state - order is created but not paid yet.
+    // Конкретное состояние - заказ создан, но ещё не оплачен.
     public class NewState : OrderStateBase
     {
-        public override string Name => "New";
+        public override string Name => "Новый";
 
         public override void Pay(Order order)
         {
-            Console.WriteLine($"    Payment of {order.Amount:F2} accepted");
+            Console.WriteLine($"    Оплата {order.Amount:F2} принята");
             order.TransitionTo(new PaidState());
         }
 

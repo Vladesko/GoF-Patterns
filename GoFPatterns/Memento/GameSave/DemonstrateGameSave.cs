@@ -4,37 +4,37 @@
     {
         public void Demonstrate()
         {
-            Console.WriteLine("=== Memento: Game saves ===\n");
+            Console.WriteLine("=== Снимок: сохранения игры ===\n");
 
-            var hero = new Hero("Arthur");
+            var hero = new Hero("Артур");
             var saves = new SaveManager();
 
-            hero.Travel("Forest");
+            hero.Travel("Лес");
             hero.Fight(damage: 30, reward: 50);
-            hero.Buy("health potion", 20);
+            hero.Buy("зелье здоровья", 20);
             Console.WriteLine($"  {hero}");
-            saves.Save(hero, "before castle");
+            saves.Save(hero, "перед замком");
 
-            hero.Travel("Dark castle");
+            hero.Travel("Тёмный замок");
             hero.Fight(damage: 40, reward: 100);
             Console.WriteLine($"  {hero}");
-            saves.Save(hero, "autosave");
+            saves.Save(hero, "автосохранение");
 
-            Console.WriteLine("\nBoss fight...");
+            Console.WriteLine("\nБитва с боссом...");
             hero.Fight(damage: 500, reward: 1000);
-            Console.WriteLine($"  {hero}  <- game over");
+            Console.WriteLine($"  {hero}  <- игра окончена");
 
-            Console.WriteLine("\nLoading last autosave:");
-            saves.TryLoad(hero, "autosave");
+            Console.WriteLine("\nЗагружаем последнее автосохранение:");
+            saves.TryLoad(hero, "автосохранение");
             Console.WriteLine($"  {hero}");
 
-            Console.WriteLine("\nPlayer decides to prepare better and loads earlier save:");
-            saves.TryLoad(hero, "before castle");
+            Console.WriteLine("\nИгрок решает лучше подготовиться и загружает более раннее сохранение:");
+            saves.TryLoad(hero, "перед замком");
             Console.WriteLine($"  {hero}");
 
-            saves.TryLoad(hero, "slot 3");
+            saves.TryLoad(hero, "слот 3");
 
-            Console.WriteLine("\nAll saves:");
+            Console.WriteLine("\nВсе сохранения:");
             foreach (var slot in saves.Slots)
             {
                 Console.WriteLine($"  {slot}");

@@ -1,3 +1,5 @@
+🌐 **Русский** | [English](https://github.com/Vladesko/GoF-Patterns/tree/eng/GoFPatterns/Prototype) | [Deutsch](https://github.com/Vladesko/GoF-Patterns/tree/deu/GoFPatterns/Prototype) | [Italiano](https://github.com/Vladesko/GoF-Patterns/tree/ita/GoFPatterns/Prototype) | [Español](https://github.com/Vladesko/GoF-Patterns/tree/spa/GoFPatterns/Prototype)
+
 # Prototype (Прототип)
 
 **Тип:** порождающий паттерн.

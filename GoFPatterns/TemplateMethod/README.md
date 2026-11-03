@@ -1,3 +1,5 @@
+🌐 **Русский** | [English](https://github.com/Vladesko/GoF-Patterns/tree/eng/GoFPatterns/TemplateMethod) | [Deutsch](https://github.com/Vladesko/GoF-Patterns/tree/deu/GoFPatterns/TemplateMethod) | [Italiano](https://github.com/Vladesko/GoF-Patterns/tree/ita/GoFPatterns/TemplateMethod) | [Español](https://github.com/Vladesko/GoF-Patterns/tree/spa/GoFPatterns/TemplateMethod)
+
 # Template Method (Шаблонный метод)
 
 **Тип:** поведенческий паттерн.
@@ -70,11 +72,11 @@
 ```csharp
 public IReadOnlyList<Customer> Import(string rawData)
 {
-    var content = Preprocess(rawData);          // hook
-    var records = Parse(content);               // abstract
-    var valid = records.Where(Validate).ToList();   // virtual
+    var content = Preprocess(rawData);          // хук
+    var records = Parse(content);               // абстрактный шаг
+    var valid = records.Where(Validate).ToList();   // виртуальный шаг
     Save(valid);                                // общий шаг
-    AfterImport(valid);                         // hook
+    AfterImport(valid);                         // хук
     return valid;
 }
 ```

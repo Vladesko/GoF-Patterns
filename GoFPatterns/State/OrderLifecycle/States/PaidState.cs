@@ -1,19 +1,19 @@
 ﻿namespace GoFPatterns.State.OrderLifecycle.States
 {
-    // Concrete state - order is paid. Cancel here means refund.
+    // Конкретное состояние - заказ оплачен. Отмена здесь означает возврат денег.
     public class PaidState : OrderStateBase
     {
-        public override string Name => "Paid";
+        public override string Name => "Оплачен";
 
         public override void Ship(Order order)
         {
-            Console.WriteLine("    Package is handed over to courier");
+            Console.WriteLine("    Посылка передана курьеру");
             order.TransitionTo(new ShippedState());
         }
 
         public override void Cancel(Order order)
         {
-            Console.WriteLine($"    Refund {order.Amount:F2} to customer");
+            Console.WriteLine($"    Возврат {order.Amount:F2} покупателю");
             order.TransitionTo(new CancelledState());
         }
     }

@@ -1,3 +1,5 @@
+🌐 **Русский** | [English](https://github.com/Vladesko/GoF-Patterns/tree/eng/GoFPatterns/Proxy) | [Deutsch](https://github.com/Vladesko/GoF-Patterns/tree/deu/GoFPatterns/Proxy) | [Italiano](https://github.com/Vladesko/GoF-Patterns/tree/ita/GoFPatterns/Proxy) | [Español](https://github.com/Vladesko/GoF-Patterns/tree/spa/GoFPatterns/Proxy)
+
 # Proxy (Заместитель)
 
 **Тип:** структурный паттерн.
@@ -100,7 +102,7 @@ public void Display()
 public void Withdraw(decimal amount)
 {
     if (role != UserRole.Owner)
-        throw new UnauthorizedAccessException($"{role} can't withdraw money.");
+        throw new UnauthorizedAccessException($"Роль {role} не может снимать деньги.");
     account.Withdraw(amount);
 }
 ```

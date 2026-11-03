@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Mediator.ChatRoom
 {
-    // Colleague - knows only mediator, doesn't know other users.
+    // Коллега - знает только посредника и не знает других пользователей.
     public class ChatUser(string name, IChatMediator chat)
     {
         public string Name { get; } = name;
@@ -10,6 +10,6 @@
         public void SendPrivate(string receiverName, string message) => chat.SendPrivate(this, receiverName, message);
 
         public virtual void Receive(string from, string message) =>
-            Console.WriteLine($"    {Name} got from {from}: {message}");
+            Console.WriteLine($"    {Name} получает от {from}: {message}");
     }
 }

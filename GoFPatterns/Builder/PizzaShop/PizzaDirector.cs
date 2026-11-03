@@ -1,7 +1,7 @@
 ﻿namespace GoFPatterns.Builder.PizzaShop
 {
-    // Director - knows the order of steps for well-known recipes.
-    // It works with any builder through IPizzaBuilder interface.
+    // Распорядитель (Director) - знает порядок шагов для известных рецептов.
+    // Он работает с любым строителем через интерфейс IPizzaBuilder.
     public class PizzaDirector(IPizzaBuilder builder)
     {
         private IPizzaBuilder _builder = builder;
@@ -15,21 +15,21 @@
         public Pizza MakeMargherita()
         {
             _builder.Reset();
-            _builder.SetSize("Medium");
-            _builder.SetDough("wheat");
-            _builder.SetSauce("tomato");
-            _builder.AddTopping("mozzarella");
-            _builder.AddTopping("basil");
+            _builder.SetSize("средняя");
+            _builder.SetDough("пшеничное");
+            _builder.SetSauce("томатный");
+            _builder.AddTopping("моцарелла");
+            _builder.AddTopping("базилик");
             return _builder.GetResult();
         }
 
         public Pizza MakePepperoni()
         {
             _builder.Reset();
-            _builder.SetSize("Large");
-            _builder.SetDough("wheat");
-            _builder.SetSauce("tomato");
-            _builder.AddTopping("pepperoni");
+            _builder.SetSize("большая");
+            _builder.SetDough("пшеничное");
+            _builder.SetSauce("томатный");
+            _builder.AddTopping("пепперони");
             _builder.AddExtraCheese();
             return _builder.GetResult();
         }

@@ -4,12 +4,12 @@
     {
         public void Demonstrate()
         {
-            Console.WriteLine("=== Mediator: Chat room ===\n");
+            Console.WriteLine("=== Посредник: чат-комната ===\n");
 
             var room = new ChatRoomMediator();
-            var anna = new ChatUser("Anna", room);
-            var ivan = new ChatUser("Ivan", room);
-            var olga = new ChatUser("Olga", room);
+            var anna = new ChatUser("Анна", room);
+            var ivan = new ChatUser("Иван", room);
+            var olga = new ChatUser("Ольга", room);
             var bot = new ChatBot(room);
 
             room.Join(anna);
@@ -17,13 +17,13 @@
             room.Join(olga);
             room.Join(bot);
 
-            anna.Send("Hi everyone!");
-            ivan.SendPrivate("Anna", "Hi, how are you?");
-            olga.Send("Buy cheap SPAM here");
+            anna.Send("Всем привет!");
+            ivan.SendPrivate("Анна", "Привет, как дела?");
+            olga.Send("Дёшево купить SPAM здесь");
             ivan.Send("/time");
 
             room.Leave(olga);
-            anna.SendPrivate("Olga", "Are you here?");
+            anna.SendPrivate("Ольга", "Ты здесь?");
         }
     }
 }

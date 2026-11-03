@@ -1,3 +1,5 @@
+🌐 **Русский** | [English](https://github.com/Vladesko/GoF-Patterns/tree/eng/GoFPatterns/Bridge) | [Deutsch](https://github.com/Vladesko/GoF-Patterns/tree/deu/GoFPatterns/Bridge) | [Italiano](https://github.com/Vladesko/GoF-Patterns/tree/ita/GoFPatterns/Bridge) | [Español](https://github.com/Vladesko/GoF-Patterns/tree/spa/GoFPatterns/Bridge)
+
 # Bridge (Мост)
 
 **Тип:** структурный паттерн.
@@ -94,10 +96,10 @@ public class Remote(IDevice device)
 **RefinedAbstraction** — `SalesReport` и `InventoryReport` (папка `ReportTypes/`) знают **что** выводить: продажи считают итог, складской отчёт помечает заканчивающиеся товары. **Как** это выглядит — решает рендерер:
 
 ```csharp
-var lines = new List<string> { Renderer.RenderTitle("Inventory") };
+var lines = new List<string> { Renderer.RenderTitle("Остатки на складе") };
 foreach (var (item, count) in stock)
 {
-    var value = count < LowStockLimit ? $"{count} (low!)" : count.ToString();
+    var value = count < LowStockLimit ? $"{count} (мало!)" : count.ToString();
     lines.Add(Renderer.RenderRow(item, value));
 }
 ```

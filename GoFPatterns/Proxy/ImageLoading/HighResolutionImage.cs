@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Proxy.ImageLoading
 {
-    // Real subject - heavy object. Image is loaded from disk right in the constructor.
+    // Реальный субъект - тяжёлый объект. Изображение загружается с диска прямо в конструкторе.
     public class HighResolutionImage : IImage
     {
         public string FileName { get; }
@@ -11,11 +11,11 @@
             LoadFromDisk();
         }
 
-        public void Display() => Console.WriteLine($"  Displaying {FileName}");
+        public void Display() => Console.WriteLine($"  Отображение {FileName}");
 
         private void LoadFromDisk()
         {
-            Console.WriteLine($"  Loading {FileName} from disk (20 MB)...");
+            Console.WriteLine($"  Загрузка {FileName} с диска (20 МБ)...");
             Thread.Sleep(200);
         }
     }

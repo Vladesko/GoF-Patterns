@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Prototype.GameUnits
 {
-    // Client - spawns units by cloning a prototype. It doesn't know which concrete unit it copies.
+    // Клиент - создаёт юниты, клонируя прототип. Он не знает, какой конкретный юнит копирует.
     public class Spawner(Unit prototype)
     {
         private int _counter;

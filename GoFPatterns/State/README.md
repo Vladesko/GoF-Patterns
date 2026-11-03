@@ -1,3 +1,5 @@
+🌐 **Русский** | [English](https://github.com/Vladesko/GoF-Patterns/tree/eng/GoFPatterns/State) | [Deutsch](https://github.com/Vladesko/GoF-Patterns/tree/deu/GoFPatterns/State) | [Italiano](https://github.com/Vladesko/GoF-Patterns/tree/ita/GoFPatterns/State) | [Español](https://github.com/Vladesko/GoF-Patterns/tree/spa/GoFPatterns/State)
+
 # State (Состояние)
 
 **Тип:** поведенческий паттерн.
@@ -87,7 +89,7 @@ internal void TransitionTo(IOrderState state) => State = state;
 ```csharp
 public override void Cancel(Order order)
 {
-    Console.WriteLine($"Refund {order.Amount:F2} to customer");
+    Console.WriteLine($"Возврат {order.Amount:F2} покупателю");
     order.TransitionTo(new CancelledState());
 }
 ```

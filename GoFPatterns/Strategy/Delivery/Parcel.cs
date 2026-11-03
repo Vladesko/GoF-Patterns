@@ -1,5 +1,5 @@
 ﻿namespace GoFPatterns.Strategy.Delivery
 {
-    // Data for strategies.
+    // Данные для стратегий.
     public record Parcel(decimal WeightKg, int DistanceKm, decimal DeclaredValue);
 }

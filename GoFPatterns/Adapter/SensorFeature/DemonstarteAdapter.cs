@@ -4,22 +4,22 @@
     {
         public void Demonstarte()
         {
-            Console.WriteLine("=== Adapter Pattern Demo ===\n");
+            Console.WriteLine("=== Демонстрация паттерна Адаптер ===\n");
 
-            // Modern sensor - works directly
+            // Современный датчик - работает напрямую
             ITemperatureSensor celsiusSensor = new CelsiusSensor();
-            Console.WriteLine($"Celsius sensor: {celsiusSensor.GetTemperatureCelsius()}°C");
+            Console.WriteLine($"Датчик в Цельсиях: {celsiusSensor.GetTemperatureCelsius()}°C");
 
-            // Legacy sensor - needs adapter
+            // Устаревший датчик - нужен адаптер
             var fahrenheitSensor = new FahrenheitSensor();
-            Console.WriteLine($"Fahrenheit sensor (incompatible): {fahrenheitSensor.GetCurrentTemperature()}°F");
+            Console.WriteLine($"Датчик в Фаренгейтах (несовместим): {fahrenheitSensor.GetCurrentTemperature()}°F");
 
-            // Using adapter
+            // Используем адаптер
             ITemperatureSensor adapter = new FahrenheitSensorAdapter(fahrenheitSensor);
-            Console.WriteLine($"Fahrenheit sensor via adapter: {adapter.GetTemperatureCelsius()}°C");
+            Console.WriteLine($"Датчик в Фаренгейтах через адаптер: {adapter.GetTemperatureCelsius()}°C");
 
-            // Both work with the same interface
-            Console.WriteLine("\n=== Using unified interface ===");
+            // Оба работают через один и тот же интерфейс
+            Console.WriteLine("\n=== Использование единого интерфейса ===");
             DisplayTemperature(celsiusSensor);
             DisplayTemperature(adapter);
         }
@@ -29,11 +29,11 @@
             var temp = sensor.GetTemperatureCelsius();
             var status = temp switch
             {
-                < 15 => "Cold ",
-                >= 15 and < 25 => "Comfortable ",
-                _ => "Hot "
+                < 15 => "Холодно ",
+                >= 15 and < 25 => "Комфортно ",
+                _ => "Жарко "
             };
-            Console.WriteLine($"Temperature: {temp}°C - {status}");
+            Console.WriteLine($"Температура: {temp}°C - {status}");
         }
     }
 }

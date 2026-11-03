@@ -6,14 +6,14 @@ namespace GoFPatterns.Strategy.Delivery
     {
         public void Demonstrate()
         {
-            Console.WriteLine("=== Strategy: Delivery cost ===\n");
+            Console.WriteLine("=== Стратегия: стоимость доставки ===\n");
 
             var parcel = new Parcel(WeightKg: 4, DistanceKm: 30, DeclaredValue: 120);
-            Console.WriteLine($"Parcel: {parcel}\n");
+            Console.WriteLine($"Посылка: {parcel}\n");
 
             IDeliveryStrategy[] strategies = [new PostDeliveryStrategy(), new CourierDeliveryStrategy(), new PickupPointStrategy()];
 
-            // The same context with different strategies.
+            // Один и тот же контекст с разными стратегиями.
             var calculator = new DeliveryCalculator(strategies[0]);
             foreach (var strategy in strategies)
             {
@@ -21,10 +21,10 @@ namespace GoFPatterns.Strategy.Delivery
                 Console.WriteLine($"  {calculator.GetQuote(parcel)}");
             }
 
-            // Strategy can be chosen automatically by some rule.
+            // Стратегию можно выбирать автоматически по какому-либо правилу.
             var cheapest = strategies.MinBy(s => s.CalculateCost(parcel))!;
             var fastest = strategies.MinBy(s => s.EstimateDays(parcel))!;
-            Console.WriteLine($"\nCheapest: {cheapest.Name}, fastest: {fastest.Name}");
+            Console.WriteLine($"\nСамая дешёвая: {cheapest.Name}, самая быстрая: {fastest.Name}");
         }
     }
 }

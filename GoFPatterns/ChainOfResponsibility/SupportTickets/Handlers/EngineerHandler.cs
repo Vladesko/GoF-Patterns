@@ -1,13 +1,13 @@
 ﻿namespace GoFPatterns.ChainOfResponsibility.SupportTickets.Handlers
 {
-    // Concrete handler - second line of support, technical problems.
+    // Конкретный обработчик - вторая линия поддержки, технические проблемы.
     public class EngineerHandler : SupportHandler
     {
         public override void Handle(SupportTicket ticket)
         {
             if (ticket.Severity == TicketSeverity.High)
             {
-                Console.WriteLine($"  Engineer: fixed the bug from ticket #{ticket.Id}");
+                Console.WriteLine($"  Инженер: исправил ошибку из заявки #{ticket.Id}");
                 return;
             }
             base.Handle(ticket);

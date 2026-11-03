@@ -1,7 +1,7 @@
 ﻿namespace GoFPatterns.Builder.HttpRequest
 {
-    // Fluent builder - every step returns the builder itself, so calls can be chained.
-    // Build() validates collected data and creates immutable product.
+    // Fluent-строитель: каждый шаг возвращает сам строитель, поэтому вызовы можно объединять в цепочку.
+    // Build() проверяет собранные данные и создаёт неизменяемый продукт.
     public class HttpRequestBuilder
     {
         private string _method = "GET";
@@ -45,10 +45,10 @@
         public HttpRequestMessageModel Build()
         {
             if (string.IsNullOrWhiteSpace(_url))
-                throw new InvalidOperationException("Url is required.");
+                throw new InvalidOperationException("Необходимо указать Url.");
 
             if (_method == "GET" && _body is not null)
-                throw new InvalidOperationException("GET request can't have a body.");
+                throw new InvalidOperationException("GET-запрос не может содержать тело.");
 
             return new HttpRequestMessageModel(
                 _method,

@@ -1,3 +1,5 @@
+🌐 **Русский** | [English](https://github.com/Vladesko/GoF-Patterns/tree/eng/GoFPatterns/Composite) | [Deutsch](https://github.com/Vladesko/GoF-Patterns/tree/deu/GoFPatterns/Composite) | [Italiano](https://github.com/Vladesko/GoF-Patterns/tree/ita/GoFPatterns/Composite) | [Español](https://github.com/Vladesko/GoF-Patterns/tree/spa/GoFPatterns/Composite)
+
 # Composite (Компоновщик)
 
 **Тип:** структурный паттерн.
@@ -74,7 +76,7 @@ public override long GetSize() => _children.Sum(c => c.GetSize());
 
 public override void Print(string indent = "")
 {
-    Console.WriteLine($"{indent}+ {Name}/ ({GetSize()} B)");
+    Console.WriteLine($"{indent}+ {Name}/ ({GetSize()} Б)");
     foreach (var child in _children)
         child.Print(indent + "    ");
 }

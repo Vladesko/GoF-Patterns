@@ -1,5 +1,5 @@
 ﻿namespace GoFPatterns.Facade.OrderPlacement
 {
-    // Input data for facade. Client passes everything in one object.
+    // Входные данные для фасада. Клиент передаёт всё в одном объекте.
     public record OrderRequest(string Product, int Count, decimal Price, string CardNumber, string Address, string Email);
 }

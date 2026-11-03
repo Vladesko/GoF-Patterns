@@ -6,25 +6,25 @@ namespace GoFPatterns.Builder.PizzaShop
     {
         public void Demonstrate()
         {
-            Console.WriteLine("=== Builder: Pizza ===\n");
+            Console.WriteLine("=== Строитель: пицца ===\n");
 
-            // The same recipes (director) with different builders give different products.
+            // Одни и те же рецепты (распорядитель) с разными строителями дают разные продукты.
             var director = new PizzaDirector(new ItalianPizzaBuilder());
-            Console.WriteLine($"Italian margherita: {director.MakeMargherita()}");
-            Console.WriteLine($"Italian pepperoni:  {director.MakePepperoni()}");
+            Console.WriteLine($"Итальянская маргарита:  {director.MakeMargherita()}");
+            Console.WriteLine($"Итальянская пепперони:  {director.MakePepperoni()}");
 
             director.ChangeBuilder(new AmericanPizzaBuilder());
-            Console.WriteLine($"American margherita: {director.MakeMargherita()}");
-            Console.WriteLine($"American pepperoni:  {director.MakePepperoni()}");
+            Console.WriteLine($"Американская маргарита: {director.MakeMargherita()}");
+            Console.WriteLine($"Американская пепперони: {director.MakePepperoni()}");
 
-            // Client can use builder without director to make a custom pizza.
+            // Клиент может использовать строитель без распорядителя, чтобы собрать свою пиццу.
             IPizzaBuilder builder = new ItalianPizzaBuilder();
-            builder.SetSize("Small");
-            builder.SetDough("rye");
-            builder.SetSauce("pesto");
-            builder.AddTopping("mushrooms");
-            builder.AddTopping("olives");
-            Console.WriteLine($"\nCustom pizza: {builder.GetResult()}");
+            builder.SetSize("маленькая");
+            builder.SetDough("ржаное");
+            builder.SetSauce("песто");
+            builder.AddTopping("грибы");
+            builder.AddTopping("оливки");
+            Console.WriteLine($"\nСвоя пицца: {builder.GetResult()}");
         }
     }
 }

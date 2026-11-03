@@ -14,7 +14,7 @@ namespace GoFPatterns.AbtractFactory.Payments.Services
             var isValid = _paymentValidator.ValidatePayment(amount);
             if (!isValid) 
             {
-                throw new InvalidOperationException("Invalid payment amount.");
+                throw new InvalidOperationException("Некорректная сумма платежа.");
             }
             return _paymentProcessor.ProcessPayment(amount);
         }

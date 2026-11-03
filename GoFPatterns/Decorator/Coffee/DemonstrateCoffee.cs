@@ -7,28 +7,28 @@ namespace GoFPatterns.Decorator.Coffee
     {
         public void Demonstrate()
         {
-            Console.WriteLine("=== Decorator: Coffee shop ===\n");
+            Console.WriteLine("=== Декоратор: кофейня ===\n");
 
             IBeverage espresso = new Espresso();
             Print(espresso);
 
-            // Decorators wrap each other like a matryoshka.
+            // Декораторы оборачивают друг друга, как матрёшка.
             IBeverage latte = new MilkDecorator(new MilkDecorator(new Espresso()));
             Print(latte);
 
-            IBeverage vanillaLatte = new SyrupDecorator(latte, "vanilla");
+            IBeverage vanillaLatte = new SyrupDecorator(latte, "ванильный");
             Print(vanillaLatte);
 
             IBeverage largeVanillaLatte = new LargeSizeDecorator(vanillaLatte);
             Print(largeVanillaLatte);
 
-            // The same add-ons can be used with any beverage.
-            Print(new SyrupDecorator(new MilkDecorator(new BlackTea()), "caramel"));
+            // Те же добавки можно использовать с любым напитком.
+            Print(new SyrupDecorator(new MilkDecorator(new BlackTea()), "карамельный"));
 
-            // Order of decorators matters.
-            Console.WriteLine("\nOrder matters:");
-            Print(new LargeSizeDecorator(new SyrupDecorator(new Espresso(), "mint")));
-            Print(new SyrupDecorator(new LargeSizeDecorator(new Espresso()), "mint"));
+            // Порядок декораторов важен.
+            Console.WriteLine("\nПорядок имеет значение:");
+            Print(new LargeSizeDecorator(new SyrupDecorator(new Espresso(), "мятный")));
+            Print(new SyrupDecorator(new LargeSizeDecorator(new Espresso()), "мятный"));
         }
 
         private static void Print(IBeverage beverage) =>

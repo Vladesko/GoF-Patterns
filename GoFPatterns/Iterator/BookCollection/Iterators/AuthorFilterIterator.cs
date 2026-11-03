@@ -1,13 +1,13 @@
 ﻿namespace GoFPatterns.Iterator.BookCollection.Iterators
 {
-    // Concrete iterator - returns only books of the given author.
+    // Конкретный итератор - возвращает только книги заданного автора.
     public class AuthorFilterIterator(Library library, string author) : IBookIterator
     {
         private int _position;
 
         public bool HasNext()
         {
-            // Skip books of other authors.
+            // Пропускаем книги других авторов.
             while (_position < library.Count && library.GetAt(_position).Author != author)
             {
                 _position++;
@@ -16,7 +16,7 @@
         }
 
         public Book Next() =>
-            HasNext() ? library.GetAt(_position++) : throw new InvalidOperationException("No more books.");
+            HasNext() ? library.GetAt(_position++) : throw new InvalidOperationException("Книг больше нет.");
 
         public void Reset() => _position = 0;
     }

@@ -1,7 +1,7 @@
 ﻿namespace GoFPatterns.Command.TextEditor
 {
-    // Invoker - executes commands and keeps their history for Undo/Redo.
-    // It works only with ICommand and doesn't know what commands do.
+    // Инициатор - выполняет команды и хранит их историю для Undo/Redo.
+    // Он работает только с ICommand и не знает, что делают команды.
     public class CommandHistory
     {
         private readonly Stack<ICommand> _undo = new();
@@ -11,32 +11,32 @@
         {
             command.Execute();
             _undo.Push(command);
-            _redo.Clear(); // New action makes redo history invalid.
-            Console.WriteLine($"  Do:   {command.Name}");
+            _redo.Clear(); // Новое действие делает историю повтора недействительной.
+            Console.WriteLine($"  Выполнить: {command.Name}");
         }
 
         public void Undo()
         {
             if (!_undo.TryPop(out var command))
             {
-                Console.WriteLine("  Nothing to undo");
+                Console.WriteLine("  Нечего отменять");
                 return;
             }
             command.Undo();
             _redo.Push(command);
-            Console.WriteLine($"  Undo: {command.Name}");
+            Console.WriteLine($"  Отменить:  {command.Name}");
         }
 
         public void Redo()
         {
             if (!_redo.TryPop(out var command))
             {
-                Console.WriteLine("  Nothing to redo");
+                Console.WriteLine("  Нечего повторять");
                 return;
             }
             command.Execute();
             _undo.Push(command);
-            Console.WriteLine($"  Redo: {command.Name}");
+            Console.WriteLine($"  Повторить: {command.Name}");
         }
     }
 }

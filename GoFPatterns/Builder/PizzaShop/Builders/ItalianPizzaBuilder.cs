@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Builder.PizzaShop.Builders
 {
-    // Concrete builder - makes pizza in italian style: thin dough and tomato sauce by default.
+    // Конкретный строитель - готовит пиццу в итальянском стиле: тонкое тесто и томатный соус по умолчанию.
     public class ItalianPizzaBuilder : IPizzaBuilder
     {
         private Pizza _pizza = new();
@@ -9,7 +9,7 @@
 
         public void SetSize(string size) => _pizza.Size = size;
 
-        public void SetDough(string dough) => _pizza.Dough = $"thin {dough}";
+        public void SetDough(string dough) => _pizza.Dough = $"тонкое {dough}";
 
         public void SetSauce(string sauce) => _pizza.Sauce = sauce;
 
@@ -18,10 +18,10 @@
         public void AddExtraCheese()
         {
             _pizza.ExtraCheese = true;
-            _pizza.Toppings.Add("parmesan");
+            _pizza.Toppings.Add("пармезан");
         }
 
-        // Builder returns result and is ready to build the next pizza.
+        // Строитель возвращает результат и готов собирать следующую пиццу.
         public Pizza GetResult()
         {
             var result = _pizza;

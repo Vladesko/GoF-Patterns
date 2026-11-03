@@ -1,3 +1,5 @@
+🌐 **Русский** | [English](https://github.com/Vladesko/GoF-Patterns/tree/eng/GoFPatterns/Mediator) | [Deutsch](https://github.com/Vladesko/GoF-Patterns/tree/deu/GoFPatterns/Mediator) | [Italiano](https://github.com/Vladesko/GoF-Patterns/tree/ita/GoFPatterns/Mediator) | [Español](https://github.com/Vladesko/GoF-Patterns/tree/spa/GoFPatterns/Mediator)
+
 # Mediator (Посредник)
 
 **Тип:** поведенческий паттерн.

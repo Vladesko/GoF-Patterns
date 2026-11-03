@@ -1,7 +1,7 @@
 ﻿namespace GoFPatterns.Iterator.BookCollection.Iterators
 {
-    // Concrete iterator - goes from the first book to the last.
-    // Keeps its own position, so several iterators can traverse the same library independently.
+    // Конкретный итератор - идёт от первой книги к последней.
+    // Хранит собственную позицию, поэтому несколько итераторов могут обходить одну библиотеку независимо.
     public class ForwardBookIterator(Library library) : IBookIterator
     {
         private int _position;
@@ -9,7 +9,7 @@
         public bool HasNext() => _position < library.Count;
 
         public Book Next() =>
-            HasNext() ? library.GetAt(_position++) : throw new InvalidOperationException("No more books.");
+            HasNext() ? library.GetAt(_position++) : throw new InvalidOperationException("Книг больше нет.");
 
         public void Reset() => _position = 0;
     }

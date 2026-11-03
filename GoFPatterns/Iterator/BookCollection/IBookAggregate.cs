@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Iterator.BookCollection
 {
-    // Aggregate - collection which can create iterators for itself.
+    // Агрегат - коллекция, которая умеет создавать итераторы для самой себя.
     public interface IBookAggregate
     {
         IBookIterator CreateIterator();

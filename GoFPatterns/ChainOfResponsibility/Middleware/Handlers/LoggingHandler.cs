@@ -1,13 +1,13 @@
 ﻿namespace GoFPatterns.ChainOfResponsibility.Middleware.Handlers
 {
-    // Concrete handler - does work before AND after the rest of the chain.
+    // Конкретный обработчик - выполняет работу до И после остальной части цепочки.
     public class LoggingHandler : IRequestHandler
     {
         public void Handle(HttpRequestContext context, Action next)
         {
-            Console.WriteLine($"  [Log] -> {context.Path} from {context.ClientIp}");
+            Console.WriteLine($"  [Лог] -> {context.Path} от {context.ClientIp}");
             next();
-            Console.WriteLine($"  [Log] <- {context.StatusCode} {context.Response}");
+            Console.WriteLine($"  [Лог] <- {context.StatusCode} {context.Response}");
         }
     }
 }

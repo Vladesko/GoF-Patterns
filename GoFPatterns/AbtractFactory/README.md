@@ -1,3 +1,5 @@
+🌐 **Русский** | [English](https://github.com/Vladesko/GoF-Patterns/tree/eng/GoFPatterns/AbtractFactory) | [Deutsch](https://github.com/Vladesko/GoF-Patterns/tree/deu/GoFPatterns/AbtractFactory) | [Italiano](https://github.com/Vladesko/GoF-Patterns/tree/ita/GoFPatterns/AbtractFactory) | [Español](https://github.com/Vladesko/GoF-Patterns/tree/spa/GoFPatterns/AbtractFactory)
+
 # Abstract Factory (Абстрактная фабрика)
 
 **Тип:** порождающий паттерн.
@@ -115,7 +117,7 @@ internal class PaymentService(IPaymentProviderFactory paymentProviderFactory) : 
     public Guid Pay(decimal amount)
     {
         if (!_paymentValidator.ValidatePayment(amount))
-            throw new InvalidOperationException("Invalid payment amount.");
+            throw new InvalidOperationException("Некорректная сумма платежа.");
         return _paymentProcessor.ProcessPayment(amount);
     }
 

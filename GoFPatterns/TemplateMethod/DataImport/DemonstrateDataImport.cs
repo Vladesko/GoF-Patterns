@@ -6,24 +6,24 @@ namespace GoFPatterns.TemplateMethod.DataImport
     {
         public void Demonstrate()
         {
-            Console.WriteLine("=== Template Method: Data import ===\n");
+            Console.WriteLine("=== Шаблонный метод: импорт данных ===\n");
 
             const string csv = """
                 Name;Email;Age
-                Anna;anna@mail.com;28
-                Ivan;wrong-email;35
-                Petr;petr@partner.com;17
-                Olga;olga@partner.com;41
+                Анна;anna@mail.com;28
+                Иван;wrong-email;35
+                Пётр;petr@partner.com;17
+                Ольга;olga@partner.com;41
                 """;
 
             const string json = """
                 [
-                  { "name": "Maria", "email": "maria@mail.com", "age": 30 },
-                  { "name": "Oleg", "email": "oleg@mail.com", "age": 150 }
+                  { "name": "Мария", "email": "maria@mail.com", "age": 30 },
+                  { "name": "Олег", "email": "oleg@mail.com", "age": 150 }
                 ]
                 """;
 
-            // Client works with base class, algorithm is the same for all importers.
+            // Клиент работает с базовым классом, алгоритм одинаков для всех импортёров.
             (CustomerImporter Importer, string Data)[] imports =
             [
                 (new CsvCustomerImporter(), csv),

@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Prototype.Documents
 {
-    // Reference type inside of the document. It shows the difference between shallow and deep copy.
+    // Ссылочный тип внутри документа. Показывает разницу между поверхностной и глубокой копией.
     public class DocumentStyle
     {
         public string Font { get; set; } = "Arial";
@@ -8,6 +8,6 @@
 
         public DocumentStyle Copy() => new() { Font = Font, FontSize = FontSize };
 
-        public override string ToString() => $"{Font} {FontSize}pt";
+        public override string ToString() => $"{Font} {FontSize}пт";
     }
 }

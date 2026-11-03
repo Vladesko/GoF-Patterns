@@ -1,26 +1,26 @@
 ﻿namespace GoFPatterns.Proxy.BankAccount.Proxies
 {
-    // Logging proxy - writes audit log of all operations.
+    // Логирующий заместитель - ведёт журнал аудита всех операций.
     public class LoggingAccountProxy(IBankAccount account) : IBankAccount
     {
         public decimal GetBalance()
         {
             var balance = account.GetBalance();
-            Console.WriteLine($"  [audit] balance requested: {balance:F2}");
+            Console.WriteLine($"  [аудит] запрошен баланс: {balance:F2}");
             return balance;
         }
 
         public void Withdraw(decimal amount)
         {
-            Console.WriteLine($"  [audit] withdraw {amount:F2} requested");
+            Console.WriteLine($"  [аудит] запрошено снятие {amount:F2}");
             try
             {
                 account.Withdraw(amount);
-                Console.WriteLine("  [audit] withdraw succeeded");
+                Console.WriteLine("  [аудит] снятие выполнено");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"  [audit] withdraw failed: {ex.Message}");
+                Console.WriteLine($"  [аудит] снятие не удалось: {ex.Message}");
                 throw;
             }
         }

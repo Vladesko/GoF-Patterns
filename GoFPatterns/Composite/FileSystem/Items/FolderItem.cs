@@ -1,7 +1,7 @@
 ﻿namespace GoFPatterns.Composite.FileSystem.Items
 {
-    // Composite - element with children. Children can be leaves or other composites.
-    // It doesn't do work itself, but delegates it to children and combines the result.
+    // Компоновщик - элемент с дочерними элементами. Ими могут быть листья или другие компоновщики.
+    // Сам он работу не выполняет, а делегирует её дочерним элементам и объединяет результат.
     public class FolderItem(string name) : FileSystemItem(name)
     {
         private readonly List<FileSystemItem> _children = [];
@@ -17,12 +17,12 @@
 
         public void Remove(FileSystemItem item) => _children.Remove(item);
 
-        // Recursive call - size of folder is a sum of sizes of all children.
+        // Рекурсивный вызов - размер папки равен сумме размеров всех дочерних элементов.
         public override long GetSize() => _children.Sum(c => c.GetSize());
 
         public override void Print(string indent = "")
         {
-            Console.WriteLine($"{indent}+ {Name}/ ({GetSize()} B)");
+            Console.WriteLine($"{indent}+ {Name}/ ({GetSize()} Б)");
             foreach (var child in _children)
             {
                 child.Print(indent + "    ");

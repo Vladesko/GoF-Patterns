@@ -2,8 +2,8 @@
 {
     public class GymPoolMembership : IMembership
     {
-        public string Name => "Gym + Pool Membership";
-        public string Description => "Access to gym and pool facilities";
+        public string Name => "Абонемент «Тренажёрный зал + бассейн»";
+        public string Description => "Доступ в тренажёрный зал и бассейн";
         public decimal Price => 75m;
     }
 }

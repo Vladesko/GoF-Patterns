@@ -1,7 +1,7 @@
 ﻿namespace GoFPatterns.State.OrderLifecycle.States
 {
-    // Base state - by default every action is not allowed.
-    // Concrete states override only actions which make sense for them.
+    // Базовое состояние - по умолчанию ни одно действие не разрешено.
+    // Конкретные состояния переопределяют только те действия, которые для них имеют смысл.
     public abstract class OrderStateBase : IOrderState
     {
         public abstract string Name { get; }
@@ -12,6 +12,6 @@
         public virtual void Cancel(Order order) => Deny(nameof(Cancel));
 
         private void Deny(string action) =>
-            Console.WriteLine($"    Can't {action.ToLower()}: order is {Name}");
+            Console.WriteLine($"    Действие {action} недоступно: заказ в состоянии \"{Name}\"");
     }
 }

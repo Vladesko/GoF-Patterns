@@ -1,8 +1,8 @@
 ﻿namespace GoFPatterns.Visitor.Shapes
 {
-    // The IShape interface defines the Accept method that takes a visitor as an argument.
-    // Implementing this interface allows different shapes to accept visitors that can perform operations
-    // on them without modifying the shape classes themselves.
+    // Интерфейс IShape определяет метод Accept, который принимает посетителя в качестве аргумента.
+    // Реализация этого интерфейса позволяет разным фигурам принимать посетителей, которые могут выполнять над ними операции
+    // без изменения самих классов фигур.
     public interface IShape
     {
         void Accept(IShapeVisitor visitor);

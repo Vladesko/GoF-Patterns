@@ -4,7 +4,7 @@
     {
         public void Demonstrate()
         {
-            Console.WriteLine("=== Mediator: Registration form ===\n");
+            Console.WriteLine("=== Посредник: форма регистрации ===\n");
 
             var form = new RegistrationDialog();
 
@@ -14,7 +14,7 @@
             form.AcceptTerms.Toggle();
             form.IsCompany.Toggle();
             form.Submit.Click();
-            form.CompanyName.Type("Horns & Hooves");
+            form.CompanyName.Type("Рога и копыта");
             form.Submit.Click();
         }
     }

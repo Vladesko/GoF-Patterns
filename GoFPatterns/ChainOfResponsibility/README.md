@@ -1,3 +1,5 @@
+🌐 **Русский** | [English](https://github.com/Vladesko/GoF-Patterns/tree/eng/GoFPatterns/ChainOfResponsibility) | [Deutsch](https://github.com/Vladesko/GoF-Patterns/tree/deu/GoFPatterns/ChainOfResponsibility) | [Italiano](https://github.com/Vladesko/GoF-Patterns/tree/ita/GoFPatterns/ChainOfResponsibility) | [Español](https://github.com/Vladesko/GoF-Patterns/tree/spa/GoFPatterns/ChainOfResponsibility)
+
 # Chain of Responsibility (Цепочка обязанностей)
 
 **Тип:** поведенческий паттерн.
@@ -69,7 +71,7 @@ public virtual void Handle(SupportTicket ticket)
     if (_next is not null)
         _next.Handle(ticket);
     else
-        Console.WriteLine($"Nobody could handle ticket #{ticket.Id}");
+        Console.WriteLine($"Никто не смог обработать заявку #{ticket.Id}");
 }
 ```
 
@@ -80,7 +82,7 @@ public override void Handle(SupportTicket ticket)
 {
     if (ticket.Severity <= TicketSeverity.Medium)
     {
-        Console.WriteLine($"Operator: resolved ticket #{ticket.Id}");
+        Console.WriteLine($"Оператор: решил заявку #{ticket.Id}");
         return;
     }
     base.Handle(ticket);

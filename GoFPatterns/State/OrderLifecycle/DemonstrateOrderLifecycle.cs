@@ -4,24 +4,24 @@
     {
         public void Demonstrate()
         {
-            Console.WriteLine("=== State: Order lifecycle ===\n");
+            Console.WriteLine("=== Состояние: жизненный цикл заказа ===\n");
 
-            Console.WriteLine("Happy path:");
+            Console.WriteLine("Успешный сценарий:");
             var order = new Order(1, 150m);
-            order.Ship();     // not paid yet
+            order.Ship();     // ещё не оплачен
             order.Pay();
-            order.Pay();      // already paid
+            order.Pay();      // уже оплачен
             order.Ship();
-            order.Cancel();   // too late
+            order.Cancel();   // слишком поздно
             order.Deliver();
 
-            Console.WriteLine("\nCancel after payment:");
+            Console.WriteLine("\nОтмена после оплаты:");
             var cancelled = new Order(2, 80m);
             cancelled.Pay();
             cancelled.Cancel();
             cancelled.Ship();
 
-            Console.WriteLine($"\nFinal states: #{order.Id} {order.State.Name}, #{cancelled.Id} {cancelled.State.Name}");
+            Console.WriteLine($"\nИтоговые состояния: #{order.Id} {order.State.Name}, #{cancelled.Id} {cancelled.State.Name}");
         }
     }
 }

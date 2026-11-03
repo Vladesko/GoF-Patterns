@@ -1,3 +1,5 @@
+🌐 **Русский** | [English](https://github.com/Vladesko/GoF-Patterns/tree/eng/GoFPatterns/Strategy) | [Deutsch](https://github.com/Vladesko/GoF-Patterns/tree/deu/GoFPatterns/Strategy) | [Italiano](https://github.com/Vladesko/GoF-Patterns/tree/ita/GoFPatterns/Strategy) | [Español](https://github.com/Vladesko/GoF-Patterns/tree/spa/GoFPatterns/Strategy)
+
 # Strategy (Стратегия)
 
 **Тип:** поведенческий паттерн.
@@ -74,7 +76,7 @@ public decimal CalculateCost(Parcel parcel) =>
 
 ```csharp
 public string GetQuote(Parcel parcel) =>
-    $"{_strategy.Name} cost: {_strategy.CalculateCost(parcel)}, days: {_strategy.EstimateDays(parcel)}";
+    $"{_strategy.Name} стоимость: {_strategy.CalculateCost(parcel)}, дней: {_strategy.EstimateDays(parcel)}";
 ```
 
 **Client** — демо прогоняет одну посылку через все стратегии, а потом **автоматически выбирает** самую дешёвую и самую быструю — стратегии можно сравнивать, потому что у них общий интерфейс.

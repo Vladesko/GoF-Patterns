@@ -1,8 +1,8 @@
 ﻿namespace GoFPatterns.Command.SmartHome.Devices
 {
-    // Receiver.
+    // Получатель.
     public class Thermostat
     {
-        public void SetTemperature(int degrees) => Console.WriteLine($"    Thermostat: {degrees}°C");
+        public void SetTemperature(int degrees) => Console.WriteLine($"    Термостат: {degrees}°C");
     }
 }

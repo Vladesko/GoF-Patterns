@@ -1,5 +1,5 @@
 ﻿namespace GoFPatterns.ChainOfResponsibility.SupportTickets
 {
-    // Request which travels along the chain.
+    // Запрос, который передаётся по цепочке.
     public record SupportTicket(int Id, string Description, TicketSeverity Severity);
 }

@@ -1,7 +1,7 @@
 ﻿namespace GoFPatterns.Prototype.Documents
 {
-    // Prototype - declares cloning method.
-    // Client copies objects through this interface without knowing their concrete classes.
+    // Прототип - объявляет метод клонирования.
+    // Клиент копирует объекты через этот интерфейс, не зная их конкретных классов.
     public interface IDocumentPrototype
     {
         string Title { get; set; }

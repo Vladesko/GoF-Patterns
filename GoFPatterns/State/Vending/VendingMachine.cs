@@ -2,10 +2,10 @@
 
 namespace GoFPatterns.State.Vending
 {
-    // Context - vending machine. Data (balance, stock) is stored here, behavior depends on state.
+    // Контекст - торговый автомат. Данные (баланс, остаток) хранятся здесь, поведение зависит от состояния.
     public class VendingMachine
     {
-        // States have no fields, so one instance of each state can be shared (they are flyweights).
+        // У состояний нет полей, поэтому один экземпляр каждого состояния можно разделять (они являются легковесами).
         internal static readonly IVendingState Idle = new IdleState();
         internal static readonly IVendingState HasMoney = new HasMoneyState();
         internal static readonly IVendingState SoldOut = new SoldOutState();
@@ -28,19 +28,19 @@ namespace GoFPatterns.State.Vending
 
         public void InsertCoin(int amount)
         {
-            Console.WriteLine($"  > insert {amount}");
+            Console.WriteLine($"  > внести {amount}");
             _state.InsertCoin(this, amount);
         }
 
         public void SelectProduct()
         {
-            Console.WriteLine("  > select product");
+            Console.WriteLine("  > выбрать товар");
             _state.SelectProduct(this);
         }
 
         public void Refund()
         {
-            Console.WriteLine("  > refund");
+            Console.WriteLine("  > вернуть деньги");
             _state.Refund(this);
         }
     }

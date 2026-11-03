@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Flyweight.TextFormatting
 {
-    // Context - one character of document. Symbol and position are extrinsic state,
-    // style is a reference to shared flyweight.
+    // Контекст - один символ документа. Символ и позиция - внешнее состояние,
+    // стиль - ссылка на разделяемый легковес.
     public readonly record struct FormattedCharacter(char Symbol, int Position, CharacterStyle Style);
 }

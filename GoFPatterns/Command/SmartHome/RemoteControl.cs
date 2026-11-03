@@ -1,7 +1,7 @@
 ﻿namespace GoFPatterns.Command.SmartHome
 {
-    // Invoker - remote with configurable buttons. It knows nothing about devices.
-    // Also it can put commands into a queue and execute them later (scheduler).
+    // Инициатор - пульт с настраиваемыми кнопками. Он ничего не знает об устройствах.
+    // Также он может ставить команды в очередь и выполнять их позже (планировщик).
     public class RemoteControl
     {
         private readonly Dictionary<int, IHomeCommand> _buttons = [];
@@ -13,12 +13,12 @@
         {
             if (_buttons.TryGetValue(button, out var command))
             {
-                Console.WriteLine($"  Button {button}: {command.Description}");
+                Console.WriteLine($"  Кнопка {button}: {command.Description}");
                 command.Execute();
             }
             else
             {
-                Console.WriteLine($"  Button {button}: not configured");
+                Console.WriteLine($"  Кнопка {button}: не настроена");
             }
         }
 
@@ -28,7 +28,7 @@
         {
             while (_scheduled.TryDequeue(out var command))
             {
-                Console.WriteLine($"  Scheduled: {command.Description}");
+                Console.WriteLine($"  Запланировано: {command.Description}");
                 command.Execute();
             }
         }

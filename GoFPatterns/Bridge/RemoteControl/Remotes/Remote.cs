@@ -1,14 +1,14 @@
 ﻿namespace GoFPatterns.Bridge.RemoteControl.Remotes
 {
-    // Abstraction - high-level control logic.
-    // It holds a reference to implementor (the "bridge") and delegates real work to it.
+    // Абстракция - высокоуровневая логика управления.
+    // Хранит ссылку на исполнителя ("мост") и делегирует ему реальную работу.
     public class Remote(IDevice device)
     {
         protected readonly IDevice Device = device;
 
         public void TogglePower()
         {
-            Console.WriteLine($"[{GetType().Name}] power");
+            Console.WriteLine($"[{GetType().Name}] питание");
             if (Device.IsEnabled)
                 Device.Disable();
             else

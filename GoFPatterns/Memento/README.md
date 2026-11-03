@@ -1,3 +1,5 @@
+🌐 **Русский** | [English](https://github.com/Vladesko/GoF-Patterns/tree/eng/GoFPatterns/Memento) | [Deutsch](https://github.com/Vladesko/GoF-Patterns/tree/deu/GoFPatterns/Memento) | [Italiano](https://github.com/Vladesko/GoF-Patterns/tree/ita/GoFPatterns/Memento) | [Español](https://github.com/Vladesko/GoF-Patterns/tree/spa/GoFPatterns/Memento)
+
 # Memento (Снимок, Хранитель)
 
 **Тип:** поведенческий паттерн.
@@ -62,7 +64,7 @@ public IEditorMemento Save(string label) => new Snapshot(label, _text, _cursor, 
 public void Restore(IEditorMemento memento)
 {
     if (memento is not Snapshot snapshot)
-        throw new ArgumentException("Unknown memento type.");
+        throw new ArgumentException("Неизвестный тип снимка.");
     _text = snapshot.Text;
     _cursor = snapshot.Cursor;
     _font = snapshot.Font;
