@@ -1,10 +1,10 @@
 ﻿namespace GoFPatterns.TemplateMethod.Beverages.Drinks
 {
-    // Concrete class.
+    // Clase concreta.
     public class Tea : HotBeverage
     {
-        protected override void Brew() => Console.WriteLine("  steep the tea bag for 3 minutes");
+        protected override void Brew() => Console.WriteLine("  infusionar la bolsita de té durante 3 minutos");
 
-        protected override void AddCondiments() => Console.WriteLine("  add lemon");
+        protected override void AddCondiments() => Console.WriteLine("  añadir limón");
     }
 }

@@ -1,7 +1,7 @@
 ﻿namespace GoFPatterns.State.OrderLifecycle
 {
-    // State - declares all actions which can be done with an order.
-    // Every concrete state decides what the action means in this state.
+    // Estado: declara todas las acciones que se pueden realizar con un pedido.
+    // Cada estado concreto decide qué significa la acción en ese estado.
     public interface IOrderState
     {
         string Name { get; }

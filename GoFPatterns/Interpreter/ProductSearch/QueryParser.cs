@@ -2,7 +2,7 @@
 
 namespace GoFPatterns.Interpreter.ProductSearch
 {
-    // Builds syntax tree from query string. Grammar (NOT > AND > OR by priority):
+    // Construye el árbol sintáctico a partir de la cadena de consulta. Gramática (por prioridad NOT > AND > OR):
     //   or   := and ('OR' and)*
     //   and  := not ('AND' not)*
     //   not  := 'NOT' not | atom
@@ -45,11 +45,11 @@ namespace GoFPatterns.Interpreter.ProductSearch
             {
                 var inner = ParseOr();
                 if (!Accept(")"))
-                    throw new FormatException("Missing ')'.");
+                    throw new FormatException("Falta ')'.");
                 return inner;
             }
             if (_position >= _tokens.Count)
-                throw new FormatException("Unexpected end of query.");
+                throw new FormatException("Fin inesperado de la consulta.");
             return new TagExpression(_tokens[_position++].ToLowerInvariant());
         }
 

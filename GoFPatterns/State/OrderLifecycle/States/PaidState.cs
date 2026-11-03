@@ -1,19 +1,19 @@
 ﻿namespace GoFPatterns.State.OrderLifecycle.States
 {
-    // Concrete state - order is paid. Cancel here means refund.
+    // Estado concreto: el pedido está pagado. Aquí cancelar significa reembolsar.
     public class PaidState : OrderStateBase
     {
-        public override string Name => "Paid";
+        public override string Name => "Pagado";
 
         public override void Ship(Order order)
         {
-            Console.WriteLine("    Package is handed over to courier");
+            Console.WriteLine("    El paquete se entrega al mensajero");
             order.TransitionTo(new ShippedState());
         }
 
         public override void Cancel(Order order)
         {
-            Console.WriteLine($"    Refund {order.Amount:F2} to customer");
+            Console.WriteLine($"    Reembolso de {order.Amount:F2} al cliente");
             order.TransitionTo(new CancelledState());
         }
     }

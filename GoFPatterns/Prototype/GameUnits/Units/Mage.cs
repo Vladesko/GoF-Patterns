@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Prototype.GameUnits.Units
 {
-    // Concrete prototype with reference field - list of spells is copied too (deep copy).
+    // Prototipo concreto con un campo de referencia: la lista de hechizos también se copia (copia profunda).
     public class Mage : Unit
     {
         public List<string> Spells { get; set; } = [];
@@ -13,6 +13,6 @@
             Spells = [.. Spells]
         };
 
-        public override string ToString() => $"{base.ToString()}, spells: {string.Join("/", Spells)}";
+        public override string ToString() => $"{base.ToString()}, hechizos: {string.Join("/", Spells)}";
     }
 }

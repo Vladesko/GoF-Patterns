@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Composite.FileSystem.Items
 {
-    // Leaf - element without children. Does the real work.
+    // Hoja: elemento sin hijos. Realiza el trabajo real.
     public class FileItem(string name, long size) : FileSystemItem(name)
     {
         public override long GetSize() => size;

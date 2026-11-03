@@ -1,7 +1,7 @@
 ﻿namespace GoFPatterns.Composite.FileSystem
 {
-    // Component - common interface for simple (file) and complex (folder) elements.
-    // Client works with any element through this class and doesn't care what it is.
+    // Componente: interfaz común para elementos simples (archivo) y complejos (carpeta).
+    // El cliente trabaja con cualquier elemento a través de esta clase y no le importa qué es.
     public abstract class FileSystemItem(string name)
     {
         public string Name { get; } = name;

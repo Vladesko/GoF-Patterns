@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Decorator.Coffee
 {
-    // Component - common interface for beverages and for their decorators (add-ons).
+    // Componente: interfaz común para las bebidas y para sus decoradores (complementos).
     public interface IBeverage
     {
         string GetDescription();

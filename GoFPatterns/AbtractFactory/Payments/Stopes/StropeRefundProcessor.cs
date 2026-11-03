@@ -6,7 +6,7 @@ namespace GoFPatterns.AbtractFactory.Payments.Stopes
     {
         public void ProcessRefund(Guid transactionId)
         {
-            Console.WriteLine($"Strope: processing refund for transaction {transactionId}.");
+            Console.WriteLine($"Strope: procesando el reembolso de la transacción {transactionId}.");
         }
     }
 }

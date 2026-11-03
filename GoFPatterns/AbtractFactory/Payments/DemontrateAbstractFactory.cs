@@ -10,7 +10,7 @@ namespace GoFPatterns.AbtractFactory.Payments
         public void Demonstrate()
         {
 
-            Console.WriteLine("\tUse PoolPay for transactions:\n");
+            Console.WriteLine("\tUsar PoolPay para las transacciones:\n");
 
             var poolPayPaymentProviderFactory = new PoolPayPaymentFactory();
 
@@ -20,7 +20,7 @@ namespace GoFPatterns.AbtractFactory.Payments
 
             paymentServicePoolPay.Refund(poolPayTransactionId);
 
-            Console.WriteLine("\n\tUse Strope for transactions:\n");
+            Console.WriteLine("\n\tUsar Strope para las transacciones:\n");
 
             var stropePaymentProviderFactory = new StropePaymentFactory();
 

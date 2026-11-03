@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Command.SmartHome.Commands
 {
-    // Macro command - executes a list of commands. It is a command too, so it can be bound to a button.
+    // Macrocomando: ejecuta una lista de comandos. También es un comando, así que se puede asignar a un botón.
     public class MacroCommand(string description, params IHomeCommand[] commands) : IHomeCommand
     {
         public string Description { get; } = description;

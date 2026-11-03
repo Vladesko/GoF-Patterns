@@ -1,15 +1,15 @@
 ﻿namespace GoFPatterns.Memento.GameSave
 {
-    // Originator - game hero.
+    // Originador: el héroe del juego.
     public class Hero(string name)
     {
-        private readonly List<string> _inventory = ["wooden sword"];
+        private readonly List<string> _inventory = ["espada de madera"];
 
         public string Name { get; } = name;
         public int Level { get; private set; } = 1;
         public int Health { get; private set; } = 100;
         public int Gold { get; private set; }
-        public string Location { get; private set; } = "Village";
+        public string Location { get; private set; } = "Aldea";
 
         public void Travel(string location) => Location = location;
 
@@ -44,6 +44,6 @@
         }
 
         public override string ToString() =>
-            $"{Name} lvl {Level}, HP {Health}, gold {Gold}, in {Location}, items: {string.Join(", ", _inventory)}";
+            $"{Name} nv. {Level}, HP {Health}, oro {Gold}, en {Location}, objetos: {string.Join(", ", _inventory)}";
     }
 }

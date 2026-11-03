@@ -1,9 +1,9 @@
 ﻿namespace GoFPatterns.Command.SmartHome.Devices
 {
-    // Receiver.
+    // Receptor.
     public class Light(string room)
     {
-        public void TurnOn() => Console.WriteLine($"    {room} light: on");
-        public void TurnOff() => Console.WriteLine($"    {room} light: off");
+        public void TurnOn() => Console.WriteLine($"    Luz de {room}: encendida");
+        public void TurnOff() => Console.WriteLine($"    Luz de {room}: apagada");
     }
 }

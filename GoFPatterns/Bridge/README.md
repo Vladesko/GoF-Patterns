@@ -1,14 +1,16 @@
-# Bridge (Мост)
+🌐 [Русский](https://github.com/Vladesko/GoF-Patterns/tree/rus/GoFPatterns/Bridge) | [English](https://github.com/Vladesko/GoF-Patterns/tree/eng/GoFPatterns/Bridge) | [Deutsch](https://github.com/Vladesko/GoF-Patterns/tree/deu/GoFPatterns/Bridge) | [Italiano](https://github.com/Vladesko/GoF-Patterns/tree/ita/GoFPatterns/Bridge) | **Español**
 
-**Тип:** структурный паттерн.
+# Bridge (Puente)
 
-**Bridge** разделяет один большой класс (или иерархию) на две независимые иерархии — **абстракцию** и **реализацию**, — которые можно развивать отдельно друг от друга. Связь между ними — это ссылка («мост») из абстракции на реализацию.
+**Tipo:** patrón estructural.
+
+**Bridge** divide una clase grande (o una jerarquía) en dos jerarquías independientes, la **abstracción** y la **implementación**, que pueden evolucionar por separado. La conexión entre ellas es una referencia (el «puente») desde la abstracción hacia la implementación.
 
 ---
 
-## Какую проблему решает
+## Qué problema resuelve
 
-Есть пульты (обычный, продвинутый) и устройства (телевизор, радио). Если решать задачу наследованием, получится класс на каждую комбинацию:
+Tenemos mandos (básico, avanzado) y dispositivos (televisor, radio). Si se resuelve con herencia, sale una clase por cada combinación:
 
 ```text
 Remote
@@ -18,33 +20,33 @@ Remote
  └── AdvancedRadioRemote
 ```
 
-Добавим проектор — ещё два класса. Добавим «голосовой пульт» — ещё по одному на каждое устройство. Число классов растёт как **произведение** (N пультов × M устройств), а код дублируется.
+Si añadimos un proyector, son dos clases más. Si añadimos un «mando por voz», una más por cada dispositivo. El número de clases crece como un **producto** (N mandos × M dispositivos) y el código se duplica.
 
-Причина в том, что класс пытается расширяться сразу **в двух независимых направлениях** (вид пульта и вид устройства).
+La causa es que la clase intenta ampliarse a la vez **en dos direcciones independientes** (tipo de mando y tipo de dispositivo).
 
-## Решение
+## Solución
 
-Заменить наследование **композицией**. Одно направление («что делаем» — пульт/отчёт) становится иерархией **абстракции**, другое («как делаем» — устройство/формат) — иерархией **реализации**. Абстракция хранит ссылку на объект реализации и делегирует ему работу.
+Sustituir la herencia por **composición**. Una dirección («qué hacemos»: mando/informe) se convierte en la jerarquía de la **abstracción**, y la otra («cómo lo hacemos»: dispositivo/formato), en la jerarquía de la **implementación**. La abstracción guarda una referencia al objeto de implementación y le delega el trabajo.
 
-Теперь классов N + M, и любой пульт работает с любым устройством.
+Ahora hay N + M clases, y cualquier mando funciona con cualquier dispositivo.
 
 ---
 
-## Участники
+## Participantes
 
-| Роль | Класс в примере | Описание |
-|------|-----------------|----------|
-| **Abstraction** | `Remote`, `Report` | Высокоуровневая логика управления. Хранит ссылку на Implementor и делегирует ему работу |
-| **RefinedAbstraction** | `AdvancedRemote`, `SalesReport`, `InventoryReport` | Расширяет абстракцию, не трогая реализации |
-| **Implementor** | `IDevice`, `IReportRenderer` | Интерфейс реализации — набор примитивных операций. Не обязан совпадать с интерфейсом абстракции |
-| **ConcreteImplementor** | `Tv`, `Radio`, `PlainTextRenderer`, `HtmlRenderer` | Платформо-зависимые реализации примитивов |
-| **Client** | демо-классы | Связывает абстракцию с нужной реализацией |
+| Rol | Clase en el ejemplo | Descripción |
+|-----|---------------------|-------------|
+| **Abstraction** | `Remote`, `Report` | Lógica de control de alto nivel. Guarda una referencia al Implementor y le delega el trabajo |
+| **RefinedAbstraction** | `AdvancedRemote`, `SalesReport`, `InventoryReport` | Amplía la abstracción sin tocar las implementaciones |
+| **Implementor** | `IDevice`, `IReportRenderer` | Interfaz de la implementación: un conjunto de operaciones primitivas. No tiene por qué coincidir con la interfaz de la abstracción |
+| **ConcreteImplementor** | `Tv`, `Radio`, `PlainTextRenderer`, `HtmlRenderer` | Implementaciones de las primitivas dependientes de la plataforma |
+| **Client** | clases de demo | Conecta la abstracción con la implementación necesaria |
 
-## Схема
+## Esquema
 
 ```text
-        Abstraction                         Implementor
- ┌──────────────────────┐   bridge   ┌────────────────────────┐
+        Abstracción                         Implementador
+ ┌──────────────────────┐   puente   ┌────────────────────────┐
  │ Remote               │◆─────────► │ «interface» IDevice    │
  │ - Device: IDevice    │            │ Enable(), Disable()    │
  │ + TogglePower()      │            │ SetVolume(), SetChannel│
@@ -59,78 +61,78 @@ Remote
 
 ---
 
-## Пример 1. Пульты и устройства (`RemoteControl/`)
+## Ejemplo 1. Mandos y dispositivos (`RemoteControl/`)
 
-**Implementor** — `IDevice` описывает **примитивные** операции устройства: включить, выключить, установить громкость и канал.
+**Implementor**: `IDevice` describe las operaciones **primitivas** del dispositivo: encender, apagar, ajustar el volumen y el canal.
 
-**ConcreteImplementor** — `Tv` и `Radio` (папка `Devices/`) реализуют их по-разному: у телевизора громкость 0–100, у радио 0–20 и каналы — это список станций по кругу.
+**ConcreteImplementor**: `Tv` y `Radio` (carpeta `Devices/`) las implementan de forma distinta: el televisor tiene un volumen de 0–100, la radio de 0–20, y sus canales son una lista de emisoras que se recorre en círculo.
 
-**Abstraction** — `Remote` (папка `Remotes/`) реализует **высокоуровневые** действия через примитивы устройства:
+**Abstraction**: `Remote` (carpeta `Remotes/`) implementa las acciones de **alto nivel** mediante las primitivas del dispositivo:
 
 ```csharp
 public class Remote(IDevice device)
 {
-    protected readonly IDevice Device = device;   // это и есть «мост»
+    protected readonly IDevice Device = device;   // este es el «puente»
 
     public void VolumeUp() => Device.SetVolume(Device.Volume + 5);
     public void ChannelUp() => Device.SetChannel(Device.Channel + 1);
 }
 ```
 
-**RefinedAbstraction** — `AdvancedRemote` добавляет `Mute`, `Unmute`, `SetFavoriteChannel`. Ни `Tv`, ни `Radio` для этого менять не пришлось: «без звука» — это просто `SetVolume(0)` с запоминанием прошлой громкости.
+**RefinedAbstraction**: `AdvancedRemote` añade `Mute`, `Unmute` y `SetFavoriteChannel`. No hizo falta modificar ni `Tv` ni `Radio`: «silenciar» es simplemente `SetVolume(0)` recordando el volumen anterior.
 
-**Client** — демо собирает комбинации `Remote + Tv`, `AdvancedRemote + Radio`, `AdvancedRemote + Tv` — 4 возможных комбинации из 4 классов, а не из 4 отдельных классов-комбинаций плюс база.
+**Client**: la demo forma las combinaciones `Remote + Tv`, `AdvancedRemote + Radio` y `AdvancedRemote + Tv`: 4 combinaciones posibles con 4 clases, y no con 4 clases-combinación aparte más la base.
 
-## Пример 2. Отчёты и форматы (`Reports/`)
+## Ejemplo 2. Informes y formatos (`Reports/`)
 
-**Задача:** есть типы отчётов (продажи, склад) и форматы вывода (обычный текст, HTML). Завтра могут добавить отчёт по клиентам и формат PDF.
+**Tarea:** hay tipos de informe (ventas, almacén) y formatos de salida (texto plano, HTML). Mañana pueden añadir un informe de clientes y el formato PDF.
 
-**Implementor** — `IReportRenderer` умеет отрисовать примитивы: заголовок, строку «имя — значение», подвал.
+**Implementor**: `IReportRenderer` sabe dibujar las primitivas: título, fila «nombre — valor» y pie.
 
-**ConcreteImplementor** — `PlainTextRenderer` (выравнивание колонками) и `HtmlRenderer` (теги) в папке `Renderers/`.
+**ConcreteImplementor**: `PlainTextRenderer` (alineación en columnas) y `HtmlRenderer` (etiquetas) en la carpeta `Renderers/`.
 
-**Abstraction** — абстрактный `Report` хранит `IReportRenderer` и объявляет `Build()`.
+**Abstraction**: la clase abstracta `Report` guarda un `IReportRenderer` y declara `Build()`.
 
-**RefinedAbstraction** — `SalesReport` и `InventoryReport` (папка `ReportTypes/`) знают **что** выводить: продажи считают итог, складской отчёт помечает заканчивающиеся товары. **Как** это выглядит — решает рендерер:
+**RefinedAbstraction**: `SalesReport` e `InventoryReport` (carpeta `ReportTypes/`) saben **qué** mostrar: el de ventas calcula el total y el de almacén marca los artículos que se agotan. **Cómo** se ve lo decide el renderizador:
 
 ```csharp
-var lines = new List<string> { Renderer.RenderTitle("Inventory") };
+var lines = new List<string> { Renderer.RenderTitle("Inventario") };
 foreach (var (item, count) in stock)
 {
-    var value = count < LowStockLimit ? $"{count} (low!)" : count.ToString();
+    var value = count < LowStockLimit ? $"{count} (¡poco!)" : count.ToString();
     lines.Add(Renderer.RenderRow(item, value));
 }
 ```
 
-**Client** — демо перебирает все рендереры и все отчёты; реализацию можно выбрать во время выполнения (например, по заголовку `Accept` запроса).
+**Client**: la demo recorre todos los renderizadores y todos los informes; la implementación se puede elegir en tiempo de ejecución (por ejemplo, según la cabecera `Accept` de la petición).
 
 ---
 
-## Когда применять
+## Cuándo usarlo
 
-- Класс нужно расширять в двух (и более) независимых направлениях.
-- Нужно менять реализацию во время выполнения.
-- Хочется разделить «монолитный» класс с несколькими вариантами одной функциональности (например, работа с разными БД/платформами).
-- Кросс-платформенный код: абстракция — GUI/логика, реализация — API конкретной ОС.
+- La clase debe ampliarse en dos (o más) direcciones independientes.
+- Hay que cambiar la implementación en tiempo de ejecución.
+- Se quiere dividir una clase «monolítica» con varias variantes de una misma funcionalidad (por ejemplo, trabajo con distintas BD/plataformas).
+- Código multiplataforma: la abstracción es la interfaz gráfica/lógica y la implementación, la API de un sistema operativo concreto.
 
-## Когда не нужен
+## Cuándo no hace falta
 
-- Есть только одна реализация, и другой не предвидится — лишний уровень абстракции.
+- Solo hay una implementación y no se prevé otra: sería un nivel de abstracción superfluo.
 
-## Плюсы и минусы
+## Ventajas y desventajas
 
-**Плюсы**
-- Количество классов растёт как сумма, а не произведение.
-- Абстракция и реализация развиваются независимо (Open/Closed).
-- Клиент работает только с высокоуровневой абстракцией, не видя деталей платформы.
-- Реализацию можно подменить во время выполнения.
+**Ventajas**
+- El número de clases crece como una suma, no como un producto.
+- La abstracción y la implementación evolucionan de forma independiente (Open/Closed).
+- El cliente trabaja solo con la abstracción de alto nivel, sin ver los detalles de la plataforma.
+- La implementación se puede sustituir en tiempo de ejecución.
 
-**Минусы**
-- Усложняет код, если иерархия на самом деле одна.
+**Desventajas**
+- Complica el código si en realidad solo hay una jerarquía.
 
-## Связь с другими паттернами
+## Relación con otros patrones
 
-- **Adapter** применяют к уже существующим несовместимым классам, чтобы они заработали вместе. **Bridge** проектируют заранее, чтобы части развивались независимо.
-- **Strategy** устроена похоже (объект делегирует работу другому объекту через интерфейс), но решает другую задачу: подменить алгоритм. В Bridge сама абстракция тоже является иерархией.
-- **Abstract Factory** может создавать согласованные пары «абстракция + реализация».
-- **Builder** + **Bridge**: директор играет роль абстракции, строители — реализации.
+- **Adapter** se aplica a clases incompatibles ya existentes para que funcionen juntas. **Bridge** se diseña de antemano para que las partes evolucionen de forma independiente.
+- **Strategy** tiene una estructura parecida (un objeto delega el trabajo en otro a través de una interfaz), pero resuelve otro problema: sustituir un algoritmo. En Bridge la propia abstracción también es una jerarquía.
+- **Abstract Factory** puede crear parejas coherentes «abstracción + implementación».
+- **Builder** + **Bridge**: el director hace el papel de abstracción y los builders, el de implementaciones.

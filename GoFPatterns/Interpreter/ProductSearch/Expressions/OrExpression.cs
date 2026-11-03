@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Interpreter.ProductSearch.Expressions
 {
-    // Nonterminal expression - at least one sub-expression must match.
+    // Expresión no terminal: al menos una subexpresión debe cumplirse.
     public class OrExpression(IQueryExpression left, IQueryExpression right) : IQueryExpression
     {
         public bool Matches(Product product) => left.Matches(product) || right.Matches(product);

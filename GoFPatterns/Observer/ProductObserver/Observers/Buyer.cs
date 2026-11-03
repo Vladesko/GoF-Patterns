@@ -14,7 +14,7 @@
             if (price > 50)
                 return;
 
-            Console.WriteLine("Buying product!");
+            Console.WriteLine("¡Comprando el producto!");
             _observable.Unsubscribe(this);
         }
     }

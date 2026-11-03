@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Bridge.Reports
 {
-    // Implementor - knows HOW to render primitive parts of a report.
+    // Implementador: sabe CÓMO renderizar las partes primitivas de un informe.
     public interface IReportRenderer
     {
         string RenderTitle(string title);

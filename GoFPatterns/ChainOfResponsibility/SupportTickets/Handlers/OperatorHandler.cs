@@ -1,13 +1,13 @@
 ﻿namespace GoFPatterns.ChainOfResponsibility.SupportTickets.Handlers
 {
-    // Concrete handler - first line of support.
+    // Manejador concreto: primera línea de soporte.
     public class OperatorHandler : SupportHandler
     {
         public override void Handle(SupportTicket ticket)
         {
             if (ticket.Severity <= TicketSeverity.Medium)
             {
-                Console.WriteLine($"  Operator: resolved ticket #{ticket.Id}");
+                Console.WriteLine($"  Operador: resolvió el ticket n.º {ticket.Id}");
                 return;
             }
             base.Handle(ticket);

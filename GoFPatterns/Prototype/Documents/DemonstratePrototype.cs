@@ -6,7 +6,7 @@ namespace GoFPatterns.Prototype.Documents
     {
         public void Demonstrate()
         {
-            Console.WriteLine("=== Prototype: Documents ===\n");
+            Console.WriteLine("=== Prototype: documentos ===\n");
 
             DemonstrateShallowAndDeepCopy();
             Console.WriteLine();
@@ -17,57 +17,57 @@ namespace GoFPatterns.Prototype.Documents
         {
             var original = new Contract
             {
-                Title = "Service agreement",
-                Company = "Horns & Hooves",
+                Title = "Contrato de servicios",
+                Company = "Cuernos y Pezuñas",
                 Style = new DocumentStyle { Font = "Times New Roman", FontSize = 14 },
-                Sections = ["Subject", "Price", "Responsibility"]
+                Sections = ["Objeto", "Precio", "Responsabilidad"]
             };
 
             var shallow = original.ShallowClone();
             var deep = (Contract)original.Clone();
 
-            // Change nested objects of the copies.
+            // Modificamos los objetos anidados de las copias.
             shallow.Style.FontSize = 20;
-            shallow.Sections.Add("Added in shallow copy");
+            shallow.Sections.Add("Añadida en la copia superficial");
             deep.Style.Font = "Calibri";
-            deep.Sections.Add("Added in deep copy");
+            deep.Sections.Add("Añadida en la copia profunda");
 
-            Console.WriteLine("Shallow copy shares Style and Sections with original:");
-            Console.WriteLine($"  Original: {original}");
-            Console.WriteLine($"  Shallow:  {shallow}");
-            Console.WriteLine("Deep copy is independent:");
-            Console.WriteLine($"  Deep:     {deep}");
+            Console.WriteLine("La copia superficial comparte Style y Sections con el original:");
+            Console.WriteLine($"  Original:    {original}");
+            Console.WriteLine($"  Superficial: {shallow}");
+            Console.WriteLine("La copia profunda es independiente:");
+            Console.WriteLine($"  Profunda:    {deep}");
         }
 
         private static void DemonstrateRegistry()
         {
-            // Templates are configured once ...
+            // Las plantillas se configuran una sola vez...
             var registry = new DocumentTemplateRegistry();
             registry.Register("nda", new Contract
             {
                 Title = "NDA",
                 Company = "<company>",
-                Sections = ["Confidential information", "Term", "Penalties"]
+                Sections = ["Información confidencial", "Plazo", "Penalizaciones"]
             });
-            registry.Register("invoice-eu", new Invoice { Title = "EU invoice", TaxRate = 0.2m });
+            registry.Register("invoice-eu", new Invoice { Title = "Factura UE", TaxRate = 0.2m });
 
-            // ... and then copied many times without repeating the configuration.
+            // ...y después se copian muchas veces sin repetir la configuración.
             var ndaForAcme = (Contract)registry.Create("nda");
             ndaForAcme.Company = "Acme";
 
             var ndaForGlobex = (Contract)registry.Create("nda");
             ndaForGlobex.Company = "Globex";
-            ndaForGlobex.Sections.Add("Jurisdiction");
+            ndaForGlobex.Sections.Add("Jurisdicción");
 
             var invoice = (Invoice)registry.Create("invoice-eu");
-            invoice.Lines.Add(("Laptop", 1000m));
-            invoice.Lines.Add(("Mouse", 25m));
+            invoice.Lines.Add(("Portátil", 1000m));
+            invoice.Lines.Add(("Ratón", 25m));
 
-            Console.WriteLine("Documents created from registry:");
+            Console.WriteLine("Documentos creados a partir del registro:");
             Console.WriteLine($"  {ndaForAcme}");
             Console.WriteLine($"  {ndaForGlobex}");
             Console.WriteLine($"  {invoice}");
-            Console.WriteLine($"  Template is unchanged: {registry.Create("nda")}");
+            Console.WriteLine($"  La plantilla no ha cambiado: {registry.Create("nda")}");
         }
     }
 }

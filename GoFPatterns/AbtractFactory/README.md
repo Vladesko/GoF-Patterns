@@ -1,51 +1,53 @@
-# Abstract Factory (Абстрактная фабрика)
+🌐 [Русский](https://github.com/Vladesko/GoF-Patterns/tree/rus/GoFPatterns/AbtractFactory) | [English](https://github.com/Vladesko/GoF-Patterns/tree/eng/GoFPatterns/AbtractFactory) | [Deutsch](https://github.com/Vladesko/GoF-Patterns/tree/deu/GoFPatterns/AbtractFactory) | [Italiano](https://github.com/Vladesko/GoF-Patterns/tree/ita/GoFPatterns/AbtractFactory) | **Español**
 
-**Тип:** порождающий паттерн.
+# Abstract Factory (Fábrica abstracta)
 
-**Abstract Factory** позволяет создавать **семейства связанных объектов**, не привязываясь к конкретным классам этих объектов. Клиент работает с фабрикой и продуктами только через интерфейсы.
+**Tipo:** patrón creacional.
+
+**Abstract Factory** permite crear **familias de objetos relacionados** sin atarse a las clases concretas de esos objetos. El cliente trabaja con la fábrica y con los productos solo a través de interfaces.
 
 ---
 
-## Какую проблему решает
+## Qué problema resuelve
 
-Сервис оплаты работает с платёжными провайдерами (в примере — вымышленные **PoolPay** и **Strope**). Для каждого провайдера нужен **набор** объектов:
-- процессор платежа;
-- процессор возврата;
-- валидатор платежа.
+Un servicio de pagos trabaja con proveedores de pago (en el ejemplo, los ficticios **PoolPay** y **Strope**). Para cada proveedor se necesita un **conjunto** de objetos:
+- procesador de pagos;
+- procesador de reembolsos;
+- validador de pagos.
 
-Эти объекты образуют **семейство**: процессор PoolPay должен работать вместе с валидатором и возвратами PoolPay. Смешать процессор PoolPay с возвратами Strope — ошибка (транзакция одного провайдера не существует у другого).
+Estos objetos forman una **familia**: el procesador de PoolPay debe funcionar junto con el validador y los reembolsos de PoolPay. Mezclar el procesador de PoolPay con los reembolsos de Strope es un error (la transacción de un proveedor no existe en el otro).
 
-Если сервис оплаты создаёт объекты сам:
+Si el servicio de pagos crea los objetos por sí mismo:
 
 ```csharp
 if (provider == "PoolPay") { processor = new PoolPayPaymentProcess(); refund = new PoolPayRefundProcessor(); ... }
 else if (provider == "Strope") { processor = new StropePaymentProcessor(); refund = new StropeRefundProcessor(); ... }
 ```
 
-- сервис зависит от **всех** конкретных классов всех провайдеров;
-- добавление провайдера — правка сервиса;
-- легко ошибиться и создать «несовместимый набор».
+- el servicio depende de **todas** las clases concretas de todos los proveedores;
+- añadir un proveedor implica modificar el servicio;
+- es fácil equivocarse y crear un «conjunto incompatible».
 
-## Решение
+## Solución
 
-1. Для каждого вида продукта выделить **интерфейс** (`IPaymentProcessor`, `IRefundProcessor`, `IPaymentValidator`).
-2. Объявить **абстрактную фабрику** — интерфейс с методами создания каждого продукта семейства.
-3. Для каждого семейства (провайдера) сделать **конкретную фабрику**, которая создаёт продукты только своего семейства.
-4. Клиент получает фабрику извне и создаёт продукты только через неё — так он не знает конкретных классов и **не может смешать семейства**.
+1. Definir una **interfaz** para cada tipo de producto (`IPaymentProcessor`, `IRefundProcessor`, `IPaymentValidator`).
+2. Declarar una **fábrica abstracta**: una interfaz con métodos para crear cada producto de la familia.
+3. Para cada familia (proveedor), crear una **fábrica concreta** que solo crea productos de su propia familia.
+4. El cliente recibe la fábrica desde fuera y crea los productos solo a través de ella; así no conoce las clases concretas y **no puede mezclar familias**.
 
 ---
 
-## Участники
+## Participantes
 
-| Роль | Класс в примере | Описание |
-|------|-----------------|----------|
-| **AbstractFactory** | `IPaymentProviderFactory` | Объявляет методы создания всех продуктов семейства |
-| **ConcreteFactory** | `PoolPayPaymentFactory`, `StropePaymentFactory` | Создаёт продукты одного семейства (одного провайдера) |
-| **AbstractProduct** | `IPaymentProcessor`, `IRefundProcessor`, `IPaymentValidator` | Интерфейсы продуктов |
-| **ConcreteProduct** | `PoolPayPaymentProcess`, `PoolPayRefundProcessor`, `PoolPayPaymentValidator`, `StropePaymentProcessor`, `StropeRefundProcessor`, `StropePaymentValidator` | Конкретные реализации продуктов для каждого провайдера |
-| **Client** | `PaymentService` (+ `IPaymentService`) | Использует только интерфейсы фабрики и продуктов |
+| Rol | Clase en el ejemplo | Descripción |
+|-----|---------------------|-------------|
+| **AbstractFactory** | `IPaymentProviderFactory` | Declara los métodos de creación de todos los productos de la familia |
+| **ConcreteFactory** | `PoolPayPaymentFactory`, `StropePaymentFactory` | Crea los productos de una familia (de un proveedor) |
+| **AbstractProduct** | `IPaymentProcessor`, `IRefundProcessor`, `IPaymentValidator` | Interfaces de los productos |
+| **ConcreteProduct** | `PoolPayPaymentProcess`, `PoolPayRefundProcessor`, `PoolPayPaymentValidator`, `StropePaymentProcessor`, `StropeRefundProcessor`, `StropePaymentValidator` | Implementaciones concretas de los productos para cada proveedor |
+| **Client** | `PaymentService` (+ `IPaymentService`) | Usa solo las interfaces de la fábrica y de los productos |
 
-## Схема
+## Esquema
 
 ```text
                        «interface» IPaymentProviderFactory
@@ -60,16 +62,16 @@ else if (provider == "Strope") { processor = new StropePaymentProcessor(); refun
          PoolPayPayment PoolPay PoolPay      StropePayment Strope Strope
            Process      Refund  Validator      Processor   Refund Validator
 
- PaymentService(IPaymentProviderFactory factory)   ← Client
+ PaymentService(IPaymentProviderFactory factory)   ← Cliente
    Pay(amount):  validator.ValidatePayment → processor.ProcessPayment
    Refund(id):   refundProcessor.ProcessRefund
 ```
 
 ---
 
-## Пример. Платёжные провайдеры (`Payments/`)
+## Ejemplo. Proveedores de pago (`Payments/`)
 
-**AbstractProduct** (папка `Interfaces/Abstractions/`):
+**AbstractProduct** (carpeta `Interfaces/Abstractions/`):
 
 ```csharp
 public interface IPaymentProcessor { Guid ProcessPayment(decimal amount); }
@@ -77,7 +79,7 @@ public interface IRefundProcessor  { void ProcessRefund(Guid transactionId); }
 public interface IPaymentValidator { bool ValidatePayment(decimal amount); }
 ```
 
-**AbstractFactory** (папка `Interfaces/AbstractFactories/`):
+**AbstractFactory** (carpeta `Interfaces/AbstractFactories/`):
 
 ```csharp
 public interface IPaymentProviderFactory
@@ -88,11 +90,11 @@ public interface IPaymentProviderFactory
 }
 ```
 
-**ConcreteFactory + ConcreteProduct** — у каждого провайдера своя папка:
-- `PoolPays/` — `PoolPayPaymentFactory` создаёт `PoolPayPaymentProcess`, `PoolPayRefundProcessor`, `PoolPayPaymentValidator`;
-- `Stopes/` — `StropePaymentFactory` создаёт `StropePaymentProcessor`, `StropeRefundProcessor`, `StropePaymentValidator`.
+**ConcreteFactory + ConcreteProduct**: cada proveedor tiene su propia carpeta:
+- `PoolPays/`: `PoolPayPaymentFactory` crea `PoolPayPaymentProcess`, `PoolPayRefundProcessor`, `PoolPayPaymentValidator`;
+- `Stopes/`: `StropePaymentFactory` crea `StropePaymentProcessor`, `StropeRefundProcessor`, `StropePaymentValidator`.
 
-Все конкретные классы помечены `internal` — снаружи сборки о них никто не знает, доступны только интерфейсы.
+Todas las clases concretas están marcadas como `internal`: fuera del ensamblado nadie las conoce, solo están disponibles las interfaces.
 
 ```csharp
 internal class PoolPayPaymentFactory : IPaymentProviderFactory
@@ -103,7 +105,7 @@ internal class PoolPayPaymentFactory : IPaymentProviderFactory
 }
 ```
 
-**Client** — `PaymentService` (папка `Services/`) получает фабрику в конструкторе и **один раз** создаёт через неё весь набор продуктов. Дальше он работает только с интерфейсами:
+**Client**: `PaymentService` (carpeta `Services/`) recibe la fábrica en el constructor y crea con ella **una sola vez** todo el conjunto de productos. A partir de ahí trabaja solo con interfaces:
 
 ```csharp
 internal class PaymentService(IPaymentProviderFactory paymentProviderFactory) : IPaymentService
@@ -115,7 +117,7 @@ internal class PaymentService(IPaymentProviderFactory paymentProviderFactory) : 
     public Guid Pay(decimal amount)
     {
         if (!_paymentValidator.ValidatePayment(amount))
-            throw new InvalidOperationException("Invalid payment amount.");
+            throw new InvalidOperationException("Importe de pago no válido.");
         return _paymentProcessor.ProcessPayment(amount);
     }
 
@@ -123,43 +125,43 @@ internal class PaymentService(IPaymentProviderFactory paymentProviderFactory) : 
 }
 ```
 
-Так как все три продукта получены от одной фабрики, они **гарантированно из одного семейства**.
+Como los tres productos se obtienen de la misma fábrica, **pertenecen con garantía a la misma familia**.
 
-**Демонстрация** — `DemontrateAbstractFactory` создаёт `PaymentService` сначала с фабрикой PoolPay, потом со Strope, и выполняет одинаковые операции `Pay` + `Refund`. Код сервиса один и тот же — меняется только переданная фабрика.
+**Demostración**: `DemontrateAbstractFactory` crea `PaymentService` primero con la fábrica de PoolPay y después con la de Strope, y ejecuta las mismas operaciones `Pay` + `Refund`. El código del servicio es el mismo; solo cambia la fábrica que se le pasa.
 
-Чтобы подключить нового провайдера, достаточно добавить папку с фабрикой и тремя продуктами. `PaymentService` и уже существующие провайдеры не меняются.
+Para incorporar un proveedor nuevo basta con añadir una carpeta con la fábrica y los tres productos. `PaymentService` y los proveedores existentes no cambian.
 
 ---
 
-## Когда применять
+## Cuándo usarlo
 
-- Система должна работать с разными **семействами** связанных объектов, и они должны использоваться **вместе**.
-- Нужно скрыть от клиента конкретные классы продуктов.
-- Семейство выбирается один раз (конфигурацией, настройками), а дальше используется везде.
-- Примеры: платёжные провайдеры, UI-темы (кнопка + чекбокс + окно для Windows/macOS), провайдеры БД (`DbProviderFactory` в ADO.NET: соединение + команда + параметр), облачные провайдеры (хранилище + очередь + кеш).
+- El sistema debe trabajar con distintas **familias** de objetos relacionados que deben usarse **juntos**.
+- Hay que ocultar al cliente las clases concretas de los productos.
+- La familia se elige una sola vez (por configuración, por ajustes) y después se usa en todas partes.
+- Ejemplos: proveedores de pago, temas de interfaz (botón + casilla + ventana para Windows/macOS), proveedores de BD (`DbProviderFactory` en ADO.NET: conexión + comando + parámetro), proveedores en la nube (almacenamiento + cola + caché).
 
-## Когда не нужен
+## Cuándo no hace falta
 
-- Продукт один, а не семейство — достаточно Factory Method.
-- Семейство одно и не будет расширяться.
+- Hay un único producto y no una familia: basta con Factory Method.
+- Solo hay una familia y no se va a ampliar.
 
-## Плюсы и минусы
+## Ventajas y desventajas
 
-**Плюсы**
-- Гарантирует совместимость создаваемых продуктов.
-- Клиент не зависит от конкретных классов.
-- Код создания продуктов собран в одном месте (SRP).
-- Новое семейство добавляется без изменения клиента (Open/Closed).
+**Ventajas**
+- Garantiza la compatibilidad de los productos creados.
+- El cliente no depende de las clases concretas.
+- El código de creación de productos está reunido en un solo lugar (SRP).
+- Una familia nueva se añade sin modificar el cliente (Open/Closed).
 
-**Минусы**
-- Много интерфейсов и классов.
-- Добавить **новый вид продукта** (например, `ISubscriptionProcessor`) сложно: придётся менять интерфейс фабрики и **все** конкретные фабрики.
+**Desventajas**
+- Muchas interfaces y clases.
+- Añadir un **nuevo tipo de producto** (por ejemplo, `ISubscriptionProcessor`) es difícil: hay que modificar la interfaz de la fábrica y **todas** las fábricas concretas.
 
-## Связь с другими паттернами
+## Relación con otros patrones
 
-- **Factory Method** — абстрактная фабрика часто состоит из нескольких фабричных методов. Factory Method создаёт **один** продукт и полагается на наследование; Abstract Factory создаёт **семейство** и передаётся как объект (композиция).
-- **Builder** собирает **один сложный** объект по шагам; Abstract Factory сразу возвращает **набор** простых.
-- **Prototype** — фабрика может создавать продукты клонированием прототипов.
-- **Singleton** — конкретная фабрика обычно нужна в одном экземпляре.
-- **Facade** — абстрактную фабрику можно использовать вместо фасада, чтобы скрыть, как создаются объекты подсистемы.
-- **Strategy** — с точки зрения `PaymentService` фабрика выглядит как стратегия «какого провайдера использовать».
+- **Factory Method**: una fábrica abstracta suele estar formada por varios métodos fábrica. Factory Method crea **un** producto y se basa en la herencia; Abstract Factory crea una **familia** y se pasa como objeto (composición).
+- **Builder** ensambla **un** objeto complejo paso a paso; Abstract Factory devuelve de inmediato un **conjunto** de objetos simples.
+- **Prototype**: la fábrica puede crear productos clonando prototipos.
+- **Singleton**: normalmente basta con una sola instancia de cada fábrica concreta.
+- **Facade**: se puede usar una fábrica abstracta en lugar de una fachada para ocultar cómo se crean los objetos del subsistema.
+- **Strategy**: desde el punto de vista de `PaymentService`, la fábrica parece una estrategia de «qué proveedor usar».

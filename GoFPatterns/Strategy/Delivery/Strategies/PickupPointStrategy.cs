@@ -1,11 +1,11 @@
 ﻿namespace GoFPatterns.Strategy.Delivery.Strategies
 {
-    // Concrete strategy - pickup point. Free for expensive orders.
+    // Estrategia concreta: punto de recogida. Gratis para pedidos caros.
     public class PickupPointStrategy : IDeliveryStrategy
     {
         private const decimal FreeDeliveryThreshold = 100m;
 
-        public string Name => "Pickup point";
+        public string Name => "Punto de recogida";
 
         public decimal CalculateCost(Parcel parcel) =>
             parcel.DeclaredValue >= FreeDeliveryThreshold ? 0m : 2.5m;

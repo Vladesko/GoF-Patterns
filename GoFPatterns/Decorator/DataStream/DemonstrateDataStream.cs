@@ -6,29 +6,29 @@ namespace GoFPatterns.Decorator.DataStream
     {
         public void Demonstrate()
         {
-            Console.WriteLine("=== Decorator: Data source ===\n");
+            Console.WriteLine("=== Decorator: fuente de datos ===\n");
 
-            var data = string.Join(", ", Enumerable.Repeat("customer: John Smith, card: 4111-1111-1111-1111", 5));
+            var data = string.Join(", ", Enumerable.Repeat("cliente: John Smith, tarjeta: 4111-1111-1111-1111", 5));
 
-            // Plain storage.
+            // Almacenamiento sin procesar.
             var plainStorage = new InMemoryDataSource();
             plainStorage.Write(data);
-            Console.WriteLine($"Plain storage ({plainStorage.RawContent.Length} chars):\n  {plainStorage.RawContent[..60]}...\n");
+            Console.WriteLine($"Almacenamiento sin procesar ({plainStorage.RawContent.Length} caracteres):\n  {plainStorage.RawContent[..60]}...\n");
 
-            // The same storage, but wrapped with decorators at runtime.
-            // Write: logging -> compression -> encryption -> storage
-            // Read:  storage -> encryption -> compression -> logging
+            // El mismo almacenamiento, pero envuelto con decoradores en tiempo de ejecución.
+            // Escritura: logging -> compresión -> cifrado -> almacenamiento
+            // Lectura:   almacenamiento -> cifrado -> compresión -> logging
             var protectedStorage = new InMemoryDataSource();
             IDataSource source = new LoggingDecorator(
                 new CompressionDecorator(
                     new EncryptionDecorator(protectedStorage, "secret")),
-                "client");
+                "cliente");
 
             source.Write(data);
-            Console.WriteLine($"Compressed + encrypted storage ({protectedStorage.RawContent.Length} chars):\n  {protectedStorage.RawContent[..Math.Min(60, protectedStorage.RawContent.Length)]}...");
+            Console.WriteLine($"Almacenamiento comprimido + cifrado ({protectedStorage.RawContent.Length} caracteres):\n  {protectedStorage.RawContent[..Math.Min(60, protectedStorage.RawContent.Length)]}...");
 
             var restored = source.Read();
-            Console.WriteLine($"Data is restored correctly: {restored == data}");
+            Console.WriteLine($"Los datos se restauran correctamente: {restored == data}");
         }
     }
 }

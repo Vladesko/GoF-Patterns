@@ -4,7 +4,7 @@
     {
         public void Notify(string message)
         {
-            Console.WriteLine($"Umail notification: {message}");
+            Console.WriteLine($"Notificación Umail: {message}");
         }
     }
 }

@@ -1,16 +1,16 @@
 ﻿namespace GoFPatterns.ChainOfResponsibility.SupportTickets.Handlers
 {
-    // Concrete handler - answers frequently asked questions only.
+    // Manejador concreto: solo responde a las preguntas frecuentes.
     public class ChatBotHandler : SupportHandler
     {
-        private static readonly string[] _faqKeywords = ["password", "login", "delivery time"];
+        private static readonly string[] _faqKeywords = ["contraseña", "inicio de sesión", "plazo de entrega"];
 
         public override void Handle(SupportTicket ticket)
         {
             if (ticket.Severity == TicketSeverity.Low &&
                 _faqKeywords.Any(k => ticket.Description.Contains(k, StringComparison.OrdinalIgnoreCase)))
             {
-                Console.WriteLine($"  ChatBot: answered ticket #{ticket.Id} with FAQ article");
+                Console.WriteLine($"  ChatBot: ticket n.º {ticket.Id} respondido con un artículo de las FAQ");
                 return;
             }
             base.Handle(ticket);

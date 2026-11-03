@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Decorator.DataStream.Decorators
 {
-    // Base decorator - delegates calls to wrapped data source.
+    // Decorador base: delega las llamadas en la fuente de datos envuelta.
     public abstract class DataSourceDecorator(IDataSource source) : IDataSource
     {
         protected IDataSource Source { get; } = source;

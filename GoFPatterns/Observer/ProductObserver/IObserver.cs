@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Observer.ProductObserver
 {
-    // That is the interface that will be implemented by the classes that want to be notified of changes in the subject.
+    // Esta es la interfaz que implementan las clases que quieren ser notificadas de los cambios en el sujeto.
     public interface IObserver
     {
         void Update(decimal price);

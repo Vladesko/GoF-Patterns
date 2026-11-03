@@ -1,9 +1,9 @@
 ﻿namespace GoFPatterns.Facade.HomeTheater.Subsystems
 {
-    // Subsystem class.
+    // Clase del subsistema.
     public class Lights
     {
-        public void Dim(int percent) => Console.WriteLine($"  Lights: dimmed to {percent}%");
-        public void On() => Console.WriteLine("  Lights: on");
+        public void Dim(int percent) => Console.WriteLine($"  Luces: atenuadas al {percent}%");
+        public void On() => Console.WriteLine("  Luces: encendidas");
     }
 }

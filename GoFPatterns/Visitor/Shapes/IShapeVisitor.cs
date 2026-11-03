@@ -2,7 +2,7 @@
 
 namespace GoFPatterns.Visitor.Shapes
 {
-    // Visitor interface defining operations for each shape type
+    // Interfaz del visitante que define las operaciones para cada tipo de figura
     public interface IShapeVisitor
     {
         void VisitCircle(Circle circle);

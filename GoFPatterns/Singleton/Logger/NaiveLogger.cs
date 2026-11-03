@@ -1,7 +1,7 @@
 ﻿namespace GoFPatterns.Singleton.Logger
 {
-    // Anti-example - NOT thread-safe singleton.
-    // Two threads can pass "is null" check at the same time and create two instances.
+    // Antiejemplo: singleton NO seguro para hilos.
+    // Dos hilos pueden pasar la comprobación "is null" al mismo tiempo y crear dos instancias.
     public sealed class NaiveLogger
     {
         private static NaiveLogger? _instance;
@@ -24,7 +24,7 @@
         private NaiveLogger()
         {
             Interlocked.Increment(ref _createdInstances);
-            Thread.Sleep(50); // Slow constructor makes race condition visible.
+            Thread.Sleep(50); // Un constructor lento hace visible la condición de carrera.
         }
 
         public static void Reset() => _instance = null;

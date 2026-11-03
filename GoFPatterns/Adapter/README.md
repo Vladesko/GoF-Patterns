@@ -1,46 +1,48 @@
-# Adapter (Адаптер)
+🌐 [Русский](https://github.com/Vladesko/GoF-Patterns/tree/rus/GoFPatterns/Adapter) | [English](https://github.com/Vladesko/GoF-Patterns/tree/eng/GoFPatterns/Adapter) | [Deutsch](https://github.com/Vladesko/GoF-Patterns/tree/deu/GoFPatterns/Adapter) | [Italiano](https://github.com/Vladesko/GoF-Patterns/tree/ita/GoFPatterns/Adapter) | **Español**
 
-**Тип:** структурный паттерн.
+# Adapter (Adaptador)
 
-**Adapter** позволяет объектам с **несовместимыми интерфейсами** работать вместе. Адаптер — это «переходник»: он оборачивает существующий объект и предоставляет клиенту тот интерфейс, который клиент ожидает.
+**Tipo:** patrón estructural.
 
-Примеры из жизни: переходник для розетки другой страны, USB → HDMI, конвертер форматов файлов.
+**Adapter** permite que objetos con **interfaces incompatibles** trabajen juntos. El adaptador es un «convertidor»: envuelve un objeto existente y ofrece al cliente la interfaz que este espera.
 
----
-
-## Какую проблему решает
-
-Система мониторинга температуры работает с датчиками через интерфейс `ITemperatureSensor`, который возвращает температуру **в градусах Цельсия**. Все новые датчики его реализуют.
-
-Но есть старый датчик `FahrenheitSensor` (legacy-код или сторонняя библиотека):
-- у него **другое имя метода** — `GetCurrentTemperature()`;
-- он возвращает температуру **в Фаренгейтах**;
-- менять его код нельзя (он чужой или от него зависит другой код).
-
-Клиент не может просто использовать этот датчик: интерфейсы несовместимы. Переписывать клиента под каждый «особенный» датчик — плохая идея: в клиенте появятся `if (sensor is FahrenheitSensor)` и формулы перевода.
-
-## Решение
-
-Создать класс-**адаптер**, который:
-- реализует **нужный клиенту интерфейс** (`ITemperatureSensor`);
-- хранит ссылку на **адаптируемый объект** (`FahrenheitSensor`);
-- в методах интерфейса вызывает методы адаптируемого объекта и **преобразует** данные (Фаренгейты → Цельсии).
-
-Клиент работает с адаптером как с любым другим датчиком и не знает, что внутри — старое устройство.
+Ejemplos de la vida real: el adaptador de enchufe para otro país, USB → HDMI, un conversor de formatos de archivo.
 
 ---
 
-## Участники
+## Qué problema resuelve
 
-| Роль | Класс в примере | Описание |
-|------|-----------------|----------|
-| **Target** | `ITemperatureSensor` | Интерфейс, который ожидает клиент |
-| **Adaptee** | `FahrenheitSensor` | Существующий класс с несовместимым интерфейсом |
-| **Adapter** | `FahrenheitSensorAdapter` | Реализует Target и переводит вызовы в вызовы Adaptee |
-| **Client** | `DemonstarteAdapter` (метод `DisplayTemperature`) | Работает только с Target |
-| *(обычная реализация Target)* | `CelsiusSensor` | Современный датчик — адаптер ему не нужен |
+Un sistema de monitorización de temperatura trabaja con sensores a través de la interfaz `ITemperatureSensor`, que devuelve la temperatura **en grados Celsius**. Todos los sensores nuevos la implementan.
 
-## Схема
+Pero hay un sensor antiguo, `FahrenheitSensor` (código heredado o una biblioteca de terceros):
+- su método tiene **otro nombre**: `GetCurrentTemperature()`;
+- devuelve la temperatura **en Fahrenheit**;
+- no se puede modificar su código (es ajeno o hay otro código que depende de él).
+
+El cliente no puede usar este sensor sin más: las interfaces son incompatibles. Reescribir el cliente para cada sensor «especial» es mala idea: en el cliente aparecerían `if (sensor is FahrenheitSensor)` y fórmulas de conversión.
+
+## Solución
+
+Crear una clase **adaptadora** que:
+- implementa **la interfaz que necesita el cliente** (`ITemperatureSensor`);
+- guarda una referencia al **objeto adaptado** (`FahrenheitSensor`);
+- en los métodos de la interfaz llama a los métodos del objeto adaptado y **convierte** los datos (Fahrenheit → Celsius).
+
+El cliente trabaja con el adaptador como con cualquier otro sensor y no sabe que dentro hay un dispositivo antiguo.
+
+---
+
+## Participantes
+
+| Rol | Clase en el ejemplo | Descripción |
+|-----|---------------------|-------------|
+| **Target** | `ITemperatureSensor` | La interfaz que espera el cliente |
+| **Adaptee** | `FahrenheitSensor` | Clase existente con una interfaz incompatible |
+| **Adapter** | `FahrenheitSensorAdapter` | Implementa Target y traduce las llamadas en llamadas a Adaptee |
+| **Client** | `DemonstarteAdapter` (método `DisplayTemperature`) | Trabaja solo con Target |
+| *(implementación normal de Target)* | `CelsiusSensor` | Sensor moderno: no necesita adaptador |
+
+## Esquema
 
 ```text
                      ┌─────────────────────────────┐
@@ -51,16 +53,16 @@
                           │                  │
                 ┌──────────────┐   ┌──────────────────────────┐       ┌────────────────────────┐
                 │ CelsiusSensor│   │ FahrenheitSensorAdapter  │──────►│ FahrenheitSensor       │
-                └──────────────┘   │ GetTemperatureCelsius(): │       │ (Adaptee, legacy)      │
+                └──────────────┘   │ GetTemperatureCelsius(): │       │ (Adaptee, heredado)    │
                                    │  (F - 32) * 5 / 9        │       │ GetCurrentTemperature()│
                                    └──────────────────────────┘       └────────────────────────┘
 ```
 
 ---
 
-## Пример. Датчики температуры (`SensorFeature/`)
+## Ejemplo. Sensores de temperatura (`SensorFeature/`)
 
-**Target** — `ITemperatureSensor`:
+**Target**: `ITemperatureSensor`:
 
 ```csharp
 public interface ITemperatureSensor
@@ -69,11 +71,11 @@ public interface ITemperatureSensor
 }
 ```
 
-**Обычная реализация Target** — `CelsiusSensor`: современный датчик, сразу реализует интерфейс (температура эмулируется случайным числом 15–35 °C).
+**Implementación normal de Target**: `CelsiusSensor`, un sensor moderno que implementa la interfaz directamente (la temperatura se emula con un número aleatorio de 15–35 °C).
 
-**Adaptee** — `FahrenheitSensor`: старый датчик со своим методом `GetCurrentTemperature()`, возвращающим Фаренгейты (эмуляция 55–65 °F). Интерфейс `ITemperatureSensor` он **не** реализует, и мы его не меняем.
+**Adaptee**: `FahrenheitSensor`, un sensor antiguo con su propio método `GetCurrentTemperature()`, que devuelve grados Fahrenheit (emulación de 55–65 °F). **No** implementa la interfaz `ITemperatureSensor`, y no lo modificamos.
 
-**Adapter** — `FahrenheitSensorAdapter` получает старый датчик через primary constructor, реализует `ITemperatureSensor` и делает перевод единиц:
+**Adapter**: `FahrenheitSensorAdapter` recibe el sensor antiguo mediante un primary constructor, implementa `ITemperatureSensor` y convierte las unidades:
 
 ```csharp
 public class FahrenheitSensorAdapter(FahrenheitSensor fahrenheitSensor) : ITemperatureSensor
@@ -85,55 +87,55 @@ public class FahrenheitSensorAdapter(FahrenheitSensor fahrenheitSensor) : ITempe
 }
 ```
 
-Адаптер преобразует сразу две вещи: **имя метода** (`GetCurrentTemperature` → `GetTemperatureCelsius`) и **формат данных** (°F → °C).
+El adaptador convierte dos cosas a la vez: el **nombre del método** (`GetCurrentTemperature` → `GetTemperatureCelsius`) y el **formato de los datos** (°F → °C).
 
-**Client** — `DemonstarteAdapter`:
-1. показывает, что `CelsiusSensor` работает напрямую;
-2. показывает «сырое» значение старого датчика в Фаренгейтах — с клиентом оно несовместимо;
-3. оборачивает старый датчик: `ITemperatureSensor adapter = new FahrenheitSensorAdapter(fahrenheitSensor);`
-4. передаёт **оба** датчика в один и тот же метод `DisplayTemperature(ITemperatureSensor sensor)`, который оценивает температуру (холодно / комфортно / жарко) и ничего не знает об адаптере.
+**Client**: `DemonstarteAdapter`:
+1. muestra que `CelsiusSensor` funciona directamente;
+2. muestra el valor «en bruto» del sensor antiguo en Fahrenheit, incompatible con el cliente;
+3. envuelve el sensor antiguo: `ITemperatureSensor adapter = new FahrenheitSensorAdapter(fahrenheitSensor);`
+4. pasa **ambos** sensores al mismo método `DisplayTemperature(ITemperatureSensor sensor)`, que evalúa la temperatura (frío / agradable / calor) y no sabe nada del adaptador.
 
 ---
 
-## Адаптер объектов и адаптер классов
+## Adaptador de objetos y adaptador de clases
 
-- **Адаптер объектов** (как в примере) — использует **композицию**: хранит ссылку на адаптируемый объект. Работает с любыми подклассами Adaptee. Основной вариант в C#.
-- **Адаптер классов** — **наследуется** от Adaptee и реализует Target. В C# возможен, только если Target — интерфейс (множественного наследования классов нет), и привязывает адаптер к конкретному классу.
+- **Adaptador de objetos** (como en el ejemplo): usa **composición**, guarda una referencia al objeto adaptado. Funciona con cualquier subclase de Adaptee. Es la variante principal en C#.
+- **Adaptador de clases**: **hereda** de Adaptee e implementa Target. En C# solo es posible si Target es una interfaz (no hay herencia múltiple de clases), y ata el adaptador a una clase concreta.
 
-## Когда применять
+## Cuándo usarlo
 
-- Нужно использовать существующий класс, но его интерфейс не подходит.
-- Работа с legacy-кодом, который нельзя менять.
-- Интеграция сторонних библиотек и внешних API со своим интерфейсом (например, свой `IPaymentGateway` поверх SDK платёжной системы).
-- Нужно привести несколько разнородных классов к единому интерфейсу.
+- Hay que usar una clase existente, pero su interfaz no encaja.
+- Trabajo con código heredado que no se puede modificar.
+- Integración de bibliotecas de terceros y API externas con su propia interfaz (por ejemplo, un `IPaymentGateway` propio sobre el SDK de un sistema de pagos).
+- Hay que unificar varias clases heterogéneas bajo una única interfaz.
 
-## Когда не нужен
+## Cuándo no hace falta
 
-- Исходный класс можно просто изменить.
-- Интерфейс нужно не «перевести», а упростить для целой подсистемы — это задача Facade.
+- La clase original se puede modificar sin más.
+- No se trata de «traducir» la interfaz, sino de simplificarla para todo un subsistema: eso es tarea de Facade.
 
-## Плюсы и минусы
+## Ventajas y desventajas
 
-**Плюсы**
-- Отделяет преобразование интерфейса от бизнес-логики (SRP).
-- Новые адаптеры добавляются без изменения клиента (Open/Closed).
-- Позволяет переиспользовать существующий код.
+**Ventajas**
+- Separa la conversión de interfaces de la lógica de negocio (SRP).
+- Los adaptadores nuevos se añaden sin modificar el cliente (Open/Closed).
+- Permite reutilizar código existente.
 
-**Минусы**
-- Больше классов.
-- Дополнительный уровень косвенности.
+**Desventajas**
+- Más clases.
+- Un nivel adicional de indirección.
 
-## Связь с другими паттернами
+## Relación con otros patrones
 
-| Паттерн | Отличие от Adapter |
-|---------|--------------------|
-| **Bridge** | Проектируется заранее, чтобы части развивались независимо; Adapter применяют к уже существующему коду |
-| **Decorator** | Сохраняет интерфейс и добавляет поведение; Adapter меняет интерфейс |
-| **Proxy** | Сохраняет тот же интерфейс и контролирует доступ; Adapter предоставляет другой интерфейс |
-| **Facade** | Создаёт новый упрощённый интерфейс для целой подсистемы; Adapter приспосабливает один существующий |
+| Patrón | Diferencia con Adapter |
+|--------|------------------------|
+| **Bridge** | Se diseña de antemano para que las partes evolucionen de forma independiente; Adapter se aplica a código ya existente |
+| **Decorator** | Conserva la interfaz y añade comportamiento; Adapter cambia la interfaz |
+| **Proxy** | Conserva la misma interfaz y controla el acceso; Adapter ofrece una interfaz distinta |
+| **Facade** | Crea una interfaz nueva y simplificada para todo un subsistema; Adapter adapta una sola interfaz existente |
 
-## Примеры в .NET
+## Ejemplos en .NET
 
-- `StreamReader` / `StreamWriter` — адаптируют байтовый `Stream` к работе с текстом.
-- `SqlDataAdapter` — адаптирует источник данных к `DataSet`.
-- Провайдеры логирования (Serilog, NLog) для `Microsoft.Extensions.Logging.ILogger` — адаптеры сторонних логгеров к стандартному интерфейсу.
+- `StreamReader` / `StreamWriter`: adaptan un `Stream` de bytes para trabajar con texto.
+- `SqlDataAdapter`: adapta una fuente de datos a `DataSet`.
+- Los proveedores de logging (Serilog, NLog) para `Microsoft.Extensions.Logging.ILogger`: adaptadores de loggers de terceros a la interfaz estándar.

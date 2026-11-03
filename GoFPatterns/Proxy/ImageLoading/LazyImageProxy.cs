@@ -1,7 +1,7 @@
 ﻿namespace GoFPatterns.Proxy.ImageLoading
 {
-    // Virtual proxy - postpones creation of heavy object until it is really needed.
-    // Client can't see the difference, because proxy implements the same interface.
+    // Proxy virtual: pospone la creación del objeto pesado hasta que realmente se necesita.
+    // El cliente no puede ver la diferencia, porque el proxy implementa la misma interfaz.
     public class LazyImageProxy(string fileName) : IImage
     {
         private HighResolutionImage? _realImage;

@@ -13,7 +13,7 @@
             if (price > 100)
                 return;
 
-            Console.WriteLine("Discount applied!");
+            Console.WriteLine("¡Descuento aplicado!");
         }
     }
 }

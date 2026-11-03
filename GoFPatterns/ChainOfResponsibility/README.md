@@ -1,14 +1,16 @@
-# Chain of Responsibility (Цепочка обязанностей)
+🌐 [Русский](https://github.com/Vladesko/GoF-Patterns/tree/rus/GoFPatterns/ChainOfResponsibility) | [English](https://github.com/Vladesko/GoF-Patterns/tree/eng/GoFPatterns/ChainOfResponsibility) | [Deutsch](https://github.com/Vladesko/GoF-Patterns/tree/deu/GoFPatterns/ChainOfResponsibility) | [Italiano](https://github.com/Vladesko/GoF-Patterns/tree/ita/GoFPatterns/ChainOfResponsibility) | **Español**
 
-**Тип:** поведенческий паттерн.
+# Chain of Responsibility (Cadena de responsabilidad)
 
-**Chain of Responsibility** позволяет передавать запрос последовательно по **цепочке обработчиков**. Каждый обработчик решает: обработать запрос сам, передать его дальше по цепочке — или и то, и другое.
+**Tipo:** patrón de comportamiento.
+
+**Chain of Responsibility** permite pasar una petición de forma secuencial por una **cadena de manejadores**. Cada manejador decide si procesa la petición él mismo, si la pasa al siguiente de la cadena, o ambas cosas.
 
 ---
 
-## Какую проблему решает
+## Qué problema resuelve
 
-**Служба поддержки.** Обращение может закрыть бот (если это частый вопрос), оператор (простая проблема), инженер (баг) или менеджер (авария). Если писать это одним методом:
+**Servicio de soporte.** Una incidencia la puede cerrar el bot (si es una pregunta frecuente), un operador (problema sencillo), un ingeniero (un bug) o un responsable (una avería grave). Si se escribe todo en un solo método:
 
 ```csharp
 if (ticket.Severity == Low && IsFaq(ticket)) Bot(...);
@@ -17,51 +19,51 @@ else if (ticket.Severity == High) Engineer(...);
 else Manager(...);
 ```
 
-…то любая новая линия поддержки, изменение порядка или ночная смена «без бота и менеджера» требуют правки этого метода. Отправитель жёстко связан со всеми получателями.
+…cualquier línea de soporte nueva, cualquier cambio de orden o un turno de noche «sin bot ni responsable» obligan a modificar este método. El emisor queda rígidamente acoplado a todos los receptores.
 
-**Обработка HTTP-запроса.** Перед тем как запрос дойдёт до бизнес-логики, нужно: залогировать, проверить лимит запросов, аутентифицировать, провалидировать. Каждая проверка может **остановить** обработку. Если всё это написать в контроллере, он разрастётся и смешает разные обязанности.
+**Procesamiento de una petición HTTP.** Antes de que la petición llegue a la lógica de negocio hay que registrarla en el log, comprobar el límite de peticiones, autenticarla y validarla. Cada comprobación puede **detener** el procesamiento. Si todo esto se escribe en el controlador, este crece sin control y mezcla responsabilidades distintas.
 
-## Решение
+## Solución
 
-Превратить каждую проверку/обработку в отдельный объект-**обработчик** с общим интерфейсом. Обработчики связываются в цепочку: каждый знает только о **следующем**. Клиент отправляет запрос **первому** обработчику и не знает, кто в итоге его обработает.
+Convertir cada comprobación/procesamiento en un objeto **manejador** independiente con una interfaz común. Los manejadores se enlazan en una cadena: cada uno solo conoce al **siguiente**. El cliente envía la petición al **primer** manejador y no sabe quién la procesará al final.
 
-Есть два варианта поведения цепочки:
-1. **Классический (GoF):** запрос обрабатывает **один** обработчик — первый, кто может; остальные просто передают дальше (пример `SupportTickets`).
-2. **Конвейер (pipeline/middleware):** **каждый** обработчик делает свою часть работы и решает, звать ли следующего; любой может прервать цепочку (пример `Middleware`).
+Hay dos variantes de comportamiento de la cadena:
+1. **Clásica (GoF):** la petición la procesa **un solo** manejador, el primero que puede; los demás simplemente la pasan (ejemplo `SupportTickets`).
+2. **Pipeline (middleware):** **cada** manejador hace su parte del trabajo y decide si llamar al siguiente; cualquiera puede interrumpir la cadena (ejemplo `Middleware`).
 
 ---
 
-## Участники
+## Participantes
 
-| Роль | Класс в примере | Описание |
-|------|-----------------|----------|
-| **Handler** | `SupportHandler`, `IRequestHandler` | Общий интерфейс обработчиков. Часто содержит ссылку на следующий обработчик (или получает его как делегат) |
-| **ConcreteHandler** | `ChatBotHandler`, `OperatorHandler`, `EngineerHandler`, `ManagerHandler`, `LoggingHandler`, `RateLimitHandler`, `AuthenticationHandler`, `ValidationHandler`, `EndpointHandler` | Решает, может ли обработать запрос; если нет — передаёт дальше |
-| **Request** | `SupportTicket`, `HttpRequestContext` | Данные, которые путешествуют по цепочке |
-| **Client** | демо-классы, `RequestPipeline` | Собирает цепочку и отправляет запрос первому звену |
+| Rol | Clase en el ejemplo | Descripción |
+|-----|---------------------|-------------|
+| **Handler** | `SupportHandler`, `IRequestHandler` | Interfaz común de los manejadores. A menudo contiene una referencia al siguiente manejador (o lo recibe como delegado) |
+| **ConcreteHandler** | `ChatBotHandler`, `OperatorHandler`, `EngineerHandler`, `ManagerHandler`, `LoggingHandler`, `RateLimitHandler`, `AuthenticationHandler`, `ValidationHandler`, `EndpointHandler` | Decide si puede procesar la petición; si no, la pasa al siguiente |
+| **Request** | `SupportTicket`, `HttpRequestContext` | Los datos que viajan por la cadena |
+| **Client** | clases de demo, `RequestPipeline` | Monta la cadena y envía la petición al primer eslabón |
 
-## Схема
+## Esquema
 
 ```text
  Client ──► ChatBot ──► Operator ──► Engineer ──► Manager ──► (null)
               │            │            │            │
           Low+FAQ?     ≤ Medium?     High?       Critical?
-           handle       handle       handle       handle
+          procesa      procesa      procesa      procesa
 ```
 
 ---
 
-## Пример 1. Служба поддержки (`SupportTickets/`) — классическая цепочка
+## Ejemplo 1. Servicio de soporte (`SupportTickets/`): cadena clásica
 
-**Request** — `SupportTicket(Id, Description, Severity)` (`record`), уровень — `TicketSeverity`.
+**Request**: `SupportTicket(Id, Description, Severity)` (`record`); el nivel es `TicketSeverity`.
 
-**Handler** — абстрактный `SupportHandler` хранит ссылку на следующего и реализует поведение «по умолчанию» — передать дальше:
+**Handler**: la clase abstracta `SupportHandler` guarda una referencia al siguiente e implementa el comportamiento «por defecto»: pasarla adelante:
 
 ```csharp
 public SupportHandler SetNext(SupportHandler next)
 {
     _next = next;
-    return next;           // возвращаем next, чтобы строить цепочку «в линию»
+    return next;           // devolvemos next para construir la cadena «en línea»
 }
 
 public virtual void Handle(SupportTicket ticket)
@@ -69,40 +71,40 @@ public virtual void Handle(SupportTicket ticket)
     if (_next is not null)
         _next.Handle(ticket);
     else
-        Console.WriteLine($"Nobody could handle ticket #{ticket.Id}");
+        Console.WriteLine($"Nadie pudo gestionar el ticket n.º {ticket.Id}");
 }
 ```
 
-**ConcreteHandler** (папка `Handlers/`) — каждый проверяет «своё» условие; если подходит — обрабатывает и **останавливает** цепочку (`return`), иначе вызывает `base.Handle(ticket)`:
+**ConcreteHandler** (carpeta `Handlers/`): cada uno comprueba «su» condición; si se cumple, procesa la petición y **detiene** la cadena (`return`); si no, llama a `base.Handle(ticket)`:
 
 ```csharp
 public override void Handle(SupportTicket ticket)
 {
     if (ticket.Severity <= TicketSeverity.Medium)
     {
-        Console.WriteLine($"Operator: resolved ticket #{ticket.Id}");
+        Console.WriteLine($"Operador: resolvió el ticket n.º {ticket.Id}");
         return;
     }
     base.Handle(ticket);
 }
 ```
 
-**Client** — собирает цепочку `bot → operator → engineer → manager` и отправляет все обращения **только первому звену**. В выводе видно, как далеко прошло каждое обращение. В конце показана другая конфигурация («ночная смена» — только оператор): критичную заявку никто не взял — это нормальная ситуация для паттерна, и её надо предусматривать.
+**Client**: monta la cadena `bot → operador → ingeniero → responsable` y envía todas las incidencias **solo al primer eslabón**. En la salida se ve hasta dónde llegó cada incidencia. Al final se muestra otra configuración («turno de noche», solo operador): nadie se hace cargo de la incidencia crítica; es una situación normal en este patrón y hay que tenerla prevista.
 
-## Пример 2. Конвейер обработки запроса (`Middleware/`) — как в ASP.NET Core
+## Ejemplo 2. Pipeline de procesamiento de peticiones (`Middleware/`): como en ASP.NET Core
 
-**Request** — `HttpRequestContext`: входные данные (путь, IP, токен, тело) и результат (код ответа, текст). Обработчики могут **обогащать** контекст — например, аутентификация записывает `UserName`.
+**Request**: `HttpRequestContext`: los datos de entrada (ruta, IP, token, cuerpo) y el resultado (código de respuesta, texto). Los manejadores pueden **enriquecer** el contexto; por ejemplo, la autenticación guarda `UserName`.
 
-**Handler** — `IRequestHandler.Handle(context, Action next)`. Обработчик не хранит ссылку на следующего, а получает её **делегатом** — так обработчики полностью независимы.
+**Handler**: `IRequestHandler.Handle(context, Action next)`. El manejador no guarda una referencia al siguiente, sino que la recibe como **delegado**; así los manejadores son totalmente independientes.
 
-**ConcreteHandler** (папка `Handlers/`):
-- `LoggingHandler` — работает **до и после** остальной цепочки (пишет запрос, вызывает `next()`, пишет ответ);
-- `RateLimitHandler` — после N запросов с одного IP отвечает `429` и **не вызывает** `next()`;
-- `AuthenticationHandler` — проверяет токен (`401`), иначе записывает пользователя в контекст;
-- `ValidationHandler` — проверяет тело (`400`);
-- `EndpointHandler` — конечная точка, выполняет работу (`201`).
+**ConcreteHandler** (carpeta `Handlers/`):
+- `LoggingHandler`: trabaja **antes y después** del resto de la cadena (escribe la petición, llama a `next()` y escribe la respuesta);
+- `RateLimitHandler`: tras N peticiones desde una misma IP responde `429` y **no llama** a `next()`;
+- `AuthenticationHandler`: comprueba el token (`401`); si es válido, guarda el usuario en el contexto;
+- `ValidationHandler`: comprueba el cuerpo (`400`);
+- `EndpointHandler`: el punto final, que realiza el trabajo (`201`).
 
-**Client** — `RequestPipeline` собирает цепочку методом `Use(...)` и рекурсивно связывает обработчики:
+**Client**: `RequestPipeline` monta la cadena con el método `Use(...)` y enlaza los manejadores de forma recursiva:
 
 ```csharp
 private void Invoke(int index, HttpRequestContext context)
@@ -112,38 +114,38 @@ private void Invoke(int index, HttpRequestContext context)
 }
 ```
 
-Это упрощённая копия того, как работает `app.Use(...)` в ASP.NET Core: каждый middleware получает `next` и сам решает, передавать ли запрос дальше. Также цепочкой являются `DelegatingHandler` в `HttpClient` и pipeline behaviors в MediatR.
+Es una copia simplificada de cómo funciona `app.Use(...)` en ASP.NET Core: cada middleware recibe `next` y decide él mismo si pasa la petición adelante. También son cadenas los `DelegatingHandler` de `HttpClient` y los pipeline behaviors de MediatR.
 
 ---
 
-## Когда применять
+## Cuándo usarlo
 
-- Запрос могут обработать разные объекты, и заранее неизвестно какой.
-- Набор и порядок обработчиков должен настраиваться динамически.
-- Нужно выполнить несколько независимых проверок/шагов по очереди с возможностью прерывания.
-- Нужно отвязать отправителя запроса от получателей.
+- La petición la pueden procesar distintos objetos y no se sabe de antemano cuál.
+- El conjunto y el orden de los manejadores deben configurarse dinámicamente.
+- Hay que ejecutar por turnos varias comprobaciones/pasos independientes, con posibilidad de interrupción.
+- Hay que desacoplar al emisor de la petición de sus receptores.
 
-## Когда не нужен
+## Cuándo no hace falta
 
-- Обработчик всегда один и известен заранее.
-- Порядок и набор шагов никогда не меняется — простой последовательный код читается проще.
+- Siempre hay un único manejador conocido de antemano.
+- El orden y el conjunto de pasos nunca cambian: un código secuencial simple se lee mejor.
 
-## Плюсы и минусы
+## Ventajas y desventajas
 
-**Плюсы**
-- Уменьшает связанность отправителя и получателей.
-- Каждый обработчик отвечает за одну вещь (SRP).
-- Новые обработчики добавляются без изменения существующих (Open/Closed).
-- Цепочку можно перестраивать во время выполнения.
+**Ventajas**
+- Reduce el acoplamiento entre emisor y receptores.
+- Cada manejador se encarga de una sola cosa (SRP).
+- Los manejadores nuevos se añaden sin modificar los existentes (Open/Closed).
+- La cadena se puede reorganizar en tiempo de ejecución.
 
-**Минусы**
-- Запрос может остаться необработанным.
-- Сложнее отлаживать: путь запроса не виден из кода в одном месте.
-- Важен порядок звеньев (например, логирование должно стоять первым, а аутентификация — до валидации).
+**Desventajas**
+- La petición puede quedar sin procesar.
+- Es más difícil de depurar: el recorrido de la petición no se ve en un solo lugar del código.
+- El orden de los eslabones importa (por ejemplo, el logging debe ir primero y la autenticación, antes de la validación).
 
-## Связь с другими паттернами
+## Relación con otros patrones
 
-- **Decorator** устроен похоже (цепочка обёрток), но декоратор **всегда** передаёт вызов дальше и добавляет поведение; звено цепочки может **прервать** обработку.
-- **Command** — запрос в цепочке часто оформляют как команду.
-- **Composite** — цепочку часто строят по дереву: запрос идёт от элемента к его родителю (например, обработка событий в UI).
-- **Mediator** и **Observer** — другие способы связать отправителей и получателей: через посредника или через подписку.
+- **Decorator** tiene una estructura parecida (una cadena de envoltorios), pero el decorador **siempre** pasa la llamada adelante y añade comportamiento; un eslabón de la cadena puede **interrumpir** el procesamiento.
+- **Command**: la petición de la cadena suele modelarse como un comando.
+- **Composite**: la cadena a menudo se construye sobre un árbol: la petición va de un elemento a su padre (por ejemplo, el procesamiento de eventos en una interfaz gráfica).
+- **Mediator** y **Observer**: otras formas de conectar emisores y receptores, mediante un intermediario o mediante suscripción.

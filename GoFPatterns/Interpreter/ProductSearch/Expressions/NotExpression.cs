@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Interpreter.ProductSearch.Expressions
 {
-    // Nonterminal expression with one child - negation.
+    // Expresión no terminal con un solo hijo: la negación.
     public class NotExpression(IQueryExpression inner) : IQueryExpression
     {
         public bool Matches(Product product) => !inner.Matches(product);

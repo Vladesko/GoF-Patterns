@@ -1,7 +1,7 @@
 ﻿namespace GoFPatterns.Prototype.Documents
 {
-    // Prototype registry - stores preconfigured prototypes and returns their copies by key.
-    // Client gets a new document from template without knowing how it was configured.
+    // Registro de prototipos: almacena prototipos preconfigurados y devuelve sus copias por clave.
+    // El cliente obtiene un documento nuevo a partir de una plantilla sin saber cómo se configuró.
     public class DocumentTemplateRegistry
     {
         private readonly Dictionary<string, IDocumentPrototype> _templates = [];
@@ -15,7 +15,7 @@
         public IDocumentPrototype Create(string key)
         {
             if (!_templates.TryGetValue(key, out var template))
-                throw new KeyNotFoundException($"Template '{key}' is not registered.");
+                throw new KeyNotFoundException($"La plantilla '{key}' no está registrada.");
 
             return template.Clone();
         }

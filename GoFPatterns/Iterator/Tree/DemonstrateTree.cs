@@ -4,36 +4,36 @@
     {
         public void Demonstrate()
         {
-            Console.WriteLine("=== Iterator: Tree traversal ===\n");
+            Console.WriteLine("=== Iterator: recorrido de árbol ===\n");
 
-            var catalog = new CategoryNode("Catalog").Add(
-                new CategoryNode("Electronics").Add(
-                    new CategoryNode("Phones"),
-                    new CategoryNode("Laptops").Add(
+            var catalog = new CategoryNode("Catálogo").Add(
+                new CategoryNode("Electrónica").Add(
+                    new CategoryNode("Teléfonos"),
+                    new CategoryNode("Portátiles").Add(
                         new CategoryNode("Gaming"),
                         new CategoryNode("Ultrabooks"))),
-                new CategoryNode("Books").Add(
-                    new CategoryNode("Fiction"),
-                    new CategoryNode("Science")));
+                new CategoryNode("Libros").Add(
+                    new CategoryNode("Ficción"),
+                    new CategoryNode("Ciencia")));
 
-            Console.WriteLine("Depth-first (as a menu):");
+            Console.WriteLine("En profundidad (como un menú):");
             foreach (var (node, depth) in catalog.DepthFirst())
             {
                 Console.WriteLine($"  {new string(' ', depth * 2)}{node.Name}");
             }
 
-            Console.WriteLine("\nBreadth-first (level by level):");
+            Console.WriteLine("\nEn anchura (nivel a nivel):");
             foreach (var (node, depth) in catalog.BreadthFirst())
             {
-                Console.WriteLine($"  level {depth}: {node.Name}");
+                Console.WriteLine($"  nivel {depth}: {node.Name}");
             }
 
-            // Iterators are lazy: traversal stops as soon as we have found what we need.
+            // Los iteradores son perezosos: el recorrido se detiene en cuanto encontramos lo que necesitamos.
             var visited = 0;
             var found = catalog.DepthFirst()
                 .Select(x => { visited++; return x.Node; })
-                .First(n => n.Name == "Laptops");
-            Console.WriteLine($"\nFound '{found.Name}' after visiting {visited} of {catalog.DepthFirst().Count()} nodes.");
+                .First(n => n.Name == "Portátiles");
+            Console.WriteLine($"\nEncontrado '{found.Name}' tras visitar {visited} de {catalog.DepthFirst().Count()} nodos.");
         }
     }
 }

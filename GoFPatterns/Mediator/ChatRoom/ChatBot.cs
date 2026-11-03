@@ -1,12 +1,12 @@
 ﻿namespace GoFPatterns.Mediator.ChatRoom
 {
-    // Another colleague with its own reaction to messages.
+    // Otro colega con su propia reacción a los mensajes.
     public class ChatBot(IChatMediator chat) : ChatUser("Bot", chat)
     {
         public override void Receive(string from, string message)
         {
             if (message.StartsWith("/time"))
-                SendPrivate(from, $"Current time is {DateTime.Now:HH:mm}");
+                SendPrivate(from, $"La hora actual es {DateTime.Now:HH:mm}");
         }
     }
 }

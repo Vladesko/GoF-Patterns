@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Proxy.BankAccount
 {
-    // Subject - operations with bank account.
+    // Sujeto: operaciones con una cuenta bancaria.
     public interface IBankAccount
     {
         decimal GetBalance();

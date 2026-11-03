@@ -3,8 +3,8 @@ using GoFPatterns.Interpreter.MathExpressions.Expressions;
 
 namespace GoFPatterns.Interpreter.MathExpressions
 {
-    // Parser is not a part of Interpreter pattern itself, but somebody has to build the syntax tree.
-    // Recursive descent parser for grammar:
+    // El parser no forma parte del patrón Interpreter en sí, pero alguien tiene que construir el árbol sintáctico.
+    // Parser descendente recursivo para la gramática:
     //   expression := term   (('+' | '-') term)*
     //   term       := factor (('*' | '/') factor)*
     //   factor     := number | variable | '(' expression ')'
@@ -19,7 +19,7 @@ namespace GoFPatterns.Interpreter.MathExpressions
             _position = 0;
             var expression = ParseExpression();
             if (_position < _text.Length)
-                throw new FormatException($"Unexpected symbol '{_text[_position]}' at {_position}.");
+                throw new FormatException($"Símbolo inesperado '{_text[_position]}' en la posición {_position}.");
             return expression;
         }
 
@@ -52,7 +52,7 @@ namespace GoFPatterns.Interpreter.MathExpressions
                 _position++;
                 var inner = ParseExpression();
                 if (Current != ')')
-                    throw new FormatException("Missing ')'.");
+                    throw new FormatException("Falta ')'.");
                 _position++;
                 return inner;
             }
@@ -70,7 +70,7 @@ namespace GoFPatterns.Interpreter.MathExpressions
                 return new VariableExpression(_text[start.._position]);
             }
 
-            throw new FormatException($"Unexpected symbol at {_position}.");
+            throw new FormatException($"Símbolo inesperado en la posición {_position}.");
         }
 
         private char Current => _position < _text.Length ? _text[_position] : '\0';

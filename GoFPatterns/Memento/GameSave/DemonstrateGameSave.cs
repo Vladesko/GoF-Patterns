@@ -4,37 +4,37 @@
     {
         public void Demonstrate()
         {
-            Console.WriteLine("=== Memento: Game saves ===\n");
+            Console.WriteLine("=== Memento: partidas guardadas ===\n");
 
             var hero = new Hero("Arthur");
             var saves = new SaveManager();
 
-            hero.Travel("Forest");
+            hero.Travel("Bosque");
             hero.Fight(damage: 30, reward: 50);
-            hero.Buy("health potion", 20);
+            hero.Buy("poción de salud", 20);
             Console.WriteLine($"  {hero}");
-            saves.Save(hero, "before castle");
+            saves.Save(hero, "antes del castillo");
 
-            hero.Travel("Dark castle");
+            hero.Travel("Castillo oscuro");
             hero.Fight(damage: 40, reward: 100);
             Console.WriteLine($"  {hero}");
-            saves.Save(hero, "autosave");
+            saves.Save(hero, "autoguardado");
 
-            Console.WriteLine("\nBoss fight...");
+            Console.WriteLine("\nPelea contra el jefe...");
             hero.Fight(damage: 500, reward: 1000);
-            Console.WriteLine($"  {hero}  <- game over");
+            Console.WriteLine($"  {hero}  <- fin de la partida");
 
-            Console.WriteLine("\nLoading last autosave:");
-            saves.TryLoad(hero, "autosave");
+            Console.WriteLine("\nCargando el último autoguardado:");
+            saves.TryLoad(hero, "autoguardado");
             Console.WriteLine($"  {hero}");
 
-            Console.WriteLine("\nPlayer decides to prepare better and loads earlier save:");
-            saves.TryLoad(hero, "before castle");
+            Console.WriteLine("\nEl jugador decide prepararse mejor y carga una partida anterior:");
+            saves.TryLoad(hero, "antes del castillo");
             Console.WriteLine($"  {hero}");
 
-            saves.TryLoad(hero, "slot 3");
+            saves.TryLoad(hero, "ranura 3");
 
-            Console.WriteLine("\nAll saves:");
+            Console.WriteLine("\nTodas las partidas guardadas:");
             foreach (var slot in saves.Slots)
             {
                 Console.WriteLine($"  {slot}");

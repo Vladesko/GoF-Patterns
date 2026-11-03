@@ -16,8 +16,8 @@
                 shape.Accept(areaVisitor);
                 shape.Accept(xmlVisitor);
             }
-            Console.WriteLine($"Total Area: {areaVisitor.TotalArea}");
-            Console.WriteLine("XML Export:");
+            Console.WriteLine($"Área total: {areaVisitor.TotalArea}");
+            Console.WriteLine("Exportación a XML:");
             Console.WriteLine(xmlVisitor.GetXml());
         }
     }

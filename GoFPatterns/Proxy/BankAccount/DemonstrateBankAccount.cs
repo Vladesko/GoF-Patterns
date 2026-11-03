@@ -6,28 +6,28 @@ namespace GoFPatterns.Proxy.BankAccount
     {
         public void Demonstrate()
         {
-            Console.WriteLine("=== Proxy: Bank account (protection, caching, logging) ===\n");
+            Console.WriteLine("=== Proxy: cuenta bancaria (protección, caché, logging) ===\n");
 
             var realAccount = new BankAccount(1_000m);
 
-            // Proxies can be combined, because all of them implement IBankAccount.
+            // Los proxies se pueden combinar, porque todos implementan IBankAccount.
             IBankAccount ownerAccess = new LoggingAccountProxy(
                 new ProtectionAccountProxy(
                     new CachingAccountProxy(realAccount), UserRole.Owner));
 
             var requestsBefore = BankAccount.BalanceRequests;
-            Console.WriteLine("Owner checks balance 3 times:");
+            Console.WriteLine("El titular consulta el saldo 3 veces:");
             for (var i = 0; i < 3; i++)
             {
                 ownerAccess.GetBalance();
             }
-            Console.WriteLine($"  Real requests to bank: {BankAccount.BalanceRequests - requestsBefore}\n");
+            Console.WriteLine($"  Peticiones reales al banco: {BankAccount.BalanceRequests - requestsBefore}\n");
 
-            Console.WriteLine("Owner withdraws money:");
+            Console.WriteLine("El titular retira dinero:");
             ownerAccess.Withdraw(300m);
             ownerAccess.GetBalance();
 
-            Console.WriteLine("\nGuest tries to withdraw money:");
+            Console.WriteLine("\nUn invitado intenta retirar dinero:");
             IBankAccount guestAccess = new LoggingAccountProxy(new ProtectionAccountProxy(realAccount, UserRole.Guest));
             try
             {
@@ -35,7 +35,7 @@ namespace GoFPatterns.Proxy.BankAccount
             }
             catch (UnauthorizedAccessException)
             {
-                Console.WriteLine("  Access denied, money is safe.");
+                Console.WriteLine("  Acceso denegado, el dinero está a salvo.");
             }
             guestAccess.GetBalance();
         }

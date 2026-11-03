@@ -6,21 +6,21 @@ namespace GoFPatterns.Command.TextEditor
     {
         public void Demonstrate()
         {
-            Console.WriteLine("=== Command: Text editor with Undo/Redo ===\n");
+            Console.WriteLine("=== Command: editor de texto con Undo/Redo ===\n");
 
             var document = new Document();
             var history = new CommandHistory();
 
-            void Show() => Console.WriteLine($"  Text: \"{document.Text}\"\n");
+            void Show() => Console.WriteLine($"  Texto: \"{document.Text}\"\n");
 
-            history.Execute(new InsertTextCommand(document, 0, "Hello"));
-            history.Execute(new InsertTextCommand(document, 5, " world"));
+            history.Execute(new InsertTextCommand(document, 0, "Hola"));
+            history.Execute(new InsertTextCommand(document, 4, " mundo"));
             Show();
 
-            history.Execute(new ReplaceTextCommand(document, 6, 5, "patterns"));
+            history.Execute(new ReplaceTextCommand(document, 5, 5, "patrones"));
             Show();
 
-            history.Execute(new DeleteTextCommand(document, 0, 6));
+            history.Execute(new DeleteTextCommand(document, 0, 5));
             Show();
 
             history.Undo();
@@ -30,7 +30,7 @@ namespace GoFPatterns.Command.TextEditor
             history.Redo();
             Show();
 
-            // New command clears redo history.
+            // Un comando nuevo borra el historial de rehacer.
             history.Execute(new InsertTextCommand(document, document.Text.Length, "!"));
             history.Redo();
             Show();

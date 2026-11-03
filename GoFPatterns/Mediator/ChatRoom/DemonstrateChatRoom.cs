@@ -4,7 +4,7 @@
     {
         public void Demonstrate()
         {
-            Console.WriteLine("=== Mediator: Chat room ===\n");
+            Console.WriteLine("=== Mediator: sala de chat ===\n");
 
             var room = new ChatRoomMediator();
             var anna = new ChatUser("Anna", room);
@@ -17,13 +17,13 @@
             room.Join(olga);
             room.Join(bot);
 
-            anna.Send("Hi everyone!");
-            ivan.SendPrivate("Anna", "Hi, how are you?");
-            olga.Send("Buy cheap SPAM here");
+            anna.Send("¡Hola a todos!");
+            ivan.SendPrivate("Anna", "Hola, ¿qué tal?");
+            olga.Send("Compra SPAM barato aquí");
             ivan.Send("/time");
 
             room.Leave(olga);
-            anna.SendPrivate("Olga", "Are you here?");
+            anna.SendPrivate("Olga", "¿Estás ahí?");
         }
     }
 }

@@ -28,9 +28,9 @@
             _observers.Remove(observer);
         }
 
-        // Notify all observers about the price change.
-        // This method also need for implementation of the IObservable interface.
-        // But it is private because it is not intended to be called from outside the class.
+        // Notifica a todos los observadores el cambio de precio.
+        // Este método también es necesario para implementar la interfaz IObservable.
+        // Pero es privado porque no está pensado para llamarse desde fuera de la clase.
         private void NotifyObservers()
         {
             foreach (var observer in _observers.ToArray())

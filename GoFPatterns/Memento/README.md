@@ -1,37 +1,39 @@
-# Memento (Снимок, Хранитель)
+🌐 [Русский](https://github.com/Vladesko/GoF-Patterns/tree/rus/GoFPatterns/Memento) | [English](https://github.com/Vladesko/GoF-Patterns/tree/eng/GoFPatterns/Memento) | [Deutsch](https://github.com/Vladesko/GoF-Patterns/tree/deu/GoFPatterns/Memento) | [Italiano](https://github.com/Vladesko/GoF-Patterns/tree/ita/GoFPatterns/Memento) | **Español**
 
-**Тип:** поведенческий паттерн.
+# Memento (Recuerdo, Instantánea)
 
-**Memento** позволяет **сохранять и восстанавливать** прошлое состояние объекта, **не раскрывая** деталей его реализации и не нарушая инкапсуляцию.
+**Tipo:** patrón de comportamiento.
 
----
-
-## Какую проблему решает
-
-Нужно реализовать «Отменить» в редакторе или «Сохранить/Загрузить» в игре. Для этого надо где-то хранить копии состояния объекта.
-
-Наивный вариант — снаружи прочитать все поля объекта и сохранить их. Но:
-- поля обычно **приватные** — придётся делать их публичными и ломать инкапсуляцию;
-- код, который сохраняет состояние, начинает **зависеть от внутреннего устройства** объекта: добавили поле — надо менять код истории;
-- снаружи состояние можно случайно **изменить**, и откат вернёт объект в некорректное состояние.
-
-## Решение
-
-Поручить создание снимка **самому объекту** — только он знает своё полное состояние. Объект создаёт **снимок** (memento) — неизменяемый объект с копией состояния — и умеет восстанавливаться из него.
-
-Хранением снимков занимается отдельный объект — **опекун** (caretaker). Он решает, *когда* сохранять и восстанавливать, но **не может заглянуть внутрь** снимка (или может читать только метаданные).
+**Memento** permite **guardar y restaurar** un estado anterior de un objeto **sin exponer** los detalles de su implementación y sin romper la encapsulación.
 
 ---
 
-## Участники
+## Qué problema resuelve
 
-| Роль | Класс в примере | Описание |
-|------|-----------------|----------|
-| **Originator** | `TextEditor`, `Hero` | Объект, состояние которого сохраняется. Создаёт снимки и восстанавливается из них |
-| **Memento** | `TextEditor.Snapshot` (через `IEditorMemento`), `HeroMemento` | Неизменяемый снимок состояния |
-| **Caretaker** | `EditorHistory`, `SaveManager` | Хранит снимки и решает, когда сохранять/восстанавливать. Не меняет содержимое снимков |
+Hay que implementar «Deshacer» en un editor o «Guardar/Cargar» en un juego. Para ello hay que guardar en algún sitio copias del estado del objeto.
 
-## Схема
+La variante ingenua es leer desde fuera todos los campos del objeto y guardarlos. Pero:
+- los campos suelen ser **privados**: habría que hacerlos públicos y romper la encapsulación;
+- el código que guarda el estado empieza a **depender de la estructura interna** del objeto: si se añade un campo, hay que cambiar el código del historial;
+- desde fuera el estado se puede **modificar** por accidente, y la restauración devolvería el objeto a un estado incorrecto.
+
+## Solución
+
+Encargar la creación de la instantánea **al propio objeto**: solo él conoce su estado completo. El objeto crea una **instantánea** (memento), un objeto inmutable con una copia del estado, y sabe restaurarse a partir de ella.
+
+Del almacenamiento de las instantáneas se ocupa un objeto aparte: el **cuidador** (caretaker). Decide *cuándo* guardar y restaurar, pero **no puede mirar dentro** de la instantánea (o solo puede leer sus metadatos).
+
+---
+
+## Participantes
+
+| Rol | Clase en el ejemplo | Descripción |
+|-----|---------------------|-------------|
+| **Originator** | `TextEditor`, `Hero` | El objeto cuyo estado se guarda. Crea las instantáneas y se restaura a partir de ellas |
+| **Memento** | `TextEditor.Snapshot` (a través de `IEditorMemento`), `HeroMemento` | Instantánea inmutable del estado |
+| **Caretaker** | `EditorHistory`, `SaveManager` | Guarda las instantáneas y decide cuándo guardar/restaurar. No modifica su contenido |
+
+## Esquema
 
 ```text
  ┌──────────────────────┐   Save()    ┌────────────────────────────┐
@@ -40,7 +42,7 @@
  │ - _text, _cursor,    │◄────────────│ implements IEditorMemento  │
  │   _font              │  Restore()  └────────────────────────────┘
  └──────────────────────┘                       ▲
-            ▲                                   │ видит только
+            ▲                                   │ solo ve
             │ Save / Restore                    │ IEditorMemento
  ┌──────────────────────────┐                   │ (Label, CreatedAt)
  │ EditorHistory (Caretaker)│───────────────────┘
@@ -50,11 +52,11 @@
 
 ---
 
-## Пример 1. История текстового редактора (`TextEditorHistory/`) — строгая инкапсуляция
+## Ejemplo 1. Historial del editor de texto (`TextEditorHistory/`): encapsulación estricta
 
-**Originator** — `TextEditor` с приватным состоянием: текст, позиция курсора, шрифт. Наружу никаких геттеров для этих полей нет.
+**Originator**: `TextEditor` con estado privado: texto, posición del cursor y fuente. No expone ningún getter para estos campos.
 
-**Memento** — `Snapshot` объявлен как **приватный вложенный класс** редактора. Вложенный класс видит всё внутри редактора, но снаружи его тип недоступен — клиенты получают снимок только через **узкий интерфейс** `IEditorMemento` (метка и время создания):
+**Memento**: `Snapshot` está declarado como **clase anidada privada** del editor. La clase anidada ve todo lo que hay dentro del editor, pero su tipo no es accesible desde fuera: los clientes reciben la instantánea solo a través de la **interfaz estrecha** `IEditorMemento` (etiqueta y fecha de creación):
 
 ```csharp
 public IEditorMemento Save(string label) => new Snapshot(label, _text, _cursor, _font);
@@ -62,7 +64,7 @@ public IEditorMemento Save(string label) => new Snapshot(label, _text, _cursor, 
 public void Restore(IEditorMemento memento)
 {
     if (memento is not Snapshot snapshot)
-        throw new ArgumentException("Unknown memento type.");
+        throw new ArgumentException("Tipo de memento desconocido.");
     _text = snapshot.Text;
     _cursor = snapshot.Cursor;
     _font = snapshot.Font;
@@ -71,48 +73,48 @@ public void Restore(IEditorMemento memento)
 private sealed class Snapshot(...) : IEditorMemento { ... }
 ```
 
-Это C#-аналог «широкого» и «узкого» интерфейсов из GoF: редактор видит всё содержимое снимка, опекун — только метаданные.
+Es el equivalente en C# de las interfaces «amplia» y «estrecha» de GoF: el editor ve todo el contenido de la instantánea; el cuidador, solo los metadatos.
 
-**Caretaker** — `EditorHistory` хранит снимки в стеке. `Backup` берёт снимок у редактора, `Undo` достаёт последний и передаёт редактору. Сам снимок опекун не читает и изменить не может.
+**Caretaker**: `EditorHistory` guarda las instantáneas en una pila. `Backup` obtiene una instantánea del editor y `Undo` saca la última y se la pasa al editor. El cuidador no lee la instantánea ni puede modificarla.
 
-**Client** — демо делает правки, сохраняя состояние перед каждой, и откатывается назад — вместе с текстом восстанавливаются курсор и шрифт.
+**Client**: la demo hace ediciones, guardando el estado antes de cada una, y luego vuelve atrás: junto con el texto se restauran el cursor y la fuente.
 
-## Пример 2. Сохранения в игре (`GameSave/`) — снимок как `record`
+## Ejemplo 2. Partidas guardadas (`GameSave/`): la instantánea como `record`
 
-**Originator** — `Hero`: уровень, здоровье, золото, локация, инвентарь. Свойства только для чтения снаружи (`private set`), меняются через игровые действия (`Travel`, `Fight`, `Buy`).
+**Originator**: `Hero`: nivel, salud, oro, ubicación, inventario. Las propiedades son de solo lectura desde fuera (`private set`) y cambian mediante acciones del juego (`Travel`, `Fight`, `Buy`).
 
-**Memento** — `HeroMemento` — `sealed record`. Record в C# — удобный способ описать неизменяемый снимок. Инвентарь **копируется** в новый массив (`[.. _inventory]`), иначе снимок разделял бы список с героем, и покупки после сохранения «просочились» бы в сохранение.
+**Memento**: `HeroMemento`, un `sealed record`. En C#, un record es una forma cómoda de describir una instantánea inmutable. El inventario se **copia** en un array nuevo (`[.. _inventory]`); de lo contrario, la instantánea compartiría la lista con el héroe y las compras posteriores al guardado se «colarían» en la partida guardada.
 
-**Caretaker** — `SaveManager` хранит снимки в именованных слотах и умеет их загружать. Здесь инкапсуляция мягче: снимок публичный, и менеджер читает из него данные для списка сохранений. Но **менять** героя он может только через `hero.Load(memento)`, а сам снимок неизменяем.
+**Caretaker**: `SaveManager` guarda las instantáneas en ranuras con nombre y sabe cargarlas. Aquí la encapsulación es más laxa: la instantánea es pública y el gestor lee sus datos para la lista de partidas. Pero solo puede **modificar** al héroe mediante `hero.Load(memento)`, y la instantánea en sí es inmutable.
 
-**Client** — демо проходит часть игры, сохраняется, проигрывает босса и загружает сначала автосохранение, а потом более раннее.
+**Client**: la demo juega una parte de la partida, guarda, pierde contra el jefe y carga primero el autoguardado y después una partida anterior.
 
 ---
 
-## Когда применять
+## Cuándo usarlo
 
-- Нужно сохранять снимки состояния для отмены, отката транзакции, сохранения игры, черновиков.
-- Прямое получение состояния объекта раскрыло бы детали реализации.
+- Hay que guardar instantáneas del estado para deshacer, revertir una transacción, guardar la partida o guardar borradores.
+- Obtener el estado del objeto directamente expondría detalles de implementación.
 
-## Когда не нужен
+## Cuándo no hace falta
 
-- Состояние объекта простое и публичное — достаточно его скопировать.
-- Состояние огромное, а меняется по чуть-чуть — хранить полные снимки дорого; лучше хранить изменения (подход Command с `Undo`).
+- El estado del objeto es sencillo y público: basta con copiarlo.
+- El estado es enorme pero cambia poco a poco: guardar instantáneas completas es caro; es mejor guardar los cambios (el enfoque de Command con `Undo`).
 
-## Плюсы и минусы
+## Ventajas y desventajas
 
-**Плюсы**
-- Не нарушает инкапсуляцию исходного объекта.
-- Упрощает исходный объект: хранить историю ему не нужно.
+**Ventajas**
+- No rompe la encapsulación del objeto original.
+- Simplifica el objeto original: no necesita guardar el historial.
 
-**Минусы**
-- Расход памяти, если снимков много или они большие.
-- Опекун должен следить за жизненным циклом снимков (удалять устаревшие).
-- В языках с динамической типизацией сложно гарантировать, что снимок никто не изменит; в C# помогают вложенные `private`-классы и неизменяемые `record`.
+**Desventajas**
+- Consumo de memoria si hay muchas instantáneas o son grandes.
+- El cuidador debe gestionar el ciclo de vida de las instantáneas (eliminar las obsoletas).
+- En lenguajes de tipado dinámico es difícil garantizar que nadie modifique la instantánea; en C# ayudan las clases anidadas `private` y los `record` inmutables.
 
-## Связь с другими паттернами
+## Relación con otros patrones
 
-- **Command** + **Memento**: команда перед выполнением сохраняет снимок получателя, а `Undo` восстанавливает его. Command хранит «как отменить», Memento — «что было».
-- **Iterator** — можно сохранять снимок позиции итерации.
-- **Prototype** — если состояние простое, снимок можно сделать клонированием объекта.
-- **State** — снимок может включать текущий объект-состояние.
+- **Command** + **Memento**: antes de ejecutarse, el comando guarda una instantánea del receptor, y `Undo` la restaura. Command guarda «cómo deshacer»; Memento, «lo que había».
+- **Iterator**: se puede guardar una instantánea de la posición de la iteración.
+- **Prototype**: si el estado es sencillo, la instantánea se puede hacer clonando el objeto.
+- **State**: la instantánea puede incluir el objeto de estado actual.

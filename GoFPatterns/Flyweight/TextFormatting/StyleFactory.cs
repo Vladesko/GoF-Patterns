@@ -1,13 +1,13 @@
 ﻿namespace GoFPatterns.Flyweight.TextFormatting
 {
-    // Flyweight factory - pool of styles. Equal styles are returned as the same object.
+    // Fábrica de flyweights: pool de estilos. Los estilos iguales se devuelven como el mismo objeto.
     public class StyleFactory
     {
         private readonly Dictionary<CharacterStyle, CharacterStyle> _pool = [];
 
         public int Count => _pool.Count;
 
-        public CharacterStyle Get(string font, int size, bool bold = false, string color = "black")
+        public CharacterStyle Get(string font, int size, bool bold = false, string color = "negro")
         {
             var candidate = new CharacterStyle(font, size, bold, color);
             if (_pool.TryGetValue(candidate, out var existing))

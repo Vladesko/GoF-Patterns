@@ -1,5 +1,5 @@
 ﻿namespace GoFPatterns.Interpreter.ProductSearch
 {
-    // Context - product which is checked by the search query.
+    // Contexto: producto que se comprueba con la consulta de búsqueda.
     public record Product(string Name, IReadOnlySet<string> Tags);
 }

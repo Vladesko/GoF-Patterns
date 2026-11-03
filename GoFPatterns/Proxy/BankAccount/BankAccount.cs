@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Proxy.BankAccount
 {
-    // Real subject - contains only business logic. No security, no caching, no logging.
+    // Sujeto real: contiene solo la lógica de negocio. Sin seguridad, sin caché y sin logging.
     public class BankAccount(decimal initialBalance) : IBankAccount
     {
         private decimal _balance = initialBalance;
@@ -10,14 +10,14 @@
         public decimal GetBalance()
         {
             BalanceRequests++;
-            Thread.Sleep(100); // Emulation of request to bank core system.
+            Thread.Sleep(100); // Emulación de una petición al sistema central del banco.
             return _balance;
         }
 
         public void Withdraw(decimal amount)
         {
             if (amount > _balance)
-                throw new InvalidOperationException("Not enough money.");
+                throw new InvalidOperationException("No hay suficiente dinero.");
             _balance -= amount;
         }
     }

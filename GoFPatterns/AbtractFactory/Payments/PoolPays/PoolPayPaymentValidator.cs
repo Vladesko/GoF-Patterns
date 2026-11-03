@@ -6,8 +6,8 @@ namespace GoFPatterns.AbtractFactory.Payments.PoolPays
     {
         public bool ValidatePayment(decimal amount)
         {
-            Console.WriteLine($"PoolPay: validating payment {amount}.");
-            return amount > 0; // Example validation logic
+            Console.WriteLine($"PoolPay: validando el pago {amount}.");
+            return amount > 0; // Ejemplo de lógica de validación
         }
     }
 }

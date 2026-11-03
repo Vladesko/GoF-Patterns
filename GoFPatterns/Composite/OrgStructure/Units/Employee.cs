@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Composite.OrgStructure.Units
 {
-    // Leaf - employee.
+    // Hoja: empleado.
     public class Employee(string name, string position, decimal salary) : IOrgUnit
     {
         public string Name { get; } = name;

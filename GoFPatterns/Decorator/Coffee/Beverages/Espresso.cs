@@ -1,6 +1,6 @@
 ﻿namespace GoFPatterns.Decorator.Coffee.Beverages
 {
-    // Concrete component - basic beverage which will be wrapped by decorators.
+    // Componente concreto: bebida básica que envolverán los decoradores.
     public class Espresso : IBeverage
     {
         public string GetDescription() => "Espresso";

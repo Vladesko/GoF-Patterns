@@ -2,8 +2,8 @@
 
 namespace GoFPatterns.Facade.OrderPlacement
 {
-    // Facade - hides the whole order workflow: checks, reservation, payment, rollback, shipping, notification.
-    // Controller (client) calls only PlaceOrder and doesn't depend on four services.
+    // Fachada: oculta todo el flujo del pedido: comprobaciones, reserva, pago, reversión, envío y notificación.
+    // El controlador (cliente) solo llama a PlaceOrder y no depende de cuatro servicios.
     public class OrderFacade(
         InventoryService inventory,
         PaymentGateway payments,
@@ -12,25 +12,25 @@ namespace GoFPatterns.Facade.OrderPlacement
     {
         public OrderResult PlaceOrder(OrderRequest order)
         {
-            Console.WriteLine($"Placing order: {order.Count} x {order.Product}");
+            Console.WriteLine($"Realizando el pedido: {order.Count} x {order.Product}");
 
             if (!inventory.IsAvailable(order.Product, order.Count))
-                return new OrderResult(false, $"{order.Product} is out of stock");
+                return new OrderResult(false, $"{order.Product}: sin existencias");
 
             inventory.Reserve(order.Product, order.Count);
 
             var total = order.Price * order.Count + shipping.CalculateCost(order.Address);
             if (!payments.Charge(order.CardNumber, total))
             {
-                // Facade also knows how to roll back subsystem state.
+                // La fachada también sabe cómo revertir el estado del subsistema.
                 inventory.Release(order.Product, order.Count);
-                return new OrderResult(false, "Payment was declined");
+                return new OrderResult(false, "El pago fue rechazado");
             }
 
             var tracking = shipping.CreateShipment(order.Product, order.Address);
-            notifications.SendEmail(order.Email, $"Order is paid ({total:F2}), tracking number {tracking}");
+            notifications.SendEmail(order.Email, $"El pedido está pagado ({total:F2}), número de seguimiento {tracking}");
 
-            return new OrderResult(true, $"Order placed, tracking {tracking}");
+            return new OrderResult(true, $"Pedido realizado, seguimiento {tracking}");
         }
     }
 }

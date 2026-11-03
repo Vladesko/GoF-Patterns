@@ -1,65 +1,67 @@
-# Flyweight (Легковес, Приспособленец)
+🌐 [Русский](https://github.com/Vladesko/GoF-Patterns/tree/rus/GoFPatterns/Flyweight) | [English](https://github.com/Vladesko/GoF-Patterns/tree/eng/GoFPatterns/Flyweight) | [Deutsch](https://github.com/Vladesko/GoF-Patterns/tree/deu/GoFPatterns/Flyweight) | [Italiano](https://github.com/Vladesko/GoF-Patterns/tree/ita/GoFPatterns/Flyweight) | **Español**
 
-**Тип:** структурный паттерн.
+# Flyweight (Peso ligero)
 
-**Flyweight** позволяет уместить в памяти большое количество объектов за счёт **разделения общего состояния** между ними вместо хранения одинаковых данных в каждом объекте.
+**Tipo:** patrón estructural.
 
----
-
-## Какую проблему решает
-
-В игре нужно нарисовать лес из 100 000 деревьев. Каждое дерево — объект с координатами, названием породы, цветом и **текстурой** (допустим, 1 МБ). Если каждое дерево хранит свою копию текстуры, получится ~100 ГБ памяти, хотя различных пород всего четыре.
-
-То же в текстовом редакторе: у каждого символа есть шрифт, размер, цвет, жирность. Тысячи символов, а уникальных стилей — единицы.
-
-Проблема в том, что **большая часть данных повторяется** во множестве объектов.
-
-## Решение
-
-Разделить состояние объекта на две части:
-
-- **Внутреннее (intrinsic)** — одинаковое для многих объектов и не зависящее от контекста: порода, цвет, текстура; шрифт, размер. Его выносят в объект-**легковес**, который создаётся **один раз** и разделяется всеми.
-- **Внешнее (extrinsic)** — уникальное для каждого объекта: координаты дерева, символ и позиция в тексте. Его хранит **контекст** (или клиент) и передаёт легковесу в параметрах методов.
-
-Легковесы должны быть **неизменяемыми** — ведь один объект используют тысячи контекстов. Чтобы не создать дубликат, легковесы выдаёт **фабрика** с пулом (кешем).
+**Flyweight** permite meter en memoria una gran cantidad de objetos **compartiendo el estado común** entre ellos en lugar de guardar los mismos datos en cada objeto.
 
 ---
 
-## Участники
+## Qué problema resuelve
 
-| Роль | Класс в примере | Описание |
-|------|-----------------|----------|
-| **Flyweight** | `TreeType`, `CharacterStyle` | Хранит внутреннее (разделяемое) состояние. Неизменяем. Внешнее состояние получает через параметры |
-| **FlyweightFactory** | `TreeTypeFactory`, `StyleFactory` | Пул легковесов: возвращает существующий или создаёт новый |
-| **Context** | `Tree`, `FormattedCharacter` | Хранит внешнее состояние + ссылку на легковес. Таких объектов много, но они маленькие |
-| **Client** | `ForestMap`, `TextDocument` | Создаёт контексты, получая легковесы только через фабрику |
+En un juego hay que dibujar un bosque de 100 000 árboles. Cada árbol es un objeto con coordenadas, nombre de la especie, color y **textura** (pongamos, 1 MB). Si cada árbol guarda su propia copia de la textura, se necesitan ~100 GB de memoria, aunque solo hay cuatro especies distintas.
 
-## Схема
+Lo mismo ocurre en un editor de texto: cada carácter tiene fuente, tamaño, color y negrita. Hay miles de caracteres, pero solo unos pocos estilos únicos.
+
+El problema es que **la mayor parte de los datos se repite** en muchos objetos.
+
+## Solución
+
+Dividir el estado del objeto en dos partes:
+
+- **Intrínseco (intrinsic)**: igual para muchos objetos e independiente del contexto: especie, color, textura; fuente, tamaño. Se traslada a un objeto **flyweight**, que se crea **una sola vez** y que todos comparten.
+- **Extrínseco (extrinsic)**: único para cada objeto: las coordenadas del árbol, el carácter y su posición en el texto. Lo guarda el **contexto** (o el cliente) y se lo pasa al flyweight como parámetro de los métodos.
+
+Los flyweights deben ser **inmutables**, ya que un mismo objeto lo usan miles de contextos. Para no crear duplicados, los flyweights los entrega una **fábrica** con un pool (caché).
+
+---
+
+## Participantes
+
+| Rol | Clase en el ejemplo | Descripción |
+|-----|---------------------|-------------|
+| **Flyweight** | `TreeType`, `CharacterStyle` | Guarda el estado intrínseco (compartido). Es inmutable. Recibe el estado extrínseco a través de parámetros |
+| **FlyweightFactory** | `TreeTypeFactory`, `StyleFactory` | Pool de flyweights: devuelve uno existente o crea uno nuevo |
+| **Context** | `Tree`, `FormattedCharacter` | Guarda el estado extrínseco + una referencia al flyweight. Hay muchos objetos de este tipo, pero son pequeños |
+| **Client** | `ForestMap`, `TextDocument` | Crea los contextos obteniendo los flyweights solo a través de la fábrica |
+
+## Esquema
 
 ```text
  ForestMap (Client)
-   │ PlantTree(x, y, "Oak", ...)
+   │ PlantTree(x, y, "Roble", ...)
    ▼
- TreeTypeFactory ── _types: "Oak|dark green|oak.png" ─► TreeType ◄──┐
-                                                       (1 MB)        │
-                                                                     │ shared
-   Tree(x=10, y=20) ─────────────────────────────────────────────────┤
-   Tree(x=55, y=13) ─────────────────────────────────────────────────┤
-   Tree(x=91, y=77) ─────────────────────────────────────────────────┘
-   ... 100 000 маленьких контекстов, 4 легковеса
+ TreeTypeFactory ── _types: "Roble|verde oscuro|oak.png" ─► TreeType ◄──┐
+                                                           (1 MB)        │
+                                                                         │ compartido
+   Tree(x=10, y=20) ─────────────────────────────────────────────────────┤
+   Tree(x=55, y=13) ─────────────────────────────────────────────────────┤
+   Tree(x=91, y=77) ─────────────────────────────────────────────────────┘
+   ... 100 000 contextos pequeños, 4 flyweights
 ```
 
 ---
 
-## Пример 1. Лес (`Forest/`)
+## Ejemplo 1. Bosque (`Forest/`)
 
-**Flyweight** — `TreeType`. Хранит название, цвет, путь к текстуре и сами «тяжёлые» данные текстуры (массив 1 МБ). Класс `sealed`, все свойства только для чтения. Координаты в нём **не хранятся** — они приходят в метод:
+**Flyweight**: `TreeType`. Guarda el nombre, el color, la ruta de la textura y los propios datos «pesados» de la textura (un array de 1 MB). La clase es `sealed` y todas sus propiedades son de solo lectura. Las coordenadas **no se guardan** en ella: llegan como parámetros del método:
 
 ```csharp
-public string Draw(int x, int y) => $"{Name} ({Color}) at [{x}, {y}] using {TexturePath}";
+public string Draw(int x, int y) => $"{Name} ({Color}) en [{x}, {y}] usando {TexturePath}";
 ```
 
-**FlyweightFactory** — `TreeTypeFactory` хранит словарь `ключ → TreeType`. Новый объект создаётся только если такого ещё нет (в демо видно, что сообщение «created new tree type» печатается ровно 4 раза на 100 000 деревьев):
+**FlyweightFactory**: `TreeTypeFactory` guarda un diccionario `clave → TreeType`. Solo se crea un objeto nuevo si todavía no existe (en la demo se ve que el mensaje «creado un nuevo tipo de árbol» se imprime exactamente 4 veces para 100 000 árboles):
 
 ```csharp
 if (!_types.TryGetValue(key, out var type))
@@ -70,51 +72,51 @@ if (!_types.TryGetValue(key, out var type))
 return type;
 ```
 
-**Context** — `Tree`: два `int` и ссылка на `TreeType`. Метод `Draw()` передаёт свои координаты легковесу.
+**Context**: `Tree`: dos `int` y una referencia a `TreeType`. El método `Draw()` pasa sus coordenadas al flyweight.
 
-**Client** — `ForestMap` сажает деревья через фабрику и никогда не создаёт `TreeType` сам.
+**Client**: `ForestMap` planta los árboles a través de la fábrica y nunca crea un `TreeType` por sí mismo.
 
-Демо считает примерный объём памяти: без легковеса ~100 ГБ, с легковесом ~5,5 МБ (4 текстуры + 100 000 маленьких контекстов).
+La demo calcula el volumen aproximado de memoria: sin flyweight, ~100 GB; con flyweight, ~5,5 MB (4 texturas + 100 000 contextos pequeños).
 
-## Пример 2. Форматирование текста (`TextFormatting/`)
+## Ejemplo 2. Formato de texto (`TextFormatting/`)
 
-**Flyweight** — `CharacterStyle` — `sealed record` (шрифт, размер, жирность, цвет). Record неизменяем и сравнивается по значению — поэтому его удобно использовать как ключ словаря.
+**Flyweight**: `CharacterStyle`, un `sealed record` (fuente, tamaño, negrita, color). Un record es inmutable y se compara por valor, por lo que resulta cómodo usarlo como clave de diccionario.
 
-**FlyweightFactory** — `StyleFactory` хранит пул `Dictionary<CharacterStyle, CharacterStyle>`: если равный по значению стиль уже есть, возвращается **тот же объект**, иначе кандидат добавляется в пул.
+**FlyweightFactory**: `StyleFactory` guarda un pool `Dictionary<CharacterStyle, CharacterStyle>`: si ya existe un estilo igual por valor, se devuelve **el mismo objeto**; si no, el candidato se añade al pool.
 
-**Context** — `FormattedCharacter` — `readonly record struct` из символа, позиции и ссылки на стиль.
+**Context**: `FormattedCharacter`, un `readonly record struct` con el carácter, la posición y una referencia al estilo.
 
-**Client** — `TextDocument.Append(...)` получает стиль из фабрики и создаёт контексты для каждого символа. Демо показывает, что на 123 символа приходится только 3 объекта стиля, а `CountDistinctStyleObjects()` проверяет это через сравнение **по ссылке** (`ReferenceEqualityComparer`).
+**Client**: `TextDocument.Append(...)` obtiene el estilo de la fábrica y crea contextos para cada carácter. La demo muestra que para todos los caracteres del texto solo hay 3 objetos de estilo, y `CountDistinctStyleObjects()` lo comprueba comparando **por referencia** (`ReferenceEqualityComparer`).
 
-В конце показан встроенный в .NET легковес — **интернирование строк**: `string.Intern` возвращает один и тот же объект для одинаковых строк. Строковые литералы в C# интернируются автоматически.
+Al final se muestra el flyweight integrado en .NET, el **internado de cadenas**: `string.Intern` devuelve el mismo objeto para cadenas iguales. Los literales de cadena de C# se internan automáticamente.
 
 ---
 
-## Когда применять
+## Cuándo usarlo
 
-- В программе **очень много** однотипных объектов, и они не помещаются в память.
-- Большую часть состояния этих объектов можно вынести наружу или разделить.
-- Объекты можно сделать неизменяемыми.
-- Примеры: частицы и тайлы в играх, символы в редакторах, маркеры на карте, кеш иконок.
+- El programa tiene **muchísimos** objetos del mismo tipo y no caben en memoria.
+- La mayor parte del estado de esos objetos se puede sacar fuera o compartir.
+- Los objetos se pueden hacer inmutables.
+- Ejemplos: partículas y tiles en juegos, caracteres en editores, marcadores en un mapa, caché de iconos.
 
-## Когда не нужен
+## Cuándo no hace falta
 
-- Объектов мало — экономия не стоит усложнения.
-- Состояние объектов почти полностью уникально — разделять нечего.
+- Hay pocos objetos: el ahorro no compensa la complicación.
+- El estado de los objetos es casi totalmente único: no hay nada que compartir.
 
-## Плюсы и минусы
+## Ventajas y desventajas
 
-**Плюсы**
-- Существенная экономия памяти.
+**Ventajas**
+- Ahorro considerable de memoria.
 
-**Минусы**
-- Тратится процессорное время на поиск в пуле и передачу внешнего состояния.
-- Код усложняется: состояние «размазано» между контекстом и легковесом.
-- Легковесы обязаны быть неизменяемыми — иначе изменение одного затронет все контексты.
+**Desventajas**
+- Se gasta tiempo de CPU en buscar en el pool y en pasar el estado extrínseco.
+- El código se complica: el estado queda «repartido» entre el contexto y el flyweight.
+- Los flyweights tienen que ser inmutables; de lo contrario, cambiar uno afectaría a todos los contextos.
 
-## Связь с другими паттернами
+## Relación con otros patrones
 
-- **Composite** — листья дерева часто делают легковесами (например, символы в документе).
-- **Singleton** похож тем, что объект разделяется, но одиночка — один экземпляр на класс, а легковесов много (по одному на каждое уникальное внутреннее состояние), и они неизменяемы.
-- **Factory Method** / пул объектов — фабрика легковесов по сути является кешем.
-- **State** и **Strategy** — объекты состояний и стратегий без собственных полей часто делают легковесами.
+- **Composite**: las hojas del árbol a menudo se implementan como flyweights (por ejemplo, los caracteres de un documento).
+- **Singleton** se le parece en que el objeto se comparte, pero un singleton es una instancia por clase, mientras que flyweights hay muchos (uno por cada estado intrínseco único) y son inmutables.
+- **Factory Method** / pool de objetos: la fábrica de flyweights es, en esencia, una caché.
+- **State** y **Strategy**: los objetos de estado y de estrategia sin campos propios suelen implementarse como flyweights.

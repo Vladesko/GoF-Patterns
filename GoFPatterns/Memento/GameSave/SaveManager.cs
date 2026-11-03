@@ -1,7 +1,7 @@
 ﻿namespace GoFPatterns.Memento.GameSave
 {
-    // Caretaker - stores saves in named slots. It can read public data of memento (to show list of saves),
-    // but changes hero state only through hero.Load().
+    // Cuidador (caretaker): guarda las partidas en ranuras con nombre. Puede leer los datos públicos del memento (para mostrar la lista de partidas),
+    // pero cambia el estado del héroe solo mediante hero.Load().
     public class SaveManager
     {
         private readonly Dictionary<string, HeroMemento> _slots = [];
@@ -9,21 +9,21 @@
         public void Save(Hero hero, string slot)
         {
             _slots[slot] = hero.Save(slot);
-            Console.WriteLine($"  [save] game saved to slot \"{slot}\"");
+            Console.WriteLine($"  [guardado] partida guardada en la ranura \"{slot}\"");
         }
 
         public bool TryLoad(Hero hero, string slot)
         {
             if (!_slots.TryGetValue(slot, out var memento))
             {
-                Console.WriteLine($"  [save] slot \"{slot}\" is empty");
+                Console.WriteLine($"  [guardado] la ranura \"{slot}\" está vacía");
                 return false;
             }
             hero.Load(memento);
-            Console.WriteLine($"  [save] game loaded from slot \"{slot}\"");
+            Console.WriteLine($"  [guardado] partida cargada desde la ranura \"{slot}\"");
             return true;
         }
 
-        public IEnumerable<string> Slots => _slots.Values.Select(m => $"{m.SlotName}: lvl {m.Level} at {m.Location}");
+        public IEnumerable<string> Slots => _slots.Values.Select(m => $"{m.SlotName}: nv. {m.Level} en {m.Location}");
     }
 }

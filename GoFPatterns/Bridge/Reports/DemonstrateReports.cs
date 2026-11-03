@@ -7,14 +7,14 @@ namespace GoFPatterns.Bridge.Reports
     {
         public void Demonstrate()
         {
-            Console.WriteLine("=== Bridge: Reports ===\n");
+            Console.WriteLine("=== Bridge: informes ===\n");
 
-            var sales = new Dictionary<string, decimal> { ["January"] = 1200.5m, ["February"] = 980m, ["March"] = 1430.25m };
-            var stock = new Dictionary<string, int> { ["Laptop"] = 12, ["Mouse"] = 3, ["Monitor"] = 1 };
+            var sales = new Dictionary<string, decimal> { ["Enero"] = 1200.5m, ["Febrero"] = 980m, ["Marzo"] = 1430.25m };
+            var stock = new Dictionary<string, int> { ["Portátil"] = 12, ["Ratón"] = 3, ["Monitor"] = 1 };
 
             IReportRenderer[] renderers = [new PlainTextRenderer(), new HtmlRenderer()];
 
-            // Any report type works with any renderer. Renderer can be chosen at runtime.
+            // Cualquier tipo de informe funciona con cualquier renderizador. El renderizador se puede elegir en tiempo de ejecución.
             foreach (var renderer in renderers)
             {
                 Report[] reports = [new SalesReport(renderer, sales), new InventoryReport(renderer, stock)];

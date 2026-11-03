@@ -1,13 +1,13 @@
 ﻿namespace GoFPatterns.TemplateMethod.Beverages.Drinks
 {
-    // Concrete class which uses hooks: lower water temperature and no condiments.
+    // Clase concreta que usa hooks: temperatura del agua más baja y sin complementos.
     public class GreenTea : HotBeverage
     {
         protected override int WaterTemperature => 80;
 
-        protected override void Brew() => Console.WriteLine("  steep green tea leaves for 2 minutes");
+        protected override void Brew() => Console.WriteLine("  infusionar las hojas de té verde durante 2 minutos");
 
-        protected override void AddCondiments() => Console.WriteLine("  add jasmine");
+        protected override void AddCondiments() => Console.WriteLine("  añadir jazmín");
 
         protected override bool CustomerWantsCondiments() => false;
     }

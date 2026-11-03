@@ -6,14 +6,14 @@
 
         public void Demonstrate()
         {
-            Console.WriteLine("=== Flyweight: Forest ===\n");
+            Console.WriteLine("=== Flyweight: bosque ===\n");
 
             (string Name, string Color, string Texture)[] kinds =
             [
-                ("Oak", "dark green", "oak.png"),
-                ("Pine", "green", "pine.png"),
-                ("Birch", "light green", "birch.png"),
-                ("Maple", "red", "maple_autumn.png")
+                ("Roble", "verde oscuro", "oak.png"),
+                ("Pino", "verde", "pine.png"),
+                ("Abedul", "verde claro", "birch.png"),
+                ("Arce", "rojo", "maple_autumn.png")
             ];
 
             var forest = new ForestMap();
@@ -24,20 +24,20 @@
                 forest.PlantTree(random.Next(10_000), random.Next(10_000), kind.Name, kind.Color, kind.Texture);
             }
 
-            Console.WriteLine("\nFirst trees on the map:");
+            Console.WriteLine("\nPrimeros árboles del mapa:");
             foreach (var line in forest.Draw(3))
             {
                 Console.WriteLine($"  {line}");
             }
 
-            // Rough memory estimate: tree = 2 ints + reference (~ 16 bytes of data).
+            // Estimación aproximada de memoria: árbol = 2 ints + referencia (~ 16 bytes de datos).
             const long treeContextSize = 16;
             var withoutFlyweight = forest.TreesCount * (TreeType.TextureSize + treeContextSize);
             var withFlyweight = forest.TreeTypesCount * TreeType.TextureSize + forest.TreesCount * treeContextSize;
 
-            Console.WriteLine($"\nTrees: {forest.TreesCount:N0}, tree type objects: {forest.TreeTypesCount}");
-            Console.WriteLine($"Memory without flyweight: ~{withoutFlyweight / 1024d / 1024 / 1024:N1} GB");
-            Console.WriteLine($"Memory with flyweight:    ~{withFlyweight / 1024d / 1024:N1} MB");
+            Console.WriteLine($"\nÁrboles: {forest.TreesCount:N0}, objetos de tipo de árbol: {forest.TreeTypesCount}");
+            Console.WriteLine($"Memoria sin flyweight: ~{withoutFlyweight / 1024d / 1024 / 1024:N1} GB");
+            Console.WriteLine($"Memoria con flyweight: ~{withFlyweight / 1024d / 1024:N1} MB");
         }
     }
 }

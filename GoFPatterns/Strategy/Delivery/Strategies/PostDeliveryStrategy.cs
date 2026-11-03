@@ -1,9 +1,9 @@
 ﻿namespace GoFPatterns.Strategy.Delivery.Strategies
 {
-    // Concrete strategy - cheap and slow post.
+    // Estrategia concreta: correo postal, barato y lento.
     public class PostDeliveryStrategy : IDeliveryStrategy
     {
-        public string Name => "Post";
+        public string Name => "Correo postal";
 
         public decimal CalculateCost(Parcel parcel) => 3m + parcel.WeightKg * 1.2m;
 

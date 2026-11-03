@@ -1,7 +1,7 @@
 ﻿namespace GoFPatterns.Memento.GameSave
 {
-    // Memento - immutable snapshot of hero state. Record is a convenient way to write it in C#.
-    // Inventory is copied into a new array, so later changes of hero don't affect the save.
+    // Memento: instantánea inmutable del estado del héroe. Un record es una forma cómoda de escribirlo en C#.
+    // El inventario se copia en un array nuevo, así que los cambios posteriores del héroe no afectan a la partida guardada.
     public sealed record HeroMemento(
         string SlotName,
         int Level,

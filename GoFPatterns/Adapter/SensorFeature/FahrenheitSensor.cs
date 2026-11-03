@@ -1,13 +1,13 @@
 ﻿namespace GoFPatterns.Adapter.SensorFeature
 {
-    //That is legacy code. There is need Adapter
+    // Este es código heredado. Necesita un Adapter
     public class FahrenheitSensor
     {
-        //Need for demonstartion
-        //Should be private and Get from other Service or something
-        private readonly int CurrentTemperature = new Random().Next(55, 65); //Emulation temperature
+        // Necesario para la demostración
+        // Debería ser privado y obtenerse de otro servicio o similar
+        private readonly int CurrentTemperature = new Random().Next(55, 65); // Emulación de la temperatura
 
-        //There is some work. It would be a some request to other service
+        // Aquí se hace cierto trabajo. Podría ser una petición a otro servicio
         public decimal GetCurrentTemperature() => CurrentTemperature;
     }
 }

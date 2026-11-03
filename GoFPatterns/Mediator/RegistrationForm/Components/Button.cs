@@ -1,13 +1,13 @@
 ﻿namespace GoFPatterns.Mediator.RegistrationForm.Components
 {
-    // Concrete colleague - button.
+    // Colega concreto: botón.
     public class Button(string name) : FormComponent(name)
     {
         public void Click()
         {
             if (!IsEnabled)
             {
-                Console.WriteLine($"  {Name} is disabled - nothing happens");
+                Console.WriteLine($"  {Name} está deshabilitado: no ocurre nada");
                 return;
             }
             Mediator?.Notify(this, "click");

@@ -1,9 +1,9 @@
 ﻿namespace GoFPatterns.Strategy.Delivery.Strategies
 {
-    // Concrete strategy - courier, price depends on distance.
+    // Estrategia concreta: mensajero; el precio depende de la distancia.
     public class CourierDeliveryStrategy : IDeliveryStrategy
     {
-        public string Name => "Courier";
+        public string Name => "Mensajero";
 
         public decimal CalculateCost(Parcel parcel) => 10m + parcel.DistanceKm * 0.05m + parcel.WeightKg * 0.5m;
 
