@@ -1,0 +1,39 @@
+﻿namespace GoFPatterns.Builder.HttpRequest
+{
+    // Product - immutable request. It can be created only through the builder.
+    public class HttpRequestMessageModel
+    {
+        public string Method { get; }
+        public string Url { get; }
+        public IReadOnlyDictionary<string, string> Headers { get; }
+        public IReadOnlyDictionary<string, string> QueryParameters { get; }
+        public string? Body { get; }
+        public TimeSpan Timeout { get; }
+
+        internal HttpRequestMessageModel(
+            string method,
+            string url,
+            IReadOnlyDictionary<string, string> headers,
+            IReadOnlyDictionary<string, string> queryParameters,
+            string? body,
+            TimeSpan timeout)
+        {
+            Method = method;
+            Url = url;
+            Headers = headers;
+            QueryParameters = queryParameters;
+            Body = body;
+            Timeout = timeout;
+        }
+
+        public override string ToString()
+        {
+            var query = QueryParameters.Count == 0
+                ? string.Empty
+                : "?" + string.Join("&", QueryParameters.Select(p => $"{p.Key}={p.Value}"));
+            var headers = string.Join(Environment.NewLine, Headers.Select(h => $"  {h.Key}: {h.Value}"));
+            var body = Body is null ? string.Empty : $"{Environment.NewLine}  Body: {Body}";
+            return $"{Method} {Url}{query} (timeout {Timeout.TotalSeconds}s){Environment.NewLine}{headers}{body}";
+        }
+    }
+}
